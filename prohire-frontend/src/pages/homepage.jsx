@@ -18,12 +18,13 @@ const Homepage = () => {
   const [logo, setLogo] = useState("");
   const [sections, setSections] = useState([]);
 
+  const [loading, setLoading] = useState(true);
+
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
-  const slug = queryParams.get("slug") || "home"; // Default slug if not provided
+  const slug = queryParams.get("slug") || "home";
 
-  // Fetch navbar data
   useEffect(() => {
     fetch("https://prohires.strangled.net/headerfooter/header-footer")
       .then((res) => res.json())
@@ -34,7 +35,6 @@ const Homepage = () => {
       .catch((err) => console.error("Error fetching header data:", err));
   }, []);
 
-  // Fetch homepage content with slug
   useEffect(() => {
     fetch(`https://prohires.strangled.net/frontend/fetch_records?slug=${slug}`)
       .then((res) => res.json())
@@ -94,6 +94,44 @@ const Homepage = () => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
+
+      {/* Hero Section */}
+      <section className="hero-section">
+        <Container>
+          <Row className="align-items-center">
+            <Col lg={6} className="hero-image-col">
+              <div className="hero-image-wrapper">
+                <img
+                  src="https://via.placeholder.com/600x400"
+                  alt="Hero Illustration"
+                  className="hero-image"
+                />
+              </div>
+            </Col>
+            <Col lg={6} className="hero-content">
+              <h1 className="hero-title">
+                ProHire{" "}
+                <span className="hero-subtitle">
+                  — Where talent meets opportunity.
+                </span>
+              </h1>
+              <p className="hero-text">Search for jobs, internships...</p>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Button
+                  variant="primary"
+                  className="hero-btn rounded-pill"
+                  onClick={() => navigate("/register")}
+                >
+                  Get Started
+                </Button>
+              </motion.div>
+            </Col>
+          </Row>
+        </Container>
+      </section>
     </>
   );
 };

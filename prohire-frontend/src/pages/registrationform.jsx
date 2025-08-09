@@ -1,8 +1,10 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/RegistrationForm.css";
 import axios from "axios";
 
 const RegistrationForm = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1); // 1: Registration, 2: OTP, 3: Additional Details
   const [formData, setFormData] = useState({
     firstName: "",
@@ -179,7 +181,6 @@ const RegistrationForm = () => {
     setApiMessage("");
 
     try {
-      // Prepare form data for file uploads
       const formDataToSend = new FormData();
       formDataToSend.append("email", formData.email);
       formDataToSend.append("otp", formData.otp);
@@ -198,7 +199,6 @@ const RegistrationForm = () => {
       if (formData.resume) {
         formDataToSend.append("resume_link", formData.resume);
       }
-      //   formDataToSend.append("is_selected", true);
 
       const response = await axios.post(
         "https://prohires.strangled.net/mainapp/user_registration/",
@@ -212,8 +212,10 @@ const RegistrationForm = () => {
 
       if (response.data && response.data.message) {
         setApiMessage(response.data.message);
-        alert("Registration completed successfully!");
-        // You might want to redirect the user or reset the form here
+        // Redirect to login page after successful registration
+        setTimeout(() => {
+          navigate("/login");
+        }, 1500);
       } else {
         setApiMessage("Registration failed. Please try again.");
       }

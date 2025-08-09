@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/homepage";
-import RegistrationForm from "./pages/registrationform";
+import RegistrationForm from "./pages/RegistrationForm";
+import Login from "./pages/login";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/homepage" element={<HomePage />} />
         <Route path="/registrationform" element={<RegistrationForm />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </Router>
   );

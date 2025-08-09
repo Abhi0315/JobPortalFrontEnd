@@ -86,7 +86,7 @@ const Homepage = () => {
               <Button
                 variant="primary"
                 className="signup-btn rounded-pill mx-2"
-                onClick={() => navigate("/register")}
+                onClick={() => navigate("/registrationform")}
               >
                 Sign Up
               </Button>

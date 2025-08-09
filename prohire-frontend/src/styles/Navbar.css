@@ -1,0 +1,44 @@
+/* navbar.css */
+
+.prohire-navbar {
+  background-color: #ffffff;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #eee;
+  transition: all 0.3s ease-in-out;
+}
+
+.prohire-navbar .navbar-brand img {
+  max-height: 40px;
+}
+
+.prohire-navbar .navbar-brand {
+  font-weight: bold;
+  font-size: 1.25rem;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.prohire-navbar .nav-link {
+  color: #555 !important;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  transition: color 0.2s ease-in-out;
+}
+
+.prohire-navbar .nav-link:hover {
+  color: #007bff !important;
+}
+
+.signup-btn {
+  background: linear-gradient(135deg, #007bff, #00c6ff);
+  border: none;
+  color: white;
+  padding: 0.5rem 1.25rem;
+  font-weight: 600;
+  transition: transform 0.2s ease-in-out;
+}
+
+.signup-btn:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #0056b3, #00a3cc);
+}

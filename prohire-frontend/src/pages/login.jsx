@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import "../styles/RegistrationForm.css"; // Reusing the same styles
+import "../styles/RegistrationForm.css";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -57,9 +57,11 @@ const LoginForm = () => {
         }
       );
 
-      if (response.data && response.data.token) {
-        localStorage.setItem("authToken", response.data.token);
-        setApiMessage(response.data.message || "Login success");
+      const token = response?.data?.token;
+
+      if (token) {
+        localStorage.setItem("token", token); // Changed from "authToken" to "token"
+        setApiMessage("Login successful");
         navigate("/dashboard");
       } else {
         setApiMessage("Login failed. Please check your credentials.");

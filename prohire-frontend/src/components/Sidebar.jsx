@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { fetchSidebarData } from "../api/sidebar";
+import { MdLogout } from "react-icons/md";
 
 const BACKEND_BASE_URL = "https://prohires.strangled.net"; // Change if your backend runs elsewhere
 
@@ -81,17 +82,12 @@ const Sidebar = ({
           </div>
         ))}
       </div>
-      <div className="sidebar-footer">
-        <button onClick={handleLogout} className="logout-button">
-          <img
-            src={`${BACKEND_BASE_URL}/media/sidebar_icons/logout.png`}
-            alt="Logout"
-            className="menu-icon"
-            style={{ width: 24, height: 24 }}
-          />
-          {sidebarOpen && <span>Logout</span>}
-        </button>
-      </div>
+<div className="sidebar-footer">
+  <button onClick={handleLogout} className="logout-button">
+    <MdLogout size={24} style={{ marginRight: sidebarOpen ? 8 : 0 }} />
+    {sidebarOpen && <span>Logout</span>}
+  </button>
+</div>
       {sidebarOpen && (
         <div className="sidebar-resizer" onMouseDown={startResizing} />
       )}

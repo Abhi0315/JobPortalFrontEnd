@@ -50,7 +50,7 @@
   min-height: 88vh;
   display: flex;
   align-items: center;
-  height: 92vh;
+  height: 90vh;
 }
 .hero-btn-wrapper {
   width: 200px;
@@ -69,9 +69,9 @@
 
 .hero-image {
   width: 100%;
-  margin-top: 75px;
+  margin-top: 50px;
   border-radius: 16px;
-  max-height: 83vh;
+  max-height: 82vh;
   object-fit: cover;
 }
 
@@ -189,8 +189,6 @@
   width: 100%;
   position: relative;
   padding-bottom: 10px;
-  border: 0px solid transparent;
-  /* border-radius: 10%; */
 }
 
 .features-scroll-track {
@@ -198,15 +196,10 @@
   width: max-content;
   animation: scroll-left 25s linear infinite;
 }
-.card-img-top {
-  background-color: #e7f7ff;
-}
 
 .feature-card-wrapper {
   min-width: 280px;
   margin-right: 24px;
-  background-color: #cde2ed;
-  border-radius: 16px !important;
 }
 
 @keyframes scroll-left {
@@ -218,3 +211,98 @@
   }
 }
 /* --- End auto-scrolling --- */
+/* Hero Section Enhancements */
+.hero-highlights {
+  margin: 25px 0;
+}
+
+.hero-features-list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 30px;
+}
+
+.hero-features-list li {
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+  color: #444;
+}
+
+.hero-features-list li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #2c1475;
+  font-weight: bold;
+}
+
+.hero-btn-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.hero-demo-btn {
+  padding: 12px 30px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  border: 2px solid #2c1475 !important;
+  color: #2c1475 !important;
+  transition: all 0.3s ease;
+}
+
+.hero-demo-btn:hover {
+  background-color: #2c1475 !important;
+  color: white !important;
+  transform: scale(1.05);
+}
+
+.trust-indicators {
+  margin-top: 30px;
+}
+
+.trusted-by {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.trust-logos {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.trust-logos span {
+  font-weight: 600;
+  color: #2c1475;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.trust-logos span:hover {
+  opacity: 1;
+}
+
+/* Responsive adjustments for new elements */
+@media (max-width: 768px) {
+  .hero-btn-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero-demo-btn {
+    margin-top: 15px;
+    margin-left: 0 !important;
+  }
+
+  .hero-features-list li {
+    font-size: 1rem;
+  }
+
+  .trust-logos {
+    gap: 15px;
+  }
+}

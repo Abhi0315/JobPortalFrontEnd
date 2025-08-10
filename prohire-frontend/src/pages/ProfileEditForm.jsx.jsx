@@ -41,12 +41,33 @@ const ProfileEditForm = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get("/api/user/profile", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+        const response = await axios.get(
+          "https://prohires.strangled.net/mainapp/get_user_profile",
+          {
+            headers: {
+              Authorization: `Token ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+
+        const user = response.data.data;
+        const address =
+          user.addresses && user.addresses.length > 0 ? user.addresses[0] : {};
+
+        setUserData({
+          firstName: user.username.split("@")[0] || "",
+          lastName: "",
+          phoneNumber: user.phone_number || "",
+          email: user.email || "",
+          profilePicture: user.profile_picture || "",
+          address: address.address || "",
+          city: address.city || "",
+          state: address.state || "",
+          country: address.country || "",
+          pincode: address.pincode || "",
+          resume: user.resume_link || "",
         });
-        setUserData(response.data);
+
         setLoading(false);
       } catch (err) {
         setError("Failed to fetch user data");

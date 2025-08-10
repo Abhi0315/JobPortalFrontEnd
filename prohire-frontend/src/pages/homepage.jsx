@@ -62,6 +62,7 @@ const Homepage = () => {
           heroImage: hero.image_url
             ? `https://prohires.strangled.net${hero.image_url}`
             : null,
+          contents: hero.contents || [], // ✅ add this
         });
 
         // Find features/other section
@@ -137,11 +138,13 @@ const Homepage = () => {
 
                 {/* Additional content below description */}
                 <motion.div className="hero-highlights" variants={itemVariants}>
-                  <ul className="hero-features-list">
-                    <li>AI-powered job matching</li>
-                    <li>100+ companies hiring</li>
-                    <li>Personalized career guidance</li>
-                  </ul>
+                  {heroContent.contents && heroContent.contents.length > 0 && (
+                    <ul className="hero-features-list">
+                      {heroContent.contents.map((item, index) => (
+                        <li key={index}>{item.title}</li>
+                      ))}
+                    </ul>
+                  )}
                 </motion.div>
 
                 {/* Button group */}
@@ -175,10 +178,11 @@ const Homepage = () => {
                 >
                   <div className="trusted-by">Trusted by:</div>
                   <div className="trust-logos">
-                    <span>Google</span>
-                    <span>Microsoft</span>
-                    <span>Amazon</span>
-                    <span>Adobe</span>
+                    <span>Abhiram</span>
+                    <span>Devanand</span>
+                    <span>Abhijeet</span>
+                    <span>Dipak</span>
+                    <span>Amol</span>
                   </div>
                 </motion.div>
               </motion.div>

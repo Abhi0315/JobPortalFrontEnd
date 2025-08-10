@@ -51,18 +51,22 @@ const Homepage = () => {
         setSections(data.sections || []);
 
         // Find hero section
-        const hero = data.sections?.find((s) => s.section_type === "hero") || {};
+        const hero =
+          data.sections?.find((s) => s.section_type === "hero") || {};
         setHeroContent({
           title: hero.heading || "ProHire",
           subtitle: hero.slogan || "Where talent meets opportunity.",
           description: hero.description || "Search for jobs, internships...",
           buttonText: hero.button_text || "Get Started",
           buttonLink: hero.button_url || "/register",
-          heroImage: hero.image_url ? `https://prohires.strangled.net${hero.image_url}` : null,
+          heroImage: hero.image_url
+            ? `https://prohires.strangled.net${hero.image_url}`
+            : null,
         });
 
         // Find features/other section
-        const features = data.sections?.find((s) => s.section_type === "other") || {};
+        const features =
+          data.sections?.find((s) => s.section_type === "other") || {};
         setFeaturesContent({
           title: features.heading || "",
           description: features.description || "",
@@ -77,7 +81,11 @@ const Homepage = () => {
 
   const containerVariants = {
     hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { staggerChildren: 0.3, duration: 0.8 } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { staggerChildren: 0.3, duration: 0.8 },
+    },
   };
 
   const itemVariants = {
@@ -102,21 +110,37 @@ const Homepage = () => {
                     className="hero-image"
                   />
                 ) : (
-                  <div style={{ height: 300, backgroundColor: "#ccc", borderRadius: 16 }}></div>
+                  <div
+                    style={{
+                      height: 300,
+                      backgroundColor: "#ccc",
+                      borderRadius: 16,
+                    }}
+                  ></div>
                 )}
               </div>
             </div>
 
             <div className="col-lg-6 hero-content">
-              <motion.div variants={containerVariants} initial="hidden" animate="visible">
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+              >
                 <motion.h1 className="hero-title" variants={itemVariants}>
-                  {heroContent.title} <span className="hero-subtitle">{heroContent.subtitle}</span>
+                  {heroContent.title}{" "}
+                  <span className="hero-subtitle">{heroContent.subtitle}</span>
                 </motion.h1>
                 <motion.p className="hero-text" variants={itemVariants}>
                   {heroContent.description}
                 </motion.p>
                 {heroContent.buttonText && (
-                  <motion.div variants={itemVariants} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+                  <div
+                    className="hero-btn-wrapper"
+                    variants={itemVariants}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
                     <Button
                       variant="primary"
                       className="hero-btn rounded-pill"
@@ -124,7 +148,7 @@ const Homepage = () => {
                     >
                       {heroContent.buttonText}
                     </Button>
-                  </motion.div>
+                  </div>
                 )}
               </motion.div>
             </div>
@@ -138,7 +162,11 @@ const Homepage = () => {
           className="features-section py-5"
           style={
             featuresContent.backgroundImage
-              ? { backgroundImage: `url(${featuresContent.backgroundImage})`, backgroundSize: "cover", backgroundPosition: "center" }
+              ? {
+                  backgroundImage: `url(${featuresContent.backgroundImage})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }
               : {}
           }
         >
@@ -151,24 +179,30 @@ const Homepage = () => {
             )}
             <div className="features-scroll-container">
               <div className="features-scroll-track">
-                {[...featuresContent.contents, ...featuresContent.contents].map((content, idx) => (
-                  <div key={idx} className="feature-card-wrapper">
-                    <Card className="h-100 shadow-sm border-0">
-                      {content.icon_url && (
-                        <Card.Img
-                          variant="top"
-                          src={`https://prohires.strangled.net${content.icon_url}`}
-                          alt={content.icon_alternate_text || content.title}
-                          style={{ maxHeight: 150, objectFit: "contain", padding: "15px" }}
-                        />
-                      )}
-                      <Card.Body>
-                        <Card.Title>{content.title}</Card.Title>
-                        <Card.Text>{content.description}</Card.Text>
-                      </Card.Body>
-                    </Card>
-                  </div>
-                ))}
+                {[...featuresContent.contents, ...featuresContent.contents].map(
+                  (content, idx) => (
+                    <div key={idx} className="feature-card-wrapper">
+                      <Card className="h-100 shadow-sm border-0">
+                        {content.icon_url && (
+                          <Card.Img
+                            variant="top"
+                            src={`https://prohires.strangled.net${content.icon_url}`}
+                            alt={content.icon_alternate_text || content.title}
+                            style={{
+                              maxHeight: 150,
+                              objectFit: "contain",
+                              padding: "15px",
+                            }}
+                          />
+                        )}
+                        <Card.Body>
+                          <Card.Title>{content.title}</Card.Title>
+                          <Card.Text>{content.description}</Card.Text>
+                        </Card.Body>
+                      </Card>
+                    </div>
+                  )
+                )}
               </div>
             </div>
           </Container>

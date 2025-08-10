@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";  // import useNavigate
+import { useNavigate } from "react-router-dom"; // import useNavigate
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import "../styles/Navbar.css";
@@ -7,7 +7,7 @@ import "../styles/Navbar.css";
 const ProHireNavbar = () => {
   const [menus, setMenus] = useState([]);
   const [logo, setLogo] = useState("");
-  const navigate = useNavigate();  // initialize navigate
+  const navigate = useNavigate(); // initialize navigate
 
   useEffect(() => {
     fetch("https://prohires.strangled.net/headerfooter/header-footer")

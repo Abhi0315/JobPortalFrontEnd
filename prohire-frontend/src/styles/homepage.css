@@ -5,56 +5,15 @@
 .prohire-navbar {
   background-color: white !important;
   padding: 15px 50px;
-  font-family: "Poppins", sans-serif;
-}
-
-.prohire-logo {
-  font-family: "Poppins", sans-serif;
-  font-weight: 700;
-  font-style: italic;
-  color: #2c1475 !important;
-  font-size: 1.8rem;
-  margin-right: 1rem;
-}
-
-.prohire-navbar .nav-link {
-  font-weight: 500;
-  color: #333 !important;
-  font-size: 1rem;
-  transition: color 0.3s ease;
-}
-
-.prohire-navbar .nav-link:hover {
-  color: #2c1475 !important;
 }
 
 /* Button Styles */
-.signup-btn {
-  background-color: #2c1475 !important;
-  border-color: #2c1475 !important;
-  font-weight: 600 !important;
-  padding: 8px 20px !important;
-  transition: color 0.3s ease, background-color 0.3s ease,
-    border-color 0.3s ease;
-}
-
-.signup-btn:hover {
-  border-color: black !important;
-  color: black !important;
-  background-color: white !important;
-}
 
 .btn-outline-secondary {
-  padding: 8px 20px !important;
-  font-weight: 500 !important;
-  border-color: black !important;
+  /* border-color: black !important; */
   color: black !important;
   transition: color 0.3s ease, background-color 0.3s ease,
     border-color 0.3s ease;
-}
-.btn-outline-secondary:hover {
-  background-color: #2c1475 !important;
-  color: white !important;
 }
 
 /* Responsive adjustments */
@@ -76,13 +35,25 @@
 
 /* Hero Section Styles */
 .hero-section {
-  background: linear-gradient(135deg, #cfd6ea 0%, #f3f3f3 100%);
+  background-image: linear-gradient(
+    to top,
+    #bcd2de,
+    #c3d5e6,
+    #ccd8ed,
+    #d7dbf3,
+    #e3ddf7
+  );
+
   padding: 85px 0;
   position: relative;
   overflow: hidden;
   min-height: 88vh;
   display: flex;
   align-items: center;
+  height: 90vh;
+}
+.hero-btn-wrapper {
+  width: 200px;
 }
 
 .hero-image-col {
@@ -98,7 +69,7 @@
 
 .hero-image {
   width: 100%;
-  height: auto;
+  margin-top: 50px;
   border-radius: 16px;
   max-height: 82vh;
   object-fit: cover;
@@ -108,6 +79,7 @@
   padding-left: 40px;
   position: relative;
   z-index: 2;
+  margin-top: 50px;
 }
 
 .hero-title {
@@ -128,21 +100,33 @@
   color: #555;
   margin-bottom: 30px;
 }
-
 .hero-btn {
-  background-color: #2c1475;
+  background: linear-gradient(135deg, #2c1475, #7757d6);
   border: none;
   padding: 12px 30px;
+  width: 200px;
   font-weight: 600;
   font-size: 1.1rem;
-  transition: color 0.3s ease, background-color 0.3s ease;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s ease;
+  background-size: 200% 200%;
 }
 
 .hero-btn:hover {
-  background-color: #241062;
-  color: white;
+  background: linear-gradient(135deg, #2c1475, #7757d6);
+  transform: scale(1.07);
+  background-position: right center; /* Shifts gradient */
+  box-shadow: 0 6px 18px rgba(119, 87, 214, 0.6);
 }
 
+.hero-btn:active {
+  transform: scale(0.96);
+}
 /* Responsive adjustments */
 @media (max-width: 992px) {
   .hero-section {

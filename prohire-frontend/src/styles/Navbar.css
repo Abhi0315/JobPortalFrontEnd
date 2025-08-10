@@ -1,10 +1,20 @@
 /* navbar.css */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
 .prohire-navbar {
   background-color: #ffffff;
   padding: 0.75rem 1rem;
   border-bottom: 1px solid #eee;
   transition: all 0.3s ease-in-out;
+  font-family: "Poppins", sans-serif;
+}
+.prohire-logo {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: italic;
+  color: #2c1475 !important;
+  font-size: 1.8rem;
+  margin-right: 1rem;
 }
 
 .prohire-navbar .navbar-brand img {
@@ -14,7 +24,7 @@
 .prohire-navbar .navbar-brand {
   font-weight: bold;
   font-size: 1.25rem;
-  color: #007bff;
+  color: #2c1475;
   text-decoration: none;
 }
 
@@ -26,38 +36,40 @@
 }
 
 .prohire-navbar .nav-link:hover {
-  color: #007bff !important;
+  color: #2c1475 !important;
 }
 
 .signup-btn {
-  background: linear-gradient(135deg, #0056b3, #0099ff);
+  background: linear-gradient(135deg, #2c1475, #5d44a5);
   border: none;
   color: white;
-  padding: 0.6rem 1.75rem;
-  font-weight: 700;
+  font-weight: 600 !important;
+  padding: 8px 20px !important;
   font-size: 1rem;
   box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
-  transition: transform 0.2s ease-in-out, background 0.3s ease-in-out;
+  transition: background-color 0.3s ease, color 0.3s ease,
+    transform 0.2s ease-in-out;
 }
 
 .signup-btn:hover {
-  background: linear-gradient(135deg, #003d80, #007acc);
-  transform: scale(1.1);
-  box-shadow: 0 6px 12px rgba(0, 123, 255, 0.5);
+  background-color: white !important;
+  color: white !important;
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.4);
 }
 
 .btn-outline-secondary {
-  padding: 0.55rem 1.5rem;
-  font-weight: 600;
-  font-size: 0.95rem;
-  border: 2px solid #007bff !important;
-  color: #007bff !important;
+  padding: 8px 20px !important;
+  font-weight: 500 !important;
+  border: 0.5px solid #555 !important;
+  color: #555 !important;
   box-shadow: 0 2px 6px rgba(0, 123, 255, 0.2);
-  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease-in-out;
+  transition: background-color 0.3s ease, color 0.3s ease,
+    transform 0.2s ease-in-out;
 }
 
 .btn-outline-secondary:hover {
-  background-color: #007bff !important;
+  background-color: #2c1475 !important;
   color: white !important;
   transform: scale(1.05);
   box-shadow: 0 4px 10px rgba(0, 123, 255, 0.4);

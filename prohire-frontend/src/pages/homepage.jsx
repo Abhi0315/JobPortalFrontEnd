@@ -96,7 +96,7 @@ const Homepage = () => {
   return (
     <>
       <ProHireNavbar />
-
+      {/* Hero Section */}
       {/* Hero Section */}
       <section className="hero-section">
         <Container>
@@ -134,28 +134,58 @@ const Homepage = () => {
                 <motion.p className="hero-text" variants={itemVariants}>
                   {heroContent.description}
                 </motion.p>
-                {heroContent.buttonText && (
-                  <div
-                    className="hero-btn-wrapper"
-                    variants={itemVariants}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
+
+                {/* Additional content below description */}
+                <motion.div className="hero-highlights" variants={itemVariants}>
+                  <ul className="hero-features-list">
+                    <li>AI-powered job matching</li>
+                    <li>100+ companies hiring</li>
+                    <li>Personalized career guidance</li>
+                  </ul>
+                </motion.div>
+
+                {/* Button group */}
+                <motion.div className="hero-btn-group" variants={itemVariants}>
+                  {heroContent.buttonText && (
                     <Button
                       variant="primary"
-                      className="hero-btn rounded-pill"
+                      className="hero-btn rounded-pill me-3"
                       onClick={() => navigate(heroContent.buttonLink)}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
                     >
                       {heroContent.buttonText}
                     </Button>
+                  )}
+                  <Button
+                    variant="outline-primary"
+                    className="hero-demo-btn rounded-pill"
+                    onClick={() => navigate("/demo")}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Live Demo
+                  </Button>
+                </motion.div>
+
+                {/* Trust indicators */}
+                <motion.div
+                  className="trust-indicators"
+                  variants={itemVariants}
+                >
+                  <div className="trusted-by">Trusted by:</div>
+                  <div className="trust-logos">
+                    <span>Google</span>
+                    <span>Microsoft</span>
+                    <span>Amazon</span>
+                    <span>Adobe</span>
                   </div>
-                )}
+                </motion.div>
               </motion.div>
             </div>
           </div>
         </Container>
       </section>
-
       {/* Features / Contents Section */}
       {featuresContent.contents.length > 0 && (
         <section

@@ -1,5 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import {
+  FiEdit2,
+  FiSave,
+  FiX,
+  FiTrash2,
+  FiUser,
+  FiMail,
+  FiPhone,
+  FiHome,
+  FiMapPin,
+  FiFile,
+} from "react-icons/fi";
+
 import "../styles/ProfileEditForm.css";
 
 const ProfileEditForm = () => {
@@ -22,11 +35,12 @@ const ProfileEditForm = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
   const [deleteError, setDeleteError] = useState("");
+  const [editingField, setEditingField] = useState(null);
+  const [tempValue, setTempValue] = useState("");
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        // Replace with your actual API endpoint
         const response = await axios.get("/api/user/profile", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -43,47 +57,65 @@ const ProfileEditForm = () => {
     fetchUserData();
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUserData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const startEditing = (fieldName) => {
+    setEditingField(fieldName);
+    setTempValue(userData[fieldName]);
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUserData((prev) => ({
-          ...prev,
-          [e.target.name]:
-            e.target.name === "profilePicture" ? reader.result : file,
-        }));
-      };
-      reader.readAsDataURL(file);
-    }
+  const cancelEditing = () => {
+    setEditingField(null);
+    setTempValue("");
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const saveEditing = async (fieldName) => {
     try {
-      const formData = new FormData();
-      for (const key in userData) {
-        formData.append(key, userData[key]);
-      }
+      const updatedData = { ...userData, [fieldName]: tempValue };
 
-      await axios.put("/api/user/profile", formData, {
+      await axios.put("/api/user/profile", updatedData, {
         headers: {
-          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
+
+      setUserData(updatedData);
+      setEditingField(null);
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
       setError("Failed to update profile");
+    }
+  };
+
+  const handleTempChange = (e) => {
+    setTempValue(e.target.value);
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        const formData = new FormData();
+        formData.append(e.target.name, file);
+
+        const response = await axios.put("/api/user/profile", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        setUserData((prev) => ({
+          ...prev,
+          [e.target.name]:
+            e.target.name === "profilePicture"
+              ? URL.createObjectURL(file)
+              : file.name,
+        }));
+        setSuccess(true);
+        setTimeout(() => setSuccess(false), 3000);
+      } catch (err) {
+        setError("Failed to upload file");
+      }
     }
   };
 
@@ -100,11 +132,71 @@ const ProfileEditForm = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      // Redirect to login or home page after deletion
       window.location.href = "/";
     } catch (err) {
       setDeleteError("Incorrect password or deletion failed");
     }
+  };
+
+  const renderEditableField = (
+    fieldName,
+    label,
+    type = "text",
+    IconComponent
+  ) => {
+    if (editingField === fieldName) {
+      return (
+        <div className="editing-field">
+          <div className="input-with-icon">
+            {IconComponent && <IconComponent className="field-icon" />}
+            <input
+              type={type}
+              value={tempValue}
+              onChange={handleTempChange}
+              autoFocus
+              placeholder={`Enter ${label.toLowerCase()}`}
+            />
+          </div>
+          <div className="edit-controls">
+            <button
+              type="button"
+              onClick={() => saveEditing(fieldName)}
+              className="save-btn"
+              aria-label={`Save ${label}`}
+            >
+              <FiSave />
+            </button>
+            <button
+              type="button"
+              onClick={cancelEditing}
+              className="cancel-btn"
+              aria-label="Cancel editing"
+            >
+              <FiX />
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="display-field">
+        <div className="content-with-icon">
+          {IconComponent && <IconComponent className="field-icon" />}
+          <span>
+            {userData[fieldName] || `No ${label.toLowerCase()} provided`}
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={() => startEditing(fieldName)}
+          className="edit-btn"
+          aria-label={`Edit ${label}`}
+        >
+          <FiEdit2 />
+        </button>
+      </div>
+    );
   };
 
   if (loading) return <div className="loading">Loading...</div>;
@@ -112,175 +204,167 @@ const ProfileEditForm = () => {
 
   return (
     <div className="profile-edit-container">
-      <h2>Edit Profile</h2>
-
-      {success && (
-        <div className="success-message">Profile updated successfully!</div>
-      )}
-
-      <form onSubmit={handleSubmit} className="profile-edit-form">
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="firstName">First Name</label>
-            <input
-              type="text"
-              id="firstName"
-              name="firstName"
-              value={userData.firstName}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="lastName">Last Name</label>
-            <input
-              type="text"
-              id="lastName"
-              name="lastName"
-              value={userData.lastName}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        </div>
-
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={userData.email}
-              readOnly
-              className="read-only"
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="phoneNumber">Phone Number</label>
-            <input
-              type="tel"
-              id="phoneNumber"
-              name="phoneNumber"
-              value={userData.phoneNumber}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="profilePicture">Profile Picture</label>
-          {userData.profilePicture && (
-            <div className="profile-picture-preview">
-              <img src={userData.profilePicture} alt="Profile Preview" />
+      <div className="profile-header">
+        <h2>My Profile</h2>
+        {success && (
+          <div className="success-message">
+            <div className="success-content">
+              ✓ Profile updated successfully!
             </div>
-          )}
-          <input
-            type="file"
-            id="profilePicture"
-            name="profilePicture"
-            accept="image/*"
-            onChange={handleFileChange}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="address">Address</label>
-          <input
-            type="text"
-            id="address"
-            name="address"
-            value={userData.address}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="city">City</label>
-            <input
-              type="text"
-              id="city"
-              name="city"
-              value={userData.city}
-              onChange={handleChange}
-              required
-            />
           </div>
+        )}
+      </div>
 
-          <div className="form-group">
-            <label htmlFor="state">State</label>
-            <input
-              type="text"
-              id="state"
-              name="state"
-              value={userData.state}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        </div>
-
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="country">Country</label>
-            <input
-              type="text"
-              id="country"
-              name="country"
-              value={userData.country}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="pincode">Pincode</label>
-            <input
-              type="text"
-              id="pincode"
-              name="pincode"
-              value={userData.pincode}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="resume">Upload New Resume</label>
-          {userData.resume && (
-            <div className="resume-info">
-              Current resume:{" "}
-              {typeof userData.resume === "string"
-                ? userData.resume
-                : userData.resume.name}
+      <div className="profile-card">
+        <div className="card-section personal-info">
+          <h3>
+            <FiUser /> Personal Information
+          </h3>
+          <div className="form-grid">
+            <div className="form-group">
+              <label>First Name</label>
+              {renderEditableField("firstName", "First Name", "text", FiUser)}
             </div>
-          )}
-          <input
-            type="file"
-            id="resume"
-            name="resume"
-            accept=".pdf,.doc,.docx"
-            onChange={handleFileChange}
-          />
+
+            <div className="form-group">
+              <label>Last Name</label>
+              {renderEditableField("lastName", "Last Name")}
+            </div>
+
+            <div className="form-group">
+              <label>Email</label>
+              <div className="display-field">
+                <div className="content-with-icon">
+                  <FiMail className="field-icon" />
+                  <span>{userData.email}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>Phone Number</label>
+              {renderEditableField(
+                "phoneNumber",
+                "Phone Number",
+                "tel",
+                FiPhone
+              )}
+            </div>
+          </div>
         </div>
 
-        <button type="submit" className="submit-btn">
-          Update Profile
-        </button>
-      </form>
+        <div className="card-section profile-picture-section">
+          <h3>
+            <FiUser /> Profile Picture
+          </h3>
+          <div className="profile-picture-upload">
+            <div className="picture-preview-container">
+              {userData.profilePicture ? (
+                <img
+                  src={
+                    typeof userData.profilePicture === "string"
+                      ? userData.profilePicture
+                      : URL.createObjectURL(userData.profilePicture)
+                  }
+                  alt="Profile"
+                  className="profile-image"
+                />
+              ) : (
+                <div className="profile-image-placeholder">
+                  <FiUser size={48} />
+                </div>
+              )}
+            </div>
+            <div className="file-upload-wrapper">
+              <label htmlFor="profilePicture" className="file-upload-label">
+                Change Photo
+                <input
+                  type="file"
+                  id="profilePicture"
+                  name="profilePicture"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+              </label>
+            </div>
+          </div>
+        </div>
 
-      <div className="delete-account-section">
+        <div className="card-section address-info">
+          <h3>
+            <FiHome /> Address Information
+          </h3>
+          <div className="form-grid">
+            <div className="form-group full-width">
+              <label>Address</label>
+              {renderEditableField("address", "Address", "text", FiHome)}
+            </div>
+
+            <div className="form-group">
+              <label>City</label>
+              {renderEditableField("city", "City", "text", FiMapPin)}
+            </div>
+
+            <div className="form-group">
+              <label>State</label>
+              {renderEditableField("state", "State")}
+            </div>
+
+            <div className="form-group">
+              <label>Country</label>
+              {renderEditableField("country", "Country")}
+            </div>
+
+            <div className="form-group">
+              <label>Pincode</label>
+              {renderEditableField("pincode", "Pincode")}
+            </div>
+          </div>
+        </div>
+
+        <div className="card-section resume-section">
+          <h3>
+            <FiFile /> Resume
+          </h3>
+          <div className="resume-upload">
+            {userData.resume ? (
+              <div className="resume-info">
+                <FiFile className="resume-icon" />
+                <span className="resume-name">
+                  {typeof userData.resume === "string"
+                    ? userData.resume
+                    : userData.resume.name}
+                </span>
+              </div>
+            ) : (
+              <div className="no-resume">No resume uploaded</div>
+            )}
+            <div className="file-upload-wrapper">
+              <label htmlFor="resume" className="file-upload-label">
+                {userData.resume ? "Update Resume" : "Upload Resume"}
+                <input
+                  type="file"
+                  id="resume"
+                  name="resume"
+                  accept=".pdf,.doc,.docx"
+                  onChange={handleFileChange}
+                />
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="danger-zone">
+        <h3>
+          <FiTrash2 /> Danger Zone
+        </h3>
+        <p>Permanently delete your account and all associated data.</p>
         <button
           onClick={() => setShowDeleteModal(true)}
-          className="delete-account-link"
+          className="delete-account-btn"
         >
-          Delete Account
+          <FiTrash2 /> Delete Account
         </button>
       </div>
 
@@ -298,6 +382,7 @@ const ProfileEditForm = () => {
               value={deletePassword}
               onChange={(e) => setDeletePassword(e.target.value)}
               placeholder="Enter your password"
+              className="password-input"
             />
             {deleteError && <div className="delete-error">{deleteError}</div>}
             <div className="modal-buttons">

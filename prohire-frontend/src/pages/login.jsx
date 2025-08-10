@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import "../styles/RegistrationForm.css";
@@ -75,6 +75,15 @@ const LoginForm = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+  const handlePopState = () => {
+    navigate("/homepage", { replace: true });
+  };
+
+  window.addEventListener("popstate", handlePopState);
+  return () => window.removeEventListener("popstate", handlePopState);
+}, [navigate]);
 
   return (
     <div className="split-screen">

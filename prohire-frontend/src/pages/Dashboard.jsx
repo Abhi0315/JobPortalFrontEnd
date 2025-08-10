@@ -21,7 +21,7 @@ const Dashboard = () => {
   const fetchJobs = async (token) => {
     try {
       const response = await axios.get(
-        "http://127.0.0.1:8000//job/jobs",
+        "https://prohires.strangled.net/job/jobs",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -46,7 +46,7 @@ const Dashboard = () => {
       if (token) {
         // Call logout endpoint
         await axios.post(
-          "http://127.0.0.1:8000/mainapp/user_logout/",
+          "https://prohires.strangled.net/mainapp/user_logout/",
           {},
           {
             headers: {

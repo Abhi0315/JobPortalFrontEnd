@@ -57,11 +57,9 @@ const LoginForm = () => {
         }
       );
 
-      if (response.data && response.data.access_token) {
-        // Save the token to localStorage or context
-        localStorage.setItem("authToken", response.data.access_token);
-
-        // Redirect to dashboard or home page
+      if (response.data && response.data.token) {
+        localStorage.setItem("authToken", response.data.token);
+        setApiMessage(response.data.message || "Login success");
         navigate("/dashboard");
       } else {
         setApiMessage("Login failed. Please check your credentials.");
@@ -69,7 +67,7 @@ const LoginForm = () => {
     } catch (error) {
       setApiMessage(
         error.response?.data?.error ||
-          "An error occurred during login. Please try again."
+        "An error occurred during login. Please try again."
       );
     } finally {
       setLoading(false);
@@ -134,7 +132,7 @@ const LoginForm = () => {
           {apiMessage && (
             <div
               className={`alert ${
-                apiMessage.includes("success")
+                apiMessage.toLowerCase().includes("success")
                   ? "alert-success"
                   : "alert-danger"
               }`}

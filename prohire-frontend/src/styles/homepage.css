@@ -21,7 +21,7 @@
   font-weight: 500;
   color: #333 !important;
   font-size: 1rem;
-  transition: all 0.3s ease;
+  transition: color 0.3s ease;
 }
 
 .prohire-navbar .nav-link:hover {
@@ -34,6 +34,7 @@
   border-color: #2c1475 !important;
   font-weight: 600 !important;
   padding: 8px 20px !important;
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .signup-btn:hover {
@@ -47,6 +48,7 @@
   font-weight: 500 !important;
   border-color: black !important;
   color: black !important;
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
 }
 .btn-outline-secondary:hover {
   background-color: #2c1475 !important;
@@ -76,9 +78,9 @@
   padding: 80px 0;
   position: relative;
   overflow: hidden;
-  min-height: 88vh; /* This makes it at least full viewport height */
+  min-height: 88vh;
   display: flex;
-  align-items: center; /* This vertically centers the content */
+  align-items: center;
 }
 
 .hero-image-col {
@@ -96,13 +98,8 @@
   width: 100%;
   height: auto;
   border-radius: 16px;
-  transition: transform 0.5s ease;
-  max-height: 70vh; /* Limits image height while keeping it responsive */
+  max-height: 70vh;
   object-fit: cover;
-}
-
-.hero-image:hover {
-  transform: scale(1.02);
 }
 
 .hero-content {
@@ -136,20 +133,19 @@
   padding: 12px 30px;
   font-weight: 600;
   font-size: 1.1rem;
-  transition: all 0.3s ease;
+  transition: color 0.3s ease, background-color 0.3s ease;
 }
 
 .hero-btn:hover {
   background-color: #241062;
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(44, 20, 117, 0.2);
+  color: white;
 }
 
 /* Responsive adjustments */
 @media (max-width: 992px) {
   .hero-section {
     padding: 60px 0;
-    min-height: auto; /* Remove fixed height on smaller screens */
+    min-height: auto;
     height: auto;
   }
 
@@ -181,3 +177,51 @@
     padding: 40px 0;
   }
 }
+
+.features-section .card {
+  border-radius: 16px;
+  transition: transform 0.3s ease;
+}
+
+.features-section .card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 25px rgba(44, 20, 117, 0.2);
+}
+
+.features-section .card-title {
+  font-weight: 600;
+  color: #2c1475;
+}
+
+.features-section .card-text {
+  color: #555;
+}
+
+/* --- Auto-scrolling features section --- */
+.features-scroll-container {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.features-scroll-track {
+  display: flex;
+  width: max-content;
+  animation: scroll-left 25s linear infinite;
+}
+
+.feature-card-wrapper {
+  min-width: 280px;
+  margin-right: 24px;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+/* --- End auto-scrolling --- */

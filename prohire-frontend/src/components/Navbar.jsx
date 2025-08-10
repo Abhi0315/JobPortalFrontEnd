@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";  // import useNavigate
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
-import "../styles/Navbar.css"; // Assuming you have a CSS file for styles
+import "../styles/Navbar.css";
 
 const ProHireNavbar = () => {
   const [menus, setMenus] = useState([]);
   const [logo, setLogo] = useState("");
+  const navigate = useNavigate();  // initialize navigate
 
   useEffect(() => {
     fetch("https://prohires.strangled.net/headerfooter/header-footer")
@@ -33,8 +35,12 @@ const ProHireNavbar = () => {
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mx-auto">
+
+        <Navbar.Collapse
+          id="basic-navbar-nav"
+          className="d-flex justify-content-between align-items-center"
+        >
+          <Nav className="">
             {menus.map((menu) => (
               <Nav.Link key={menu.id} href={menu.url} className="px-3">
                 {menu.title}
@@ -43,10 +49,18 @@ const ProHireNavbar = () => {
           </Nav>
 
           <div className="d-flex">
-            <Button variant="outline-secondary" className="rounded-pill mx-2">
+            <Button
+              variant="outline-secondary"
+              className="rounded-pill mx-2"
+              onClick={() => navigate("/login")}
+            >
               Login
             </Button>
-            <Button variant="primary" className="signup-btn rounded-pill mx-2">
+            <Button
+              variant="primary"
+              className="signup-btn rounded-pill mx-2"
+              onClick={() => navigate("/registrationform")}
+            >
               Sign Up
             </Button>
           </div>

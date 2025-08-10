@@ -30,15 +30,35 @@
 }
 
 .signup-btn {
-  background: linear-gradient(135deg, #007bff, #00c6ff);
+  background: linear-gradient(135deg, #0056b3, #0099ff);
   border: none;
   color: white;
-  padding: 0.5rem 1.25rem;
-  font-weight: 600;
-  transition: transform 0.2s ease-in-out;
+  padding: 0.6rem 1.75rem;
+  font-weight: 700;
+  font-size: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+  transition: transform 0.2s ease-in-out, background 0.3s ease-in-out;
 }
 
 .signup-btn:hover {
+  background: linear-gradient(135deg, #003d80, #007acc);
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(0, 123, 255, 0.5);
+}
+
+.btn-outline-secondary {
+  padding: 0.55rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: 2px solid #007bff !important;
+  color: #007bff !important;
+  box-shadow: 0 2px 6px rgba(0, 123, 255, 0.2);
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease-in-out;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #007bff !important;
+  color: white !important;
   transform: scale(1.05);
-  background: linear-gradient(135deg, #0056b3, #00a3cc);
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.4);
 }

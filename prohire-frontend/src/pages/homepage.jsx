@@ -1,24 +1,33 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, NavLink } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {
-  Navbar,
-  Nav,
-  Container,
-  Button,
-  Row,
-  Col,
-  Card,
-} from "react-bootstrap";
+import { Container, Button, Card } from "react-bootstrap";
 import { motion } from "framer-motion";
 import "../styles/homepage.css";
+
+import ProHireNavbar from "../components/Navbar";
 
 const Homepage = () => {
   const [menus, setMenus] = useState([]);
   const [logo, setLogo] = useState("");
   const [sections, setSections] = useState([]);
 
-  const [loading, setLoading] = useState(true);
+  // Separate states for hero and features
+  const [heroContent, setHeroContent] = useState({
+    title: "",
+    subtitle: "",
+    description: "",
+    buttonText: "",
+    buttonLink: "",
+    heroImage: "",
+  });
+
+  const [featuresContent, setFeaturesContent] = useState({
+    title: "",
+    description: "",
+    contents: [],
+    backgroundImage: "",
+  });
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -40,98 +49,131 @@ const Homepage = () => {
       .then((res) => res.json())
       .then((data) => {
         setSections(data.sections || []);
+
+        // Find hero section
+        const hero = data.sections?.find((s) => s.section_type === "hero") || {};
+        setHeroContent({
+          title: hero.heading || "ProHire",
+          subtitle: hero.slogan || "Where talent meets opportunity.",
+          description: hero.description || "Search for jobs, internships...",
+          buttonText: hero.button_text || "Get Started",
+          buttonLink: hero.button_url || "/register",
+          heroImage: hero.image_url ? `https://prohires.strangled.net${hero.image_url}` : null,
+        });
+
+        // Find features/other section
+        const features = data.sections?.find((s) => s.section_type === "other") || {};
+        setFeaturesContent({
+          title: features.heading || "",
+          description: features.description || "",
+          contents: features.contents || [],
+          backgroundImage: features.background_image
+            ? `https://prohires.strangled.net${features.background_image}`
+            : "",
+        });
       })
       .catch((err) => console.error("Error fetching homepage data:", err));
   }, [slug]);
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { staggerChildren: 0.3, duration: 0.8 } },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
     <>
-      {/* Navbar */}
-      <Navbar expand="lg" className="prohire-navbar shadow-sm">
-        <Container fluid>
-          <Navbar.Brand as={NavLink} to="/" className="prohire-logo">
-            {logo ? (
-              <img
-                src={logo}
-                alt="ProHire Logo"
-                style={{ height: "40px", objectFit: "contain" }}
-              />
-            ) : (
-              "ProHire"
-            )}
-          </Navbar.Brand>
-
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mx-auto">
-              {menus.map((menu) => (
-                <Nav.Link
-                  key={menu.id}
-                  as={NavLink}
-                  to={`/?slug=${menu.slug}`}
-                  className="px-3"
-                >
-                  {menu.title}
-                </Nav.Link>
-              ))}
-            </Nav>
-            <div className="d-flex">
-              <Button
-                variant="outline-secondary"
-                className="rounded-pill mx-2"
-                onClick={() => navigate("/login")}
-              >
-                Login
-              </Button>
-              <Button
-                variant="primary"
-                className="signup-btn rounded-pill mx-2"
-                onClick={() => navigate("/registrationform")}
-              >
-                Sign Up
-              </Button>
-            </div>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+      <ProHireNavbar />
 
       {/* Hero Section */}
       <section className="hero-section">
         <Container>
-          <Row className="align-items-center">
-            <Col lg={6} className="hero-image-col">
+          <div className="row align-items-center">
+            <div className="col-lg-6 hero-image-col">
               <div className="hero-image-wrapper">
-                <img
-                  src="https://via.placeholder.com/600x400"
-                  alt="Hero Illustration"
-                  className="hero-image"
-                />
+                {heroContent.heroImage ? (
+                  <img
+                    src={heroContent.heroImage}
+                    alt={heroContent.title}
+                    className="hero-image"
+                  />
+                ) : (
+                  <div style={{ height: 300, backgroundColor: "#ccc", borderRadius: 16 }}></div>
+                )}
               </div>
-            </Col>
-            <Col lg={6} className="hero-content">
-              <h1 className="hero-title">
-                ProHire{" "}
-                <span className="hero-subtitle">
-                  — Where talent meets opportunity.
-                </span>
-              </h1>
-              <p className="hero-text">Search for jobs, internships...</p>
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button
-                  variant="primary"
-                  className="hero-btn rounded-pill"
-                  onClick={() => navigate("/register")}
-                >
-                  Get Started
-                </Button>
+            </div>
+
+            <div className="col-lg-6 hero-content">
+              <motion.div variants={containerVariants} initial="hidden" animate="visible">
+                <motion.h1 className="hero-title" variants={itemVariants}>
+                  {heroContent.title} <span className="hero-subtitle">{heroContent.subtitle}</span>
+                </motion.h1>
+                <motion.p className="hero-text" variants={itemVariants}>
+                  {heroContent.description}
+                </motion.p>
+                {heroContent.buttonText && (
+                  <motion.div variants={itemVariants} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+                    <Button
+                      variant="primary"
+                      className="hero-btn rounded-pill"
+                      onClick={() => navigate(heroContent.buttonLink)}
+                    >
+                      {heroContent.buttonText}
+                    </Button>
+                  </motion.div>
+                )}
               </motion.div>
-            </Col>
-          </Row>
+            </div>
+          </div>
         </Container>
       </section>
+
+      {/* Features / Contents Section */}
+      {featuresContent.contents.length > 0 && (
+        <section
+          className="features-section py-5"
+          style={
+            featuresContent.backgroundImage
+              ? { backgroundImage: `url(${featuresContent.backgroundImage})`, backgroundSize: "cover", backgroundPosition: "center" }
+              : {}
+          }
+        >
+          <Container>
+            {featuresContent.title && (
+              <h2 className="mb-3">{featuresContent.title}</h2>
+            )}
+            {featuresContent.description && (
+              <p className="mb-4">{featuresContent.description}</p>
+            )}
+            <div className="features-scroll-container">
+              <div className="features-scroll-track">
+                {[...featuresContent.contents, ...featuresContent.contents].map((content, idx) => (
+                  <div key={idx} className="feature-card-wrapper">
+                    <Card className="h-100 shadow-sm border-0">
+                      {content.icon_url && (
+                        <Card.Img
+                          variant="top"
+                          src={`https://prohires.strangled.net${content.icon_url}`}
+                          alt={content.icon_alternate_text || content.title}
+                          style={{ maxHeight: 150, objectFit: "contain", padding: "15px" }}
+                        />
+                      )}
+                      <Card.Body>
+                        <Card.Title>{content.title}</Card.Title>
+                        <Card.Text>{content.description}</Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Container>
+        </section>
+      )}
     </>
   );
 };

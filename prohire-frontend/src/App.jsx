@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/homepage";
-import RegistrationForm from "./pages/RegistrationForm";
+import RegistrationForm from "./pages/registrationform";
 import Login from "./pages/login";
 import Jobs from "./pages/Jobs";
 import "bootstrap/dist/css/bootstrap.min.css";

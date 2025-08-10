@@ -31,7 +31,7 @@ const Jobs = () => {
         "https://prohires.strangled.net/job/jobs",
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Token ${token}`,
           },
         }
       );
@@ -56,7 +56,7 @@ const Jobs = () => {
           {},
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Token ${token}`,
             },
           }
         );

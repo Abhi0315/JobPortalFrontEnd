@@ -74,7 +74,8 @@ const Dashboard = () => {
 
   const handleLogout = () => {
     // Implement logout logic here
-    navigate("/login");
+    localStorage.removeItem("token");
+    navigate("/login"), { replace: true };
   };
 
   return (

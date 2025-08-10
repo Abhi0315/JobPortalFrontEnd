@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { fetchSidebarData } from "../api/sidebar";
 
-const BACKEND_BASE_URL = "http://127.0.0.1:8000"; // Change if your backend runs elsewhere
+const BACKEND_BASE_URL = "https://prohires.strangled.net"; // Change if your backend runs elsewhere
 
 const Sidebar = ({
   sidebarOpen,

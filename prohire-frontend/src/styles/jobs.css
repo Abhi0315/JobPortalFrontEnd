@@ -18,7 +18,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
@@ -348,15 +348,15 @@ body {
     width: 0;
     margin-right: 10px;
   }
-  
+
   .sidebar.open {
     width: 250px;
   }
-  
+
   .main-content {
     margin-left: 0;
   }
-  
+
   .mobile-sidebar-toggle {
     display: block;
   }
@@ -366,7 +366,7 @@ body {
   .dashboard-content {
     padding: 1rem;
   }
-  
+
   .jobs-list {
     grid-template-columns: 1fr;
   }

@@ -50,7 +50,7 @@
   min-height: 88vh;
   display: flex;
   align-items: center;
-  height: 90vh;
+  height: 92vh;
 }
 .hero-btn-wrapper {
   width: 200px;
@@ -69,9 +69,9 @@
 
 .hero-image {
   width: 100%;
-  margin-top: 50px;
+  margin-top: 75px;
   border-radius: 16px;
-  max-height: 82vh;
+  max-height: 83vh;
   object-fit: cover;
 }
 
@@ -197,9 +197,15 @@
   animation: scroll-left 25s linear infinite;
 }
 
+.card-img-top {
+  background-color: #e7f7ff;
+}
+
 .feature-card-wrapper {
   min-width: 280px;
   margin-right: 24px;
+  background-color: #cde2ed;
+  border-radius: 16px !important;
 }
 
 @keyframes scroll-left {

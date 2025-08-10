@@ -1,10 +1,12 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../styles/dashboard.css";
+import "../styles/jobs.css";
 import { FiMenu, FiLogOut, FiHome, FiBriefcase, FiSettings, FiUser, FiBell, FiMessageSquare, FiHelpCircle } from "react-icons/fi";
+import Sidebar from "../components/Sidebar";
+import Mainheader from "../components/Mainheader";
 
-const Dashboard = () => {
+const Jobs = () => {
   const navigate = useNavigate();
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -89,102 +91,26 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="dashboard-container">
-      {/* Sidebar */}
-    <div 
-      ref={sidebarRef}
-      className={`sidebar ${sidebarOpen ? 'open' : 'minimized'}`}
-      style={{ width: sidebarOpen ? `${sidebarWidth}px` : '60px' }}
-    >
-      <div className="sidebar-header">
-        {sidebarOpen ? (
-          <>
-            <h2>ProHire</h2>
-            <button 
-              className="sidebar-toggle" 
-              onClick={() => setSidebarOpen(false)}
-            >
-              <FiMenu />
-            </button>
-          </>
-        ) : (
-          <button 
-            className="sidebar-toggle" 
-            onClick={() => setSidebarOpen(true)}
-            style={{ margin: "0 auto" }}
-          >
-            <FiMenu />
-          </button>
-        )}
-      </div>
-      
-      <div className="sidebar-menu">
-        <div className={`menu-item active ${!sidebarOpen ? "icon-only" : ""}`} title={!sidebarOpen ? "Dashboard" : ""}>
-  <FiHome className="menu-icon" />
-  {sidebarOpen && <span>Dashboard</span>}
-</div>
-<div className={`menu-item ${!sidebarOpen ? "icon-only" : ""}`} title={!sidebarOpen ? "Jobs" : ""}>
-  <FiBriefcase className="menu-icon" />
-  {sidebarOpen && <span>Jobs</span>}
-</div>
-<div className={`menu-item ${!sidebarOpen ? "icon-only" : ""}`} title={!sidebarOpen ? "Candidates" : ""}>
-  <FiUser className="menu-icon" />
-  {sidebarOpen && <span>Candidates</span>}
-</div>
-<div className={`menu-item ${!sidebarOpen ? "icon-only" : ""}`} title={!sidebarOpen ? "Messages" : ""}>
-  <FiMessageSquare className="menu-icon" />
-  {sidebarOpen && <span>Messages</span>}
-</div>
-<div className={`menu-item ${!sidebarOpen ? "icon-only" : ""}`} title={!sidebarOpen ? "Notifications" : ""}>
-  <FiBell className="menu-icon" />
-  {sidebarOpen && <span>Notifications</span>}
-</div>
-<div className={`menu-item ${!sidebarOpen ? "icon-only" : ""}`} title={!sidebarOpen ? "Settings" : ""}>
-  <FiSettings className="menu-icon" />
-  {sidebarOpen && <span>Settings</span>}
-</div>
-<div className={`menu-item ${!sidebarOpen ? "icon-only" : ""}`} title={!sidebarOpen ? "Help & Support" : ""}>
-  <FiHelpCircle className="menu-icon" />
-  {sidebarOpen && <span>Help & Support</span>}
-</div>
-      </div>
-
-      <div className="sidebar-footer">
-        <button onClick={handleLogout} className="logout-button">
-          <FiLogOut className="menu-icon" />
-          {sidebarOpen && <span>Logout</span>}
-        </button>
-      </div>
-
-      {sidebarOpen && (
-        <div 
-          className="sidebar-resizer" 
-          onMouseDown={startResizing}
-        />
-      )}
-    </div>
+    <div className="jobs-container">
+      <Sidebar
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen} 
+        sidebarWidth={sidebarWidth}
+        sidebarRef={sidebarRef}
+        startResizing={startResizing}
+        handleLogout={handleLogout}
+      />
 
       {/* Main Content */}
       <div 
         className="main-content" 
         style={{ marginLeft: sidebarOpen ? `${sidebarWidth}px` : '60px' }}
       >
-        <div className="dashboard-header">
-          <button 
-            className="mobile-sidebar-toggle" 
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-          >
-            <FiMenu />
-          </button>
-          <h1>Dashboard</h1>
-          <div className="user-profile">
-            <div className="user-avatar">PH</div>
-          </div>
-        </div>
+          <Mainheader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         
         {error && <div className="error-message">{error}</div>}
         
-        <div className="dashboard-content">
+        <div className="jobs-content">
           {loading ? (
             <div className="loading-spinner">
               <div className="spinner"></div>
@@ -242,4 +168,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Jobs;

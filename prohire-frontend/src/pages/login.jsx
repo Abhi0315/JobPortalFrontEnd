@@ -62,7 +62,7 @@ const LoginForm = () => {
       if (token) {
         localStorage.setItem("token", token); // Changed from "authToken" to "token"
         setApiMessage("Login successful");
-        navigate("/dashboard");
+        navigate("/jobs");
       } else {
         setApiMessage("Login failed. Please check your credentials.");
       }

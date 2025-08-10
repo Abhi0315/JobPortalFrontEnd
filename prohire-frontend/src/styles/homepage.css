@@ -37,11 +37,11 @@
 .hero-section {
   background-image: linear-gradient(
     to top,
-    #bcd2de,
-    #c3d5e6,
-    #ccd8ed,
-    #d7dbf3,
-    #e3ddf7
+    #cfd6ea,
+    #9ca5d1,
+    #7175b5,
+    #4c4697,
+    #2c1475
   );
 
   padding: 85px 0;
@@ -86,18 +86,18 @@
   font-family: "Poppins", sans-serif;
   font-weight: 700;
   font-size: 3rem;
-  color: #2c1475;
+  color: white;
   margin-bottom: 20px;
 }
 
 .hero-subtitle {
   font-weight: 400;
-  color: #333;
+  color: white;
 }
 
 .hero-text {
   font-size: 1.2rem;
-  color: #555;
+  color: white;
   margin-bottom: 30px;
 }
 .hero-btn {
@@ -233,7 +233,7 @@
   padding-left: 30px;
   margin-bottom: 12px;
   font-size: 1.1rem;
-  color: #444;
+  color: white;
 }
 
 .hero-features-list li:before {
@@ -271,7 +271,7 @@
 
 .trusted-by {
   font-size: 0.9rem;
-  color: #666;
+  color: #28213b;
   margin-bottom: 10px;
 }
 

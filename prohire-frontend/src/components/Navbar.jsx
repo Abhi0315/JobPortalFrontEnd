@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // import useNavigate
+import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import "../styles/Navbar.css";
@@ -7,7 +7,7 @@ import "../styles/Navbar.css";
 const ProHireNavbar = () => {
   const [menus, setMenus] = useState([]);
   const [logo, setLogo] = useState("");
-  const navigate = useNavigate(); // initialize navigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("https://prohires.strangled.net/headerfooter/header-footer")
@@ -36,11 +36,8 @@ const ProHireNavbar = () => {
 
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
-        <Navbar.Collapse
-          id="basic-navbar-nav"
-          className="d-flex justify-content-between align-items-center"
-        >
-          <Nav className="">
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
             {menus.map((menu) => (
               <Nav.Link key={menu.id} href={menu.url} className="px-3">
                 {menu.title}

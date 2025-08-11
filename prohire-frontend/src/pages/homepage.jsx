@@ -7,6 +7,7 @@ import "../styles/homepage.css";
 
 import ProHireNavbar from "../components/Navbar";
 import AboutUs from "../components/AboutUs";
+import Testimonials from "../components/Testimonials";
 
 const Homepage = () => {
   const [menus, setMenus] = useState([]);
@@ -331,7 +332,7 @@ const Homepage = () => {
       )}
 
       {/* Contact Us Section */}
-      <section className="contact-section py-5">
+      <section className="contact-section py-5" id="contact">
         <Container>
           <motion.div
             initial={{ opacity: 0 }}
@@ -428,7 +429,10 @@ const Homepage = () => {
           </motion.div>
         </Container>
       </section>
-      <AboutUs />
+      <section id="about">
+        <AboutUs />
+      </section>
+      <Testimonials />
     </>
   );
 };

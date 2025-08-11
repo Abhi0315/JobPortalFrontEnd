@@ -5,6 +5,7 @@ import Login from "./pages/login";
 import Jobs from "./pages/Jobs";
 import ProfileEditForm from "./pages/ProfileEditForm.jsx";
 import AboutUs from "./components/AboutUs.jsx";
+import Testimonials from "./components/Testimonials.jsx";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
@@ -21,6 +22,7 @@ function App() {
         <Route path="/registrationform" element={<RegistrationForm />} />
         <Route path="/login" element={<Login />} />
         <Route path="/aboutus" element={<AboutUs />} />
+        <Route path="/testimonial" element={<Testimonials />} />
         {/* <Route path="/jobs" element={<Jobs />} />
         <Route path="/ProfileEditForm" element={<ProfileEditForm />} />
         <Route path="/dashboard" element={<Dashboard />} /> */}

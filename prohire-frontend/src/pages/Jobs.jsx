@@ -2,7 +2,17 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/jobs.css";
-import { FiMenu, FiLogOut, FiHome, FiBriefcase, FiSettings, FiUser, FiBell, FiMessageSquare, FiHelpCircle } from "react-icons/fi";
+import {
+  FiMenu,
+  FiLogOut,
+  FiHome,
+  FiBriefcase,
+  FiSettings,
+  FiUser,
+  FiBell,
+  FiMessageSquare,
+  FiHelpCircle,
+} from "react-icons/fi";
 import Sidebar from "../components/Sidebar";
 import Mainheader from "../components/Mainheader";
 
@@ -71,8 +81,8 @@ const Jobs = () => {
 
   const startResizing = (e) => {
     setIsResizing(true);
-    document.addEventListener('mousemove', resizeSidebar);
-    document.addEventListener('mouseup', stopResizing);
+    document.addEventListener("mousemove", resizeSidebar);
+    document.addEventListener("mouseup", stopResizing);
   };
 
   const resizeSidebar = (e) => {
@@ -86,15 +96,15 @@ const Jobs = () => {
 
   const stopResizing = () => {
     setIsResizing(false);
-    document.removeEventListener('mousemove', resizeSidebar);
-    document.removeEventListener('mouseup', stopResizing);
+    document.removeEventListener("mousemove", resizeSidebar);
+    document.removeEventListener("mouseup", stopResizing);
   };
 
   return (
     <div className="jobs-container">
       <Sidebar
         sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen} 
+        setSidebarOpen={setSidebarOpen}
         sidebarWidth={sidebarWidth}
         sidebarRef={sidebarRef}
         startResizing={startResizing}
@@ -102,14 +112,14 @@ const Jobs = () => {
       />
 
       {/* Main Content */}
-      <div 
-        className="main-content" 
-        style={{ marginLeft: sidebarOpen ? `${sidebarWidth}px` : '60px' }}
+      <div
+        className="main-content"
+        style={{ marginLeft: sidebarOpen ? `${sidebarWidth}px` : "60px" }}
       >
-          <Mainheader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        
+        <Mainheader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+
         {error && <div className="error-message">{error}</div>}
-        
+
         <div className="jobs-content">
           {loading ? (
             <div className="loading-spinner">
@@ -119,7 +129,9 @@ const Jobs = () => {
           ) : jobs.length === 0 ? (
             <div className="empty-state">
               <h3>No jobs found</h3>
-              <p>There are currently no jobs available. Please check back later.</p>
+              <p>
+                There are currently no jobs available. Please check back later.
+              </p>
             </div>
           ) : (
             <div className="jobs-list">
@@ -127,9 +139,13 @@ const Jobs = () => {
                 <div key={job.job_id} className="job-card">
                   <div className="job-header">
                     <h3>{job.title}</h3>
-                    <span className="job-type">{job.employment_type || 'Full-time'}</span>
+                    <span className="job-type">
+                      {job.employment_type || "Full-time"}
+                    </span>
                   </div>
-                  <p className="job-description">{job.description?.slice(0, 150)}...</p>
+                  <p className="job-description">
+                    {job.description?.slice(0, 150)}...
+                  </p>
                   <div className="job-details">
                     <div className="detail-item">
                       <span className="detail-label">Company:</span>
@@ -138,7 +154,9 @@ const Jobs = () => {
                     <div className="detail-item">
                       <span className="detail-label">Location:</span>
                       <span className="detail-value">
-                        {job.location ? `${job.location.city}, ${job.location.country}` : "Remote"}
+                        {job.location
+                          ? `${job.location.city}, ${job.location.country}`
+                          : "Remote"}
                       </span>
                     </div>
                     <div className="detail-item">
@@ -149,13 +167,13 @@ const Jobs = () => {
                     </div>
                   </div>
                   {job.google_link && (
-                    <a 
-                      href={job.google_link} 
-                      target="_blank" 
+                    <a
+                      href={job.google_link}
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="job-link"
                     >
-                      View on Google
+                      Apply Now
                     </a>
                   )}
                 </div>

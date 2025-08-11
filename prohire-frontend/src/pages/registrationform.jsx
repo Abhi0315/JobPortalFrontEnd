@@ -68,28 +68,49 @@ const RegistrationForm = () => {
   const validateStep1 = () => {
     const newErrors = {};
 
-    if (!formData.firstName.trim())
+    // First Name validation (min 3 chars, only letters)
+    if (!formData.firstName.trim()) {
       newErrors.firstName = "First name is required";
-    if (!formData.lastName.trim()) newErrors.lastName = "Last name is required";
+    } else if (!/^[A-Za-z]{3,}$/.test(formData.firstName.trim())) {
+      newErrors.firstName =
+        "First name must be at least 3 letters (no numbers or special characters)";
+    }
 
+    // Last Name validation (min 3 chars, only letters)
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = "Last name is required";
+    } else if (!/^[A-Za-z]{3,}$/.test(formData.lastName.trim())) {
+      newErrors.lastName =
+        "Last name must be at least 3 letters (no numbers or special characters)";
+    }
+
+    // Email validation
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
-    } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Invalid email format";
     }
 
+    // Phone validation (exactly 10 digits)
     if (!formData.phone.trim()) {
       newErrors.phone = "Phone number is required";
-    } else if (!/^\d{10,15}$/.test(formData.phone)) {
-      newErrors.phone = "Invalid phone number";
+    } else if (!/^\d{10}$/.test(formData.phone)) {
+      newErrors.phone = "Phone number must be exactly 10 digits";
     }
 
+    // Password validation (8 chars with complexity)
     if (!formData.password) {
       newErrors.password = "Password is required";
-    } else if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
+    } else if (
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+        formData.password
+      )
+    ) {
+      newErrors.password =
+        "Password must be at least 8 characters including one uppercase, one lowercase, one number and one special character";
     }
 
+    // Confirm password
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
     }
@@ -127,17 +148,46 @@ const RegistrationForm = () => {
         }
       );
 
-      if (response.data && response.data.message) {
-        setApiMessage(response.data.message);
-        setStep(2);
-      } else {
-        setApiMessage("Failed to send OTP. Please try again.");
+      if (response.data) {
+        if (response.data.error) {
+          // Handle case where email exists
+          if (
+            response.data.error.includes("already exists") ||
+            response.data.error.includes("already registered")
+          ) {
+            setApiMessage(
+              "This email is already registered. Please login or use a different email."
+            );
+            return; // Prevent moving to next step
+          }
+          setApiMessage(response.data.error);
+          return;
+        }
+
+        if (response.data.message) {
+          setApiMessage(response.data.message);
+          setStep(2); // Only proceed to OTP if successful
+        }
       }
     } catch (error) {
-      setApiMessage(
-        error.response?.data?.error ||
-          "An error occurred while sending OTP. Please try again."
-      );
+      let errorMessage =
+        "An error occurred while sending OTP. Please try again.";
+
+      if (error.response) {
+        // Handle case where email exists (from error response)
+        if (
+          error.response.data.error &&
+          (error.response.data.error.includes("already exists") ||
+            error.response.data.error.includes("already registered"))
+        ) {
+          errorMessage =
+            "This email is already registered. Please login or use a different email.";
+        } else if (error.response.data.error) {
+          errorMessage = error.response.data.error;
+        }
+      }
+
+      setApiMessage(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -405,8 +455,27 @@ const RegistrationForm = () => {
                   style={{ backgroundColor: "#2c1475", color: "white" }}
                   disabled={loading}
                 >
-                  {loading ? "Sending OTP..." : "Continue"}
+                  {loading ? "Sending OTP..." : "Send OTP"}
                 </button>
+                <div className="text-center mt-3">
+                  <p>
+                    Already have an account?{" "}
+                    <a
+                      href="/login"
+                      style={{
+                        color: "#2c1475",
+                        textDecoration: "none",
+                        fontWeight: "bold",
+                      }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate("/login");
+                      }}
+                    >
+                      Login now
+                    </a>
+                  </p>
+                </div>
               </form>
             </>
           )}

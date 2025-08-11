@@ -11,6 +11,9 @@ import {
   FiHome,
   FiMapPin,
   FiFile,
+  FiCamera,
+  FiDownload,
+  FiEye,
 } from "react-icons/fi";
 
 import "../styles/ProfileEditForm.css";
@@ -55,8 +58,8 @@ const ProfileEditForm = () => {
           user.addresses && user.addresses.length > 0 ? user.addresses[0] : {};
 
         setUserData({
-          firstName: user.username.split("@")[0] || "",
-          lastName: "",
+          firstName: user.name || "",
+          lastName: user.last_name || "",
           phoneNumber: user.phone_number || "",
           email: user.email || "",
           profilePicture: user.profile_picture || "",
@@ -167,22 +170,23 @@ const ProfileEditForm = () => {
   ) => {
     if (editingField === fieldName) {
       return (
-        <div className="editing-field">
-          <div className="input-with-icon">
-            {IconComponent && <IconComponent className="field-icon" />}
+        <div className="editing-container">
+          <div className="input-group">
+            {IconComponent && <IconComponent className="input-icon" />}
             <input
               type={type}
               value={tempValue}
               onChange={handleTempChange}
               autoFocus
               placeholder={`Enter ${label.toLowerCase()}`}
+              className="edit-input"
             />
           </div>
-          <div className="edit-controls">
+          <div className="action-buttons">
             <button
               type="button"
               onClick={() => saveEditing(fieldName)}
-              className="save-btn"
+              className="action-btn save"
               aria-label={`Save ${label}`}
             >
               <FiSave />
@@ -190,7 +194,7 @@ const ProfileEditForm = () => {
             <button
               type="button"
               onClick={cancelEditing}
-              className="cancel-btn"
+              className="action-btn cancel"
               aria-label="Cancel editing"
             >
               <FiX />
@@ -201,10 +205,10 @@ const ProfileEditForm = () => {
     }
 
     return (
-      <div className="display-field">
-        <div className="content-with-icon">
+      <div className="field-container">
+        <div className="field-content">
           {IconComponent && <IconComponent className="field-icon" />}
-          <span>
+          <span className={!userData[fieldName] ? "empty-field" : ""}>
             {userData[fieldName] || `No ${label.toLowerCase()} provided`}
           </span>
         </div>
@@ -220,49 +224,81 @@ const ProfileEditForm = () => {
     );
   };
 
-  if (loading) return <div className="loading">Loading...</div>;
-  if (error) return <div className="error">{error}</div>;
+  if (loading) return <div className="loading-screen">Loading profile...</div>;
+  if (error) return <div className="error-message">{error}</div>;
 
   return (
-    <div className="profile-edit-container">
+    <div className="profile-edit-wrapper">
       <div className="profile-header">
-        <h2>My Profile</h2>
+        <h1>Profile Settings</h1>
         {success && (
-          <div className="success-message">
-            <div className="success-content">
-              ✓ Profile updated successfully!
-            </div>
-          </div>
+          <div className="success-banner">Profile updated successfully!</div>
         )}
       </div>
 
-      <div className="profile-card">
-        <div className="card-section personal-info">
-          <h3>
-            <FiUser /> Personal Information
-          </h3>
+      <div className="profile-sections">
+        {/* Profile Picture Section */}
+        <section className="profile-section picture-section">
+          <div className="section-header">
+            <h2>Profile Picture</h2>
+          </div>
+          <div className="picture-container">
+            <div className="avatar-wrapper">
+              {userData.profilePicture ? (
+                <img
+                  src={
+                    typeof userData.profilePicture === "string"
+                      ? userData.profilePicture
+                      : URL.createObjectURL(userData.profilePicture)
+                  }
+                  alt="Profile"
+                  className="profile-avatar"
+                />
+              ) : (
+                <div className="avatar-placeholder">
+                  <FiUser size={48} />
+                </div>
+              )}
+              <label className="avatar-upload-btn">
+                <FiCamera className="camera-icon" />
+                <input
+                  type="file"
+                  name="profilePicture"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+              </label>
+            </div>
+          </div>
+        </section>
+
+        {/* Personal Information Section */}
+        <section className="profile-section">
+          <div className="section-header">
+            <h2>Personal Information</h2>
+          </div>
           <div className="form-grid">
-            <div className="form-group">
+            <div className="form-field">
               <label>First Name</label>
               {renderEditableField("firstName", "First Name", "text", FiUser)}
             </div>
 
-            <div className="form-group">
+            <div className="form-field">
               <label>Last Name</label>
               {renderEditableField("lastName", "Last Name")}
             </div>
 
-            <div className="form-group">
+            <div className="form-field">
               <label>Email</label>
-              <div className="display-field">
-                <div className="content-with-icon">
+              <div className="field-container">
+                <div className="field-content">
                   <FiMail className="field-icon" />
                   <span>{userData.email}</span>
                 </div>
               </div>
             </div>
 
-            <div className="form-group">
+            <div className="form-field">
               <label>Phone Number</label>
               {renderEditableField(
                 "phoneNumber",
@@ -272,153 +308,167 @@ const ProfileEditForm = () => {
               )}
             </div>
           </div>
-        </div>
+        </section>
 
-        <div className="card-section profile-picture-section">
-          <h3>
-            <FiUser /> Profile Picture
-          </h3>
-          <div className="profile-picture-upload">
-            <div className="picture-preview-container">
-              {userData.profilePicture ? (
-                <img
-                  src={
-                    typeof userData.profilePicture === "string"
-                      ? userData.profilePicture
-                      : URL.createObjectURL(userData.profilePicture)
-                  }
-                  alt="Profile"
-                  className="profile-image"
-                />
-              ) : (
-                <div className="profile-image-placeholder">
-                  <FiUser size={48} />
-                </div>
-              )}
-            </div>
-            <div className="file-upload-wrapper">
-              <label htmlFor="profilePicture" className="file-upload-label">
-                Change Photo
-                <input
-                  type="file"
-                  id="profilePicture"
-                  name="profilePicture"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                />
-              </label>
-            </div>
+        {/* Address Information Section */}
+        <section className="profile-section">
+          <div className="section-header">
+            <h2>Address Information</h2>
           </div>
-        </div>
-
-        <div className="card-section address-info">
-          <h3>
-            <FiHome /> Address Information
-          </h3>
           <div className="form-grid">
-            <div className="form-group full-width">
+            <div className="form-field full-width">
               <label>Address</label>
               {renderEditableField("address", "Address", "text", FiHome)}
             </div>
 
-            <div className="form-group">
+            <div className="form-field">
               <label>City</label>
               {renderEditableField("city", "City", "text", FiMapPin)}
             </div>
 
-            <div className="form-group">
+            <div className="form-field">
               <label>State</label>
               {renderEditableField("state", "State")}
             </div>
 
-            <div className="form-group">
+            <div className="form-field">
               <label>Country</label>
               {renderEditableField("country", "Country")}
             </div>
 
-            <div className="form-group">
+            <div className="form-field">
               <label>Pincode</label>
               {renderEditableField("pincode", "Pincode")}
             </div>
           </div>
-        </div>
+        </section>
 
-        <div className="card-section resume-section">
-          <h3>
-            <FiFile /> Resume
-          </h3>
-          <div className="resume-upload">
+        {/* Resume Section */}
+        <section className="profile-section">
+          <div className="section-header">
+            <h2>Resume</h2>
+          </div>
+          <div className="resume-container">
             {userData.resume ? (
-              <div className="resume-info">
+              <div className="resume-card">
                 <FiFile className="resume-icon" />
-                <span className="resume-name">
-                  {typeof userData.resume === "string"
-                    ? userData.resume
-                    : userData.resume.name}
-                </span>
+                <div className="resume-details">
+                  <div className="resume-name">
+                    {(() => {
+                      if (typeof userData.resume === "string") {
+                        return userData.resume.split("/").pop();
+                      } else if (
+                        userData.resume instanceof File ||
+                        userData.resume?.name
+                      ) {
+                        return userData.resume.name;
+                      }
+                      return "Resume";
+                    })()}
+                  </div>
+                  <div className="resume-actions">
+                    <a
+                      href={
+                        typeof userData.resume === "string"
+                          ? userData.resume
+                          : URL.createObjectURL(userData.resume)
+                      }
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="resume-btn"
+                    >
+                      <FiEye /> View
+                    </a>
+                    <a
+                      href={
+                        typeof userData.resume === "string"
+                          ? userData.resume
+                          : URL.createObjectURL(userData.resume)
+                      }
+                      download
+                      className="resume-btn"
+                    >
+                      <FiDownload /> Download
+                    </a>
+                  </div>
+                </div>
               </div>
             ) : (
-              <div className="no-resume">No resume uploaded</div>
+              <div className="no-resume">
+                <FiFile className="no-resume-icon" />
+                <span>No resume uploaded</span>
+              </div>
             )}
-            <div className="file-upload-wrapper">
-              <label htmlFor="resume" className="file-upload-label">
-                {userData.resume ? "Update Resume" : "Upload Resume"}
-                <input
-                  type="file"
-                  id="resume"
-                  name="resume"
-                  accept=".pdf,.doc,.docx"
-                  onChange={handleFileChange}
-                />
-              </label>
-            </div>
+            <label className="resume-upload-btn">
+              {userData.resume ? "Update Resume" : "Upload Resume"}
+              <input
+                type="file"
+                name="resume"
+                accept=".pdf,.doc,.docx"
+                onChange={handleFileChange}
+              />
+            </label>
           </div>
-        </div>
+        </section>
+
+        {/* Danger Zone Section */}
+        <section className="profile-section danger-zone">
+          <div className="section-header">
+            <h2>Danger Zone</h2>
+          </div>
+          <div className="danger-content">
+            <div className="danger-warning">
+              <FiTrash2 className="danger-icon" />
+              <div>
+                <h3>Delete Account</h3>
+                <p>Permanently delete your account and all associated data.</p>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowDeleteModal(true)}
+              className="delete-btn"
+            >
+              Delete Account
+            </button>
+          </div>
+        </section>
       </div>
 
-      <div className="danger-zone">
-        <h3>
-          <FiTrash2 /> Danger Zone
-        </h3>
-        <p>Permanently delete your account and all associated data.</p>
-        <button
-          onClick={() => setShowDeleteModal(true)}
-          className="delete-account-btn"
-        >
-          <FiTrash2 /> Delete Account
-        </button>
-      </div>
-
+      {/* Delete Account Modal */}
       {showDeleteModal && (
         <div className="modal-overlay">
           <div className="delete-modal">
-            <h3>Delete Account</h3>
-            <p>
-              Are you sure you want to delete your account? This action cannot
-              be undone.
-            </p>
-            <p>Please enter your password to confirm:</p>
-            <input
-              type="password"
-              value={deletePassword}
-              onChange={(e) => setDeletePassword(e.target.value)}
-              placeholder="Enter your password"
-              className="password-input"
-            />
-            {deleteError && <div className="delete-error">{deleteError}</div>}
-            <div className="modal-buttons">
-              <button onClick={handleDeleteAccount} className="confirm-delete">
-                Delete Account
-              </button>
+            <div className="modal-header">
+              <h3>Confirm Account Deletion</h3>
+            </div>
+            <div className="modal-body">
+              <p className="warning-text">
+                This action cannot be undone. All your data will be permanently
+                deleted.
+              </p>
+              <p>Please enter your password to confirm:</p>
+              <input
+                type="password"
+                value={deletePassword}
+                onChange={(e) => setDeletePassword(e.target.value)}
+                placeholder="Enter your password"
+                className="password-input"
+              />
+              {deleteError && <div className="error-text">{deleteError}</div>}
+            </div>
+            <div className="modal-footer">
               <button
                 onClick={() => {
                   setShowDeleteModal(false);
                   setDeletePassword("");
                   setDeleteError("");
                 }}
-                className="cancel-delete"
+                className="secondary-btn"
               >
                 Cancel
+              </button>
+              <button onClick={handleDeleteAccount} className="danger-btn">
+                Delete Account
               </button>
             </div>
           </div>

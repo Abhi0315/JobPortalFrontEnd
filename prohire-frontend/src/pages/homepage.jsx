@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import "../styles/homepage.css";
 
 import ProHireNavbar from "../components/Navbar";
+import AboutUs from "../components/AboutUs";
 
 const Homepage = () => {
   const [menus, setMenus] = useState([]);
@@ -427,6 +428,7 @@ const Homepage = () => {
           </motion.div>
         </Container>
       </section>
+      <AboutUs />
     </>
   );
 };

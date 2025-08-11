@@ -91,7 +91,7 @@ const Homepage = () => {
 
         // Find contact section (assuming it's another section type)
         const contact =
-          data.sections?.find((s) => s.section_type === "contact") || {};
+          data.sections?.find((s) => s.section_type === "contact_us") || {};
         setContactContent({
           title: contact.heading || "Contact Us",
           description:

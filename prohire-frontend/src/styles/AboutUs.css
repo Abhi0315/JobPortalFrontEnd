@@ -282,8 +282,8 @@
 }
 
 .member-icon-wrapper {
-  width: 70px; /* slightly larger */
-  height: 70px;
+  width: 170px; /* slightly larger */
+  height: 170px;
   border-radius: 6px; /* square with light round edges */
   object-fit: cover;
   display: flex;

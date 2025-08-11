@@ -88,7 +88,7 @@ const AboutUs = () => {
           if (teamSection && teamSection.contents) {
             result.teamMembers = teamSection.contents.map((content, index) => ({
               name: content.title || `Team Member ${index + 1}`,
-              role: content.subtitle || "Team Role",
+              role: content.button_text || "Team Role",
               description: content.description || "Team member description",
               color: getColorByIndex(index),
               icon: content.icon_url

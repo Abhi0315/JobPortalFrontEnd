@@ -79,6 +79,10 @@
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   z-index: 1;
   border: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* ✅ ensures icon & text are centered */
+  text-align: center;
 }
 
 .team-card:hover {
@@ -275,4 +279,30 @@
 
 .team-card:hover .team-card-bg {
   animation: pulse 3s ease-in-out infinite;
+}
+
+.member-icon-wrapper {
+  width: 70px; /* slightly larger */
+  height: 70px;
+  border-radius: 6px; /* square with light round edges */
+  object-fit: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  background-color: #ccc;
+  overflow: hidden;
+  margin: 0 auto 1rem; /* 🔁 center horizontally + spacing below */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Optional: circle instead of rounded square */
+.member-icon-wrapper.circle {
+  border-radius: 50%;
+}
+
+.fallback-icon {
+  text-transform: uppercase;
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Button, Card } from "react-bootstrap";
+import { Container, Button, Card, Form, Row, Col } from "react-bootstrap";
 import { motion } from "framer-motion";
 import "../styles/homepage.css";
 
@@ -27,6 +27,18 @@ const Homepage = () => {
     description: "",
     contents: [],
     backgroundImage: "",
+  });
+
+  const [contactContent, setContactContent] = useState({
+    title: "",
+    description: "",
+    image_url: "",
+  });
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
   });
 
   const location = useLocation();
@@ -76,6 +88,19 @@ const Homepage = () => {
             ? `https://prohires.strangled.net${features.background_image}`
             : "",
         });
+
+        // Find contact section (assuming it's another section type)
+        const contact =
+          data.sections?.find((s) => s.section_type === "contact") || {};
+        setContactContent({
+          title: contact.heading || "Contact Us",
+          description:
+            contact.description ||
+            "Have questions? Get in touch with our team.",
+          image_url: contact.image_url
+            ? `https://prohires.strangled.net${contact.image_url}`
+            : "",
+        });
       })
       .catch((err) => console.error("Error fetching homepage data:", err));
   }, [slug]);
@@ -94,10 +119,30 @@ const Homepage = () => {
     visible: { opacity: 1, y: 0 },
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Here you would typically send the form data to your backend
+    console.log("Form submitted:", formData);
+    // Reset form after submission
+    setFormData({
+      name: "",
+      email: "",
+      message: "",
+    });
+    // Show success message or redirect
+  };
+
   return (
     <>
       <ProHireNavbar />
-      {/* Hero Section */}
       {/* Hero Section */}
       <section className="hero-section">
         <Container>
@@ -242,6 +287,93 @@ const Homepage = () => {
           </Container>
         </section>
       )}
+
+      {/* Contact Us Section */}
+      <section className="contact-section py-5">
+        <Container>
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <Row className="align-items-center">
+              <Col lg={6} className="mb-4 mb-lg-0">
+                <h2 className="contact-title mb-4">{contactContent.title}</h2>
+                <p className="contact-description mb-4">
+                  {contactContent.description}
+                </p>
+
+                <Form onSubmit={handleSubmit}>
+                  <Form.Group className="mb-3" controlId="formName">
+                    <Form.Label>Your Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      placeholder="Enter your name"
+                      required
+                    />
+                  </Form.Group>
+
+                  <Form.Group className="mb-3" controlId="formEmail">
+                    <Form.Label>Email Address</Form.Label>
+                    <Form.Control
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="Enter your email"
+                      required
+                    />
+                  </Form.Group>
+
+                  <Form.Group className="mb-4" controlId="formMessage">
+                    <Form.Label>Your Message</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      rows={4}
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      placeholder="Enter your message"
+                      required
+                    />
+                  </Form.Group>
+
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    className="contact-submit-btn rounded-pill"
+                  >
+                    Send Message
+                  </Button>
+                </Form>
+              </Col>
+
+              <Col lg={6}>
+                {contactContent.image_url ? (
+                  <div className="contact-image-wrapper">
+                    <img
+                      src={contactContent.image_url}
+                      alt="Contact Us"
+                      className="contact-image img-fluid rounded"
+                    />
+                  </div>
+                ) : (
+                  <div className="contact-image-placeholder">
+                    <div className="placeholder-content">
+                      <i className="bi bi-envelope-open"></i>
+                      <p>Get in touch with us</p>
+                    </div>
+                  </div>
+                )}
+              </Col>
+            </Row>
+          </motion.div>
+        </Container>
+      </section>
     </>
   );
 };

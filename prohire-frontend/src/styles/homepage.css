@@ -8,29 +8,10 @@
 }
 
 /* Button Styles */
-
 .btn-outline-secondary {
-  /* border-color: black !important; */
   color: black !important;
   transition: color 0.3s ease, background-color 0.3s ease,
     border-color 0.3s ease;
-}
-
-/* Responsive adjustments */
-@media (max-width: 992px) {
-  .prohire-navbar .navbar-collapse {
-    padding-top: 10px;
-  }
-
-  .prohire-navbar .nav-link {
-    padding: 10px 0;
-  }
-
-  .d-flex {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-right: 190px;
-  }
 }
 
 /* Hero Section Styles */
@@ -43,7 +24,6 @@
     #4c4697,
     #2c1475
   );
-
   padding: 85px 0;
   position: relative;
   overflow: hidden;
@@ -51,9 +31,6 @@
   display: flex;
   align-items: center;
   height: 92vh;
-}
-.hero-btn-wrapper {
-  width: 200px;
 }
 
 .hero-image-col {
@@ -64,7 +41,6 @@
 .hero-image-wrapper {
   border-radius: 16px;
   overflow: hidden;
-  /* box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); */
 }
 
 .hero-image {
@@ -100,6 +76,7 @@
   color: white;
   margin-bottom: 30px;
 }
+
 .hero-btn {
   background: linear-gradient(135deg, #2c1475, #7757d6);
   border: none;
@@ -118,106 +95,15 @@
 }
 
 .hero-btn:hover {
-  background: linear-gradient(135deg, #2c1475, #7757d6);
   transform: scale(1.07);
-  background-position: right center; /* Shifts gradient */
+  background-position: right center;
   box-shadow: 0 6px 18px rgba(119, 87, 214, 0.6);
 }
 
 .hero-btn:active {
   transform: scale(0.96);
 }
-/* Responsive adjustments */
-@media (max-width: 992px) {
-  .hero-section {
-    padding: 60px 0;
-    min-height: auto;
-    height: auto;
-  }
 
-  .hero-content {
-    padding-left: 0;
-    margin-top: 40px;
-    text-align: center;
-  }
-
-  .hero-title {
-    font-size: 2.5rem;
-  }
-
-  .hero-image {
-    max-height: 50vh;
-  }
-}
-
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: 2rem;
-  }
-
-  .hero-text {
-    font-size: 1rem;
-  }
-
-  .hero-section {
-    padding: 40px 0;
-  }
-}
-
-.features-section .card {
-  border-radius: 16px;
-  transition: transform 0.3s ease;
-}
-
-.features-section .card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 25px rgba(44, 20, 117, 0.2);
-}
-
-.features-section .card-title {
-  font-weight: 600;
-  color: #2c1475;
-}
-
-.features-section .card-text {
-  color: #555;
-}
-
-/* --- Auto-scrolling features section --- */
-.features-scroll-container {
-  overflow: hidden;
-  width: 100%;
-  position: relative;
-  padding-bottom: 10px;
-}
-
-.features-scroll-track {
-  display: flex;
-  width: max-content;
-  animation: scroll-left 25s linear infinite;
-}
-
-.card-img-top {
-  background-color: #e7f7ff;
-}
-
-.feature-card-wrapper {
-  min-width: 280px;
-  margin-right: 24px;
-  background-color: #cde2ed;
-  border-radius: 16px !important;
-}
-
-@keyframes scroll-left {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-/* --- End auto-scrolling --- */
-/* Hero Section Enhancements */
 .hero-highlights {
   margin: 25px 0;
 }
@@ -292,30 +178,61 @@
   opacity: 1;
 }
 
-/* Responsive adjustments for new elements */
-@media (max-width: 768px) {
-  .hero-btn-group {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+/* Features Section */
+.features-section .card {
+  border-radius: 16px;
+  transition: transform 0.3s ease;
+}
 
-  .hero-demo-btn {
-    margin-top: 15px;
-    margin-left: 0 !important;
-  }
+.features-section .card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 25px rgba(44, 20, 117, 0.2);
+}
 
-  .hero-features-list li {
-    font-size: 1rem;
-  }
+.features-section .card-title {
+  font-weight: 600;
+  color: #2c1475;
+}
 
-  .trust-logos {
-    gap: 15px;
+.features-section .card-text {
+  color: #555;
+}
+
+.features-scroll-container {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.features-scroll-track {
+  display: flex;
+  width: max-content;
+  animation: scroll-left 25s linear infinite;
+}
+
+.card-img-top {
+  background-color: #e7f7ff;
+}
+
+.feature-card-wrapper {
+  min-width: 280px;
+  margin-right: 24px;
+  background-color: #cde2ed;
+  border-radius: 16px !important;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
   }
 }
 
-/* Contact Us Section Styles */
+/* Contact Us Section */
 .contact-section {
-  /* background: linear-gradient(to bottom, #f8f9fa, #e9ecef); */
   background-color: white;
   padding: 80px 0;
 }
@@ -337,7 +254,6 @@
 .contact-image-wrapper {
   border-radius: 16px;
   overflow: hidden;
-  /* box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); */
   height: 100%;
 }
 
@@ -398,10 +314,63 @@
   box-shadow: 0 0 0 0.25rem rgba(119, 87, 214, 0.25);
 }
 
-/* Responsive adjustments for contact section */
+.form-control.is-invalid {
+  border-color: #dc3545;
+}
+
+.form-control.is-invalid:focus {
+  box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+
+.invalid-feedback {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .hero-text {
+    font-size: 1.1rem;
+  }
+}
+
 @media (max-width: 992px) {
-  .contact-section {
+  .hero-section {
     padding: 60px 0;
+    min-height: auto;
+    height: auto;
+  }
+
+  .hero-content {
+    padding-left: 0;
+    margin-top: 40px;
+    text-align: center;
+  }
+
+  .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .hero-image {
+    max-height: 50vh;
+    margin-top: 0;
+  }
+
+  .hero-btn-group {
+    justify-content: center;
+  }
+
+  .trust-indicators {
+    text-align: center;
+  }
+
+  .trust-logos {
+    justify-content: center;
   }
 
   .contact-title {
@@ -410,6 +379,32 @@
 }
 
 @media (max-width: 768px) {
+  .hero-title {
+    font-size: 1.8rem;
+  }
+
+  .hero-text {
+    font-size: 1rem;
+  }
+
+  .hero-section {
+    padding: 40px 0;
+  }
+
+  .hero-btn-group {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .hero-btn,
+  .hero-demo-btn {
+    width: 100%;
+  }
+
+  .hero-features-list li {
+    font-size: 1rem;
+  }
+
   .contact-title {
     font-size: 1.8rem;
   }
@@ -421,5 +416,46 @@
   .contact-image-placeholder {
     height: 300px;
     margin-top: 30px;
+  }
+
+  .feature-card-wrapper {
+    min-width: 250px;
+    margin-right: 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-title {
+    font-size: 1.6rem;
+  }
+
+  .hero-subtitle {
+    display: block;
+    margin-top: 10px;
+  }
+
+  .hero-features-list li {
+    font-size: 0.9rem;
+    padding-left: 25px;
+  }
+
+  .contact-title {
+    font-size: 1.6rem;
+  }
+
+  .placeholder-content i {
+    font-size: 3rem;
+  }
+
+  .placeholder-content p {
+    font-size: 1.2rem;
+  }
+
+  .features-section .card-title {
+    font-size: 1rem;
+  }
+
+  .features-section .card-text {
+    font-size: 0.9rem;
   }
 }

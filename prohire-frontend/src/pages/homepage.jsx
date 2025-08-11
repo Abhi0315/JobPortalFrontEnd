@@ -11,6 +11,11 @@ const Homepage = () => {
   const [menus, setMenus] = useState([]);
   const [logo, setLogo] = useState("");
   const [sections, setSections] = useState([]);
+  const [formErrors, setFormErrors] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
 
   // Separate states for hero and features
   const [heroContent, setHeroContent] = useState({
@@ -74,7 +79,7 @@ const Homepage = () => {
           heroImage: hero.image_url
             ? `https://prohires.strangled.net${hero.image_url}`
             : null,
-          contents: hero.contents || [], // ✅ add this
+          contents: hero.contents || [],
         });
 
         // Find features/other section
@@ -125,19 +130,55 @@ const Homepage = () => {
       ...prev,
       [name]: value,
     }));
+    // Clear error when user types
+    if (formErrors[name]) {
+      setFormErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    let isValid = true;
+
+    if (!formData.name.trim()) {
+      errors.name = "Name is required";
+      isValid = false;
+    }
+
+    if (!formData.email.trim()) {
+      errors.email = "Email is required";
+      isValid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.email = "Please enter a valid email address";
+      isValid = false;
+    }
+
+    if (!formData.message.trim()) {
+      errors.message = "Message is required";
+      isValid = false;
+    }
+
+    setFormErrors(errors);
+    return isValid;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would typically send the form data to your backend
-    console.log("Form submitted:", formData);
-    // Reset form after submission
-    setFormData({
-      name: "",
-      email: "",
-      message: "",
-    });
-    // Show success message or redirect
+    if (validateForm()) {
+      // Here you would typically send the form data to your backend
+      console.log("Form submitted:", formData);
+      // Reset form after submission
+      setFormData({
+        name: "",
+        email: "",
+        message: "",
+      });
+      // Show success message or redirect
+      alert("Thank you for your message! We'll get back to you soon.");
+    }
   };
 
   return (
@@ -306,31 +347,39 @@ const Homepage = () => {
 
                 <Form onSubmit={handleSubmit}>
                   <Form.Group className="mb-3" controlId="formName">
-                    <Form.Label>Your Name</Form.Label>
+                    <Form.Label>Your Name *</Form.Label>
                     <Form.Control
                       type="text"
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
                       placeholder="Enter your name"
+                      isInvalid={!!formErrors.name}
                       required
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {formErrors.name}
+                    </Form.Control.Feedback>
                   </Form.Group>
 
                   <Form.Group className="mb-3" controlId="formEmail">
-                    <Form.Label>Email Address</Form.Label>
+                    <Form.Label>Email Address *</Form.Label>
                     <Form.Control
                       type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
                       placeholder="Enter your email"
+                      isInvalid={!!formErrors.email}
                       required
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {formErrors.email}
+                    </Form.Control.Feedback>
                   </Form.Group>
 
                   <Form.Group className="mb-4" controlId="formMessage">
-                    <Form.Label>Your Message</Form.Label>
+                    <Form.Label>Your Message *</Form.Label>
                     <Form.Control
                       as="textarea"
                       rows={4}
@@ -338,8 +387,12 @@ const Homepage = () => {
                       value={formData.message}
                       onChange={handleInputChange}
                       placeholder="Enter your message"
+                      isInvalid={!!formErrors.message}
                       required
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {formErrors.message}
+                    </Form.Control.Feedback>
                   </Form.Group>
 
                   <Button

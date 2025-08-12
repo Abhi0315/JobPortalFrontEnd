@@ -200,11 +200,11 @@ const Homepage = () => {
                   />
                 ) : (
                   <div
-                    style={{
-                      height: 300,
-                      backgroundColor: "#ccc",
-                      borderRadius: 16,
-                    }}
+                  // style={{
+                  //   height: 300,
+                  //   backgroundColor: "#ccc",
+                  //   borderRadius: 16,
+                  // }}
                   ></div>
                 )}
               </div>

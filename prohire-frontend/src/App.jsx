@@ -14,6 +14,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Settings from "./pages/Settings";
 import JobPage from "./pages/JobPage";
 import JobLayout from "./pages/job";
+import OTPPage from "./pages/OTPPage.jsx";
+import SendOTPPage from "./pages/SendOTPPage.jsx";
 
 function App() {
   return (
@@ -25,10 +27,11 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/aboutus" element={<AboutUs />} />
         <Route path="/testimonial" element={<Testimonials />} />
+        <Route path="/otp" element={<OTPPage />} />
+        <Route path="/send-otp" element={<SendOTPPage />} />
         {/* <Route path="/jobs" element={<Jobs />} />
         <Route path="/ProfileEditForm" element={<ProfileEditForm />} />
         <Route path="/dashboard" element={<Dashboard />} /> */}
-
 
         {/* <Route
           path="/jobs"
@@ -57,16 +60,16 @@ function App() {
           }
         />
 
-<Route
-  path="/jobs"
-  element={
-    <ProtectedRoute>
-      <JobLayout>
-        <JobPage />
-      </JobLayout>
-    </ProtectedRoute>
-  }
-/>
+        <Route
+          path="/jobs"
+          element={
+            <ProtectedRoute>
+              <JobLayout>
+                <JobPage />
+              </JobLayout>
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/settings"
@@ -76,8 +79,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-        
-
       </Routes>
     </Router>
   );

@@ -52,7 +52,7 @@
 h1 {
   font-size: 2rem;
   margin-bottom: 1.5rem;
-  color: #111827;
+  color: #2c1475;
   text-align: center;
 }
 
@@ -64,6 +64,12 @@ h1 {
 
 .input-group {
   margin-bottom: 1.5rem;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 0px solid #e2e8f0;
+  transition: all 0.3s ease;
+  background-color: white;
 }
 
 .email-input {

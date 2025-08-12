@@ -58,7 +58,7 @@ function App() {
         />
 
 <Route
-  path="/job"
+  path="/jobs"
   element={
     <ProtectedRoute>
       <JobLayout>

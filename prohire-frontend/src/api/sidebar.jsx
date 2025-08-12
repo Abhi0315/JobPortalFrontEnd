@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const fetchSidebarData = async () => {
-  const token = localStorage.getItem("token"); // Get token from storage
+  const token = localStorage.getItem("token");
 
   if (!token) {
     throw new Error("No authentication token found");
@@ -11,9 +11,9 @@ export const fetchSidebarData = async () => {
     "https://prohires.strangled.net/job/sidebar_menu_list",
     {
       headers: {
-        Authorization: `Token ${token}`, // Send token in header
+        Authorization: `Token ${token}`,
       },
-      withCredentials: true, // Optional: if cookies/session are used
+      withCredentials: true,
     }
   );
 

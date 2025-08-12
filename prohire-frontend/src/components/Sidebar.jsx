@@ -1,97 +1,155 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { fetchSidebarData } from "../api/sidebar";
-import { MdLogout } from "react-icons/md";
-
-const BACKEND_BASE_URL = "https://prohires.strangled.net"; // Change if your backend runs elsewhere
+import { MdLogout, MdChevronLeft, MdChevronRight } from "react-icons/md";
+import "../styles/sidebar.css";
 
 const Sidebar = ({
-  sidebarOpen,
-  setSidebarOpen,
-  sidebarWidth,
+  isOpen,
+  toggleSidebar,
+  width,
   sidebarRef,
   startResizing,
   handleLogout,
 }) => {
-  const [sidebarMenus, setSidebarMenus] = useState([]);
-  const [logo, setLogo] = useState("");
+  const [menuItems, setMenuItems] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const location = useLocation();
+  const { pathname } = useLocation();
 
   useEffect(() => {
-    fetchSidebarData().then(data => {
-      if (data.logo) setLogo(data.logo.startsWith("http") ? data.logo : `${BACKEND_BASE_URL}${data.logo}`);
-      setSidebarMenus(data.menus || data);
-    });
+    const loadSidebarData = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchSidebarData();
+        
+        const formattedMenus = data.map(item => ({
+          ...item,
+          id: item.title.toLowerCase().replace(/\s+/g, '-'),
+          icon: item.icon.startsWith("http") 
+            ? item.icon 
+            : `https://prohires.strangled.net${item.icon}`
+        }));
+        
+        setMenuItems(formattedMenus);
+      } catch (err) {
+        console.error("Failed to load sidebar data:", err);
+        setMenuItems([
+          {
+            id: "dashboard",
+            title: "Dashboard",
+            url: "/dashboard",
+            icon: "https://prohires.strangled.net/media/sidebar_icons/home.png"
+          },
+          {
+            id: "settings",
+            title: "Settings",
+            url: "/settings",
+            icon: "https://prohires.strangled.net/media/sidebar_icons/settings.png"
+          }
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadSidebarData();
   }, []);
 
+  const handleNavigation = (url) => {
+    navigate(url);
+    // Close sidebar automatically on mobile
+    if (window.innerWidth <= 768) {
+      toggleSidebar();
+    }
+  };
+
+  if (loading) {
+    return (
+      <aside 
+        ref={sidebarRef}
+        className={`sidebar-loading ${isOpen ? "open" : "collapsed"}`}
+        style={{ width: isOpen ? `${width}px` : "72px" }}
+      >
+        <div className="loading-spinner"></div>
+      </aside>
+    );
+  }
+
   return (
-    <div
+    <aside
       ref={sidebarRef}
-      className={`sidebar ${sidebarOpen ? "open" : "minimized"}`}
-      style={{ width: sidebarOpen ? `${sidebarWidth}px` : "60px" }}
+      className={`sidebar ${isOpen ? "open" : "collapsed"}`}
+      style={{ width: isOpen ? `${width}px` : "72px" }}
     >
       <div className="sidebar-header">
-        {sidebarOpen ? (
+        {isOpen ? (
           <>
-            {logo ? (
-              <img
-                src={logo}
-                alt="Logo"
-                className="sidebar-logo"
-                style={{ height: 40, marginBottom: 10 }}
-              />
-            ) : (
-              <h2>ProHire</h2>
-            )}
-            <button
+            <h2 className="app-name">ProHire</h2>
+            <button 
               className="sidebar-toggle"
-              onClick={() => setSidebarOpen(false)}
-              aria-label="Minimize sidebar"
+              onClick={toggleSidebar}
+              aria-label="Collapse sidebar"
             >
-              <span>&#9776;</span>
+              <MdChevronLeft size={24} />
             </button>
           </>
         ) : (
-          <button
+          <button 
             className="sidebar-toggle"
-            onClick={() => setSidebarOpen(true)}
-            style={{ margin: "0 auto" }}
+            onClick={toggleSidebar}
             aria-label="Expand sidebar"
           >
-            <span>&#9776;</span>
+            <MdChevronRight size={24} />
           </button>
         )}
       </div>
-      <div className="sidebar-menu">
-        {sidebarMenus.map((menu, idx) => (
-          <div
-            key={idx}
-            className={`menu-item${location.pathname === menu.url ? " active" : ""} ${!sidebarOpen ? "icon-only" : ""}`}
-            title={!sidebarOpen ? menu.title : ""}
-            onClick={() => navigate(menu.url)}
-            style={{ cursor: "pointer" }}
-          >
-            <img
-              src={menu.icon.startsWith("http") ? menu.icon : `${BACKEND_BASE_URL}${menu.icon}`}
-              alt={menu.title}
-              className="menu-icon"
-              style={{ width: 24, height: 24 }}
-            />
-            {sidebarOpen && <span>{menu.title}</span>}
-          </div>
-        ))}
+
+      <nav className="sidebar-nav">
+        <ul>
+          {menuItems.map((item) => (
+            <li key={item.id}>
+              <button
+                className={`nav-item ${pathname === item.url ? "active" : ""}`}
+                onClick={() => handleNavigation(item.url)}
+                aria-label={item.title}
+              >
+                <div className="nav-icon">
+                  <img 
+                    src={item.icon} 
+                    alt={item.title}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "https://prohires.strangled.net/media/sidebar_icons/default.png";
+                    }}
+                  />
+                </div>
+                {isOpen && <span className="nav-text">{item.title}</span>}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div className="sidebar-footer">
+        <button 
+          className="logout-btn"
+          onClick={handleLogout}
+          aria-label="Logout"
+        >
+          <MdLogout size={20} />
+          {isOpen && <span>Logout</span>}
+        </button>
       </div>
-<div className="sidebar-footer">
-  <button onClick={handleLogout} className="logout-button">
-    <MdLogout size={24} style={{ marginRight: sidebarOpen ? 8 : 0 }} />
-    {sidebarOpen && <span>Logout</span>}
-  </button>
-</div>
-      {sidebarOpen && (
-        <div className="sidebar-resizer" onMouseDown={startResizing} />
+
+      {isOpen && (
+        <div 
+          className="sidebar-resizer" 
+          onMouseDown={startResizing}
+          aria-label="Resize sidebar"
+        />
       )}
-    </div>
+    </aside>
   );
 };
 

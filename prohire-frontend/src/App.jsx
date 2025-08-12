@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/homepage";
 import RegistrationForm from "./pages/registrationform";
 import Login from "./pages/login";
-import Jobs from "./pages/Jobs";
 import ProfileEditForm from "./pages/ProfileEditForm.jsx";
 import AboutUs from "./components/AboutUs.jsx";
 import Testimonials from "./components/Testimonials.jsx";
@@ -12,6 +11,9 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./App.css";
 import Dashboard from "./pages/dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Settings from "./pages/Settings";
+import JobPage from "./pages/JobPage";
+import JobLayout from "./pages/job";
 
 function App() {
   return (
@@ -27,14 +29,15 @@ function App() {
         <Route path="/ProfileEditForm" element={<ProfileEditForm />} />
         <Route path="/dashboard" element={<Dashboard />} /> */}
 
-        <Route
+
+        {/* <Route
           path="/jobs"
           element={
             <ProtectedRoute>
               <Jobs />
             </ProtectedRoute>
           }
-        />
+        /> */}
 
         <Route
           path="/ProfileEditForm"
@@ -53,6 +56,28 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+<Route
+  path="/job"
+  element={
+    <ProtectedRoute>
+      <JobLayout>
+        <JobPage />
+      </JobLayout>
+    </ProtectedRoute>
+  }
+/>
+
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
+        
+
       </Routes>
     </Router>
   );

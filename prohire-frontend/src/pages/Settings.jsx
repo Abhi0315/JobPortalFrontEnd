@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import useSidebarResize from "../hooks/useSidebarResize";
-import "../styles/dashboard.css";
+import "../styles/settings.css";
 
-const DashboardLayout = ({ children }) => {
+const SettingsLayout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [sidebarWidth, setSidebarWidth] = useState(280);
   const [isResizing, setIsResizing] = useState(false);
@@ -28,7 +28,7 @@ const DashboardLayout = ({ children }) => {
   };
 
   return (
-    <div className="dashboard-layout">
+    <div className="settings-layout">
       <Sidebar
         isOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
@@ -58,4 +58,4 @@ const DashboardLayout = ({ children }) => {
   );
 };
 
-export default DashboardLayout;
+export default SettingsLayout;

@@ -2,15 +2,18 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../styles/OTPPage.css";
+import OTPImage from "../assets/otp-img.jpg";
 
 const OTPPage = () => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
+  // const [imageUrl, setImageUrl] = useState("");
   const [countdown, setCountdown] = useState(30);
   // const location = useLocation();
   const [email] = useState(location.state?.email || "");
   const navigate = useNavigate();
+
+  const imageUrl = OTPImage;
 
   useEffect(() => {
     const fetchImage = async () => {

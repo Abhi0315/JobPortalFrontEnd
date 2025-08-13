@@ -37,6 +37,8 @@
   justify-content: center;
   background: #f8f9fa;
   padding: 2rem;
+  min-height: 500px;
+  overflow: hidden;
 }
 
 .auth-image {

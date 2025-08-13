@@ -13,6 +13,7 @@ const Sidebar = ({
   handleLogout,
 }) => {
   const [menuItems, setMenuItems] = useState([]);
+  const [companyLogo, setCompanyLogo] = useState(""); // 🔥 new state for logo
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -22,18 +23,26 @@ const Sidebar = ({
       try {
         setLoading(true);
         const data = await fetchSidebarData();
-        
-        const formattedMenus = data.map(item => ({
+
+        // 🔥 Handle logo
+        setCompanyLogo(data.logo);
+
+        // 🔥 Handle menu list
+        const formattedMenus = (data.menus || []).map(item => ({
           ...item,
           id: item.title.toLowerCase().replace(/\s+/g, '-'),
-          icon: item.icon.startsWith("http") 
-            ? item.icon 
+          icon: item.icon.startsWith("http")
+            ? item.icon
             : `https://prohires.strangled.net${item.icon}`
         }));
-        
+
         setMenuItems(formattedMenus);
       } catch (err) {
         console.error("Failed to load sidebar data:", err);
+
+        // fallback menu and logo
+        setCompanyLogo("https://prohires.strangled.net/media/company/default_logo.png");
+
         setMenuItems([
           {
             id: "dashboard",
@@ -58,15 +67,12 @@ const Sidebar = ({
 
   const handleNavigation = (url) => {
     navigate(url);
-    // Close sidebar automatically on mobile
-    if (window.innerWidth <= 768) {
-      toggleSidebar();
-    }
+    if (window.innerWidth <= 768) toggleSidebar();
   };
 
   if (loading) {
     return (
-      <aside 
+      <aside
         ref={sidebarRef}
         className={`sidebar-loading ${isOpen ? "open" : "collapsed"}`}
         style={{ width: isOpen ? `${width}px` : "72px" }}
@@ -85,8 +91,13 @@ const Sidebar = ({
       <div className="sidebar-header">
         {isOpen ? (
           <>
-            <h2 className="app-name">ProHire</h2>
-            <button 
+            {/* 🔥 Display logo if open */}
+            <img
+              src={companyLogo}
+              alt="Company Logo"
+              className="sidebar-logo"
+            />
+            <button
               className="sidebar-toggle"
               onClick={toggleSidebar}
               aria-label="Collapse sidebar"
@@ -95,7 +106,7 @@ const Sidebar = ({
             </button>
           </>
         ) : (
-          <button 
+          <button
             className="sidebar-toggle"
             onClick={toggleSidebar}
             aria-label="Expand sidebar"
@@ -115,8 +126,8 @@ const Sidebar = ({
                 aria-label={item.title}
               >
                 <div className="nav-icon">
-                  <img 
-                    src={item.icon} 
+                  <img
+                    src={item.icon}
                     alt={item.title}
                     onError={(e) => {
                       e.target.onerror = null;
@@ -132,7 +143,7 @@ const Sidebar = ({
       </nav>
 
       <div className="sidebar-footer">
-        <button 
+        <button
           className="logout-btn"
           onClick={handleLogout}
           aria-label="Logout"
@@ -143,8 +154,8 @@ const Sidebar = ({
       </div>
 
       {isOpen && (
-        <div 
-          className="sidebar-resizer" 
+        <div
+          className="sidebar-resizer"
           onMouseDown={startResizing}
           aria-label="Resize sidebar"
         />

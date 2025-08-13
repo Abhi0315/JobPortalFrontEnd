@@ -1,6 +1,7 @@
 // src/components/JobCard.jsx
 import React, { useState } from "react";
 import "../styles/JobCard.css";
+import axios from "axios";
 
 const JobCard = ({ job }) => {
   const {
@@ -44,11 +45,39 @@ const JobCard = ({ job }) => {
   const postedDate = posted_at ? new Date(posted_at) : null;
   const daysAgo = postedDate ? Math.floor((new Date() - postedDate) / (1000 * 60 * 60 * 24)) : null;
 
-  const handleSaveJob = (e) => {
-    e.stopPropagation();
-    setIsSaved(!isSaved);
-    // Here you would typically make an API call to save the job
-  };
+  const handleSaveJob = async (e, jobId) => {
+  e.stopPropagation();
+
+  const token = localStorage.getItem('token');
+
+  if (!token){
+    console.error("No auth provided")
+    return ;
+    }
+
+
+
+  try {
+    const response = await axios.post(
+      'https://prohires.strangled.net/job/save_jobs/',
+      { job_id: jobId },
+      {
+        headers: {
+          Authorization: `Token ${token}`, // 👈 Include token in the header
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    if (response.status === 200 || response.status === 201) {
+      setIsSaved(true); // You could also use response.data to update state more precisely
+    } else {
+      console.error('Failed to save job');
+    }
+  } catch (error) {
+    console.error('Error saving job:', error);
+  }
+};
 
   return (
     <div className={`job-card ${expanded ? 'expanded' : ''}`} onClick={toggleExpand}>
@@ -57,13 +86,14 @@ const JobCard = ({ job }) => {
           <h2>{title}</h2>
           <span className="job-id">#{job_id.slice(0, 8)}</span>
         </div>
-        <button 
-          className={`save-job-btn ${isSaved ? 'saved' : ''}`}
-          onClick={handleSaveJob}
-          aria-label={isSaved ? "Unsave job" : "Save job"}
-        >
-          {isSaved ? '✓ Saved' : '+ Save'}
-        </button>
+<button 
+  className={`save-job-btn ${isSaved ? 'saved' : ''}`}
+  onClick={(e) => handleSaveJob(e, job_id)}
+  aria-label={isSaved ? "Unsave job" : "Save job"}
+>
+  {isSaved ? '✓ Saved' : '+ Save'}
+</button>
+
       </div>
 
       <div className="employer-info">

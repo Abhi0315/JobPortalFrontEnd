@@ -419,6 +419,11 @@ const Homepage = () => {
             </section>
           )}
 
+          <section id="about">
+            <AboutUs />
+          </section>
+          <Testimonials />
+
           {/* Contact Us Section */}
           <section className="contact-section py-5" id="contact">
             <Container>
@@ -528,10 +533,6 @@ const Homepage = () => {
               </motion.div>
             </Container>
           </section>
-          <section id="about">
-            <AboutUs />
-          </section>
-          <Testimonials />
           <Footer />
         </>
       )}

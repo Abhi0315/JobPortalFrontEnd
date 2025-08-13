@@ -350,7 +350,9 @@ const Homepage = () => {
 
                 <Form onSubmit={handleSubmit}>
                   <Form.Group className="mb-3" controlId="formName">
-                    <Form.Label>Your Name *</Form.Label>
+                    <Form.Label>
+                      Your Name <span class="required-field-span">*</span>
+                    </Form.Label>
                     <Form.Control
                       type="text"
                       name="name"
@@ -366,7 +368,9 @@ const Homepage = () => {
                   </Form.Group>
 
                   <Form.Group className="mb-3" controlId="formEmail">
-                    <Form.Label>Email Address *</Form.Label>
+                    <Form.Label>
+                      Email Address <span class="required-field-span">*</span>
+                    </Form.Label>
                     <Form.Control
                       type="email"
                       name="email"
@@ -382,7 +386,9 @@ const Homepage = () => {
                   </Form.Group>
 
                   <Form.Group className="mb-4" controlId="formMessage">
-                    <Form.Label>Your Message *</Form.Label>
+                    <Form.Label>
+                      Your Message <span class="required-field-span">*</span>
+                    </Form.Label>
                     <Form.Control
                       as="textarea"
                       rows={4}

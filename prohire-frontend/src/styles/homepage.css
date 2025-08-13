@@ -64,10 +64,14 @@
   font-size: 3rem;
   color: white;
   margin-bottom: 20px;
+  display: flex;
+  align-items: baseline; /* aligns text baseline */
+  gap: 10px; /* spacing between title and subtitle */
 }
 
 .hero-subtitle {
   font-weight: 400;
+  font-size: 1.5rem; /* adjust size to match baseline visually */
   color: white;
 }
 
@@ -458,4 +462,8 @@
   .features-section .card-text {
     font-size: 0.9rem;
   }
+}
+
+.required-field-span {
+  color: red;
 }

@@ -88,8 +88,8 @@ h1 {
 }
 
 .email-input:focus {
-  border-color: #7c3aed;
-  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.2);
+  border-color: #2c1475;
+  box-shadow: 0 0 0 4px rgba(40, 20, 117, 0.2);
   outline: none;
   background-color: #fff;
 }

@@ -51,11 +51,7 @@ const SendOTPPage = () => {
       );
 
       if (response.data.success) {
-        setIsSubmitted(true);
-        // Navigate to OTP page after 3 seconds to show success message
-        setTimeout(() => {
-          navigate("/verify-otp", { state: { email } });
-        }, 3000);
+        navigate("/otp", { state: { email } });
       } else {
         setError(response.data.message || "Failed to send OTP");
       }

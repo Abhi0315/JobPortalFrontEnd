@@ -14,8 +14,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Settings from "./pages/Settings";
 import JobPage from "./pages/JobPage";
 import JobLayout from "./pages/job";
-import OTPPage from "./pages/OTPPage.jsx";
-import SendOTPPage from "./pages/SendOTPPage.jsx";
+import OTPPage from "./pages/OTPPage";
+import SendOTPPage from "./pages/SendOTPPage";
 
 function App() {
   return (

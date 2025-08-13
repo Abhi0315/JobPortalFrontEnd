@@ -8,7 +8,8 @@ const OTPPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [countdown, setCountdown] = useState(30);
-  const [email] = useState("annelie@untitledul.com");
+  // const location = useLocation();
+  const [email] = useState(location.state?.email || "");
   const navigate = useNavigate();
 
   useEffect(() => {

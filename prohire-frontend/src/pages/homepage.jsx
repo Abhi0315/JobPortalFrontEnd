@@ -195,10 +195,10 @@ const Homepage = () => {
         <section className="hero-section-skeleton">
           <Container>
             <Row className="align-items-center">
-              <Col lg={6} className="order-lg-2">
+              <Col lg={6} className="order-lg-1">
                 <div className="skeleton-image"></div>
               </Col>
-              <Col lg={6} className="order-lg-1">
+              <Col lg={6} className="order-lg-2">
                 <div className="skeleton-title"></div>
                 <div className="skeleton-subtitle"></div>
                 <div className="skeleton-text"></div>

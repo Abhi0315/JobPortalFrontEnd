@@ -1,0 +1,254 @@
+/* Google Font Import */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+.otp-page-container {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  font-family: "Inter", sans-serif;
+  background-color: #f8f9fa;
+  padding: 20px;
+}
+
+.otp-center-container {
+  display: flex;
+  max-width: 1000px;
+  width: 100%;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.otp-left {
+  flex: 1;
+  padding: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.otp-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  padding: 2rem;
+}
+
+.auth-image {
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 8px;
+  animation: slideIn 0.8s ease-out;
+}
+
+.otp-content {
+  max-width: 400px;
+  width: 100%;
+}
+
+h1 {
+  font-family: "Poppins", sans-serif;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #2c1475;
+  text-align: center;
+}
+
+.email-notice {
+  margin-bottom: 2rem;
+  color: #4b5563;
+  text-align: center;
+}
+
+.otp-inputs {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  justify-content: center;
+}
+
+.otp-digit {
+  width: 3.5rem;
+  height: 3.5rem;
+  text-align: center;
+  font-size: 1.5rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  background-color: #f8fafc;
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.otp-digit:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.2);
+  outline: none;
+  transform: translateY(-2px);
+  background-color: #fff;
+}
+
+.otp-digit:not(:placeholder-shown) {
+  border-color: #7c3aed;
+  background-color: #fff;
+}
+
+.timer {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  color: #00b77a;
+}
+
+.verify-btn {
+  background: linear-gradient(135deg, #2c1475, #7757d6);
+  border: none;
+  padding: 14px 30px;
+  width: 100%;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: white;
+  border-radius: 12px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s ease;
+  background-size: 200% 200%;
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.verify-btn:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  background-position: right center;
+  box-shadow: 0 6px 18px rgba(119, 87, 214, 0.6);
+}
+
+.verify-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.verify-btn:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none;
+}
+
+.btn-loader {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+.resend-text {
+  text-align: center;
+  color: #4b5563;
+  margin-bottom: 1.5rem;
+  margin-top: 1rem;
+}
+
+.resend-btn {
+  background: none;
+  border: none;
+  color: #3b82f6;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0;
+}
+
+.resend-btn.disabled {
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.back-link {
+  display: block;
+  text-align: center;
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .otp-center-container {
+    flex-direction: column;
+  }
+
+  .otp-right {
+    display: none;
+  }
+
+  .otp-left {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .otp-digit {
+    width: 2.8rem;
+    height: 3rem;
+    font-size: 1.2rem;
+  }
+
+  .verify-btn {
+    padding: 12px 20px;
+    font-size: 1rem;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .otp-digit {
+    width: 2.5rem;
+    height: 2.8rem;
+  }
+
+  .otp-left {
+    padding: 1.5rem;
+  }
+}

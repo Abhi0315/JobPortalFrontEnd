@@ -69,7 +69,7 @@ const LoginForm = () => {
     } catch (error) {
       setApiMessage(
         error.response?.data?.error ||
-        "An error occurred during login. Please try again."
+          "An error occurred during login. Please try again."
       );
     } finally {
       setLoading(false);
@@ -77,13 +77,13 @@ const LoginForm = () => {
   };
 
   useEffect(() => {
-  const handlePopState = () => {
-    navigate("/homepage", { replace: true });
-  };
+    const handlePopState = () => {
+      navigate("/homepage", { replace: true });
+    };
 
-  window.addEventListener("popstate", handlePopState);
-  return () => window.removeEventListener("popstate", handlePopState);
-}, [navigate]);
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, [navigate]);
 
   return (
     <div className="split-screen">
@@ -185,7 +185,7 @@ const LoginForm = () => {
               )}
             </div>
             <div className="mb-3 text-end">
-              <Link to="/forgot-password" className="text-decoration-none">
+              <Link to="/send-otp" className="text-decoration-none">
                 Forgot Password?
               </Link>
             </div>

@@ -15,12 +15,12 @@ const SendOTPPage = () => {
     const fetchImage = async () => {
       try {
         const response = await axios.get(
-          "https://your-django-api.com/api/auth/email-image/"
+          "https://prohires.strangled.net${features.background_image}"
         );
         setImageUrl(response.data.imageUrl);
       } catch (error) {
         console.error("Error fetching image:", error);
-        setImageUrl("https://via.placeholder.com/600");
+        setImageUrl("https://prohires.strangled.net${contact.image_url}");
       }
     };
     fetchImage();
@@ -44,8 +44,10 @@ const SendOTPPage = () => {
 
     try {
       const response = await axios.post(
-        "https://your-django-api.com/api/auth/send-otp/",
-        { email }
+        "https://prohires.strangled.net/mainapp/send_otp_forgot_password/",
+        {
+          email,
+        }
       );
 
       if (response.data.success) {

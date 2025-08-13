@@ -132,6 +132,7 @@
   left: 0;
   color: #2c1475;
   font-weight: bold;
+  margin-left: 76px;
 }
 
 .hero-btn-group {
@@ -402,7 +403,7 @@
 
   .hero-btn,
   .hero-demo-btn {
-    width: 100%;
+    width: 71%;
   }
 
   .hero-features-list li {
@@ -431,6 +432,7 @@
 @media (max-width: 576px) {
   .hero-title {
     font-size: 1.6rem;
+    margin-left: 142px;
   }
 
   .hero-subtitle {

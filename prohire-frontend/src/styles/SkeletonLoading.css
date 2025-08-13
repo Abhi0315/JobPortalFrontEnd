@@ -1,0 +1,246 @@
+/* Skeleton Loading Styles */
+.skeleton-loading {
+  padding: 20px;
+}
+
+.skeleton-image,
+.skeleton-title,
+.skeleton-subtitle,
+.skeleton-text,
+.skeleton-feature-item,
+.skeleton-button,
+.skeleton-trust-text,
+.skeleton-trust-logo,
+.skeleton-features-title,
+.skeleton-features-description,
+.skeleton-feature-card,
+.skeleton-contact-title,
+.skeleton-contact-description,
+.skeleton-form-field,
+.skeleton-form-button,
+.skeleton-contact-image {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Hero Section Skeleton */
+.hero-section-skeleton {
+  padding: 80px 0;
+}
+
+.skeleton-image {
+  height: 400px;
+  margin-bottom: 20px;
+}
+
+.skeleton-title {
+  height: 50px;
+  width: 60%;
+  margin-bottom: 15px;
+}
+
+.skeleton-subtitle {
+  height: 30px;
+  width: 80%;
+  margin-bottom: 20px;
+}
+
+.skeleton-text {
+  height: 20px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.skeleton-feature-list {
+  margin: 25px 0;
+}
+
+.skeleton-feature-item {
+  height: 20px;
+  width: 100%;
+  margin-bottom: 12px;
+  padding-left: 30px;
+}
+
+.skeleton-button-group {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.skeleton-button {
+  height: 50px;
+  width: 150px;
+}
+
+.skeleton-trust-text {
+  height: 15px;
+  width: 100px;
+  margin-bottom: 15px;
+}
+
+.skeleton-trust-logos {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.skeleton-trust-logo {
+  height: 30px;
+  width: 80px;
+  border-radius: 20px;
+}
+
+/* Features Section Skeleton */
+.skeleton-features-title {
+  height: 40px;
+  width: 40%;
+  margin-bottom: 15px;
+}
+
+.skeleton-features-description {
+  height: 20px;
+  width: 70%;
+  margin-bottom: 30px;
+}
+
+.skeleton-features-scroll {
+  display: flex;
+  gap: 20px;
+  overflow: hidden;
+}
+
+.skeleton-feature-card {
+  min-width: 280px;
+  height: 300px;
+  border-radius: 16px;
+}
+
+/* Contact Section Skeleton */
+.skeleton-contact-title {
+  height: 40px;
+  width: 50%;
+  margin-bottom: 15px;
+}
+
+.skeleton-contact-description {
+  height: 20px;
+  width: 80%;
+  margin-bottom: 30px;
+}
+
+.skeleton-form-field {
+  height: 45px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.skeleton-form-button {
+  height: 45px;
+  width: 150px;
+}
+
+.skeleton-contact-image {
+  height: 400px;
+  width: 100%;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .hero-section-skeleton {
+    padding: 60px 0;
+  }
+
+  .skeleton-image {
+    height: 300px;
+  }
+
+  .skeleton-title {
+    width: 80%;
+  }
+
+  .skeleton-button-group {
+    flex-direction: column;
+  }
+
+  .skeleton-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .skeleton-features-scroll {
+    flex-direction: column;
+  }
+
+  .skeleton-feature-card {
+    width: 100%;
+  }
+
+  .skeleton-contact-image {
+    margin-top: 30px;
+    height: 300px;
+  }
+}
+.hero-skeleton-content-col {
+  padding-left: 40px;
+}
+
+.hero-skeleton-image-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.skeleton-image {
+  height: 400px;
+  width: 100%;
+  max-width: 600px;
+  margin-top: 75px;
+  border-radius: 16px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .hero-skeleton-content-col {
+    padding-left: 0;
+    margin-top: 40px;
+    text-align: center;
+  }
+
+  .hero-skeleton-image-col {
+    order: 2;
+  }
+
+  .hero-skeleton-content-col {
+    order: 1;
+  }
+
+  .skeleton-image {
+    margin-top: 0;
+    height: 300px;
+  }
+
+  .skeleton-button-group {
+    justify-content: center;
+  }
+
+  .skeleton-trust {
+    text-align: center;
+  }
+
+  .skeleton-trust-logos {
+    justify-content: center;
+  }
+}

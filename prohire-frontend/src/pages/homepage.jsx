@@ -8,6 +8,7 @@ import "../styles/homepage.css";
 import ProHireNavbar from "../components/Navbar";
 import AboutUs from "../components/AboutUs";
 import Testimonials from "../components/Testimonials";
+import Footer from "../components/Footer";
 
 const Homepage = () => {
   const [menus, setMenus] = useState([]);
@@ -433,6 +434,7 @@ const Homepage = () => {
         <AboutUs />
       </section>
       <Testimonials />
+      <Footer />
     </>
   );
 };

@@ -392,7 +392,9 @@
     font-weight: bold;
     margin-left: 76px;
   }
-
+  .me-3 {
+    margin: 0px !important;
+  }
   .hero-title {
     font-size: 1.8rem;
   }

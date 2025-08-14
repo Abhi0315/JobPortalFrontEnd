@@ -25,7 +25,7 @@ const OTPPage = () => {
       if (storedEmail) {
         setEmail(storedEmail);
       } else {
-        navigate("/ForgotPassword");
+        navigate("/forget");
       }
     }
   }, [location, navigate]);

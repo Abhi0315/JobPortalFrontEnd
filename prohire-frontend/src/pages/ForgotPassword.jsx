@@ -64,6 +64,7 @@ const ForgotPassword = () => {
         // Clear local storage
         localStorage.removeItem("otpEmail");
         localStorage.removeItem("otpVerified");
+        navigate("/login");
       } else {
         setError(response.data.message || "Password reset failed");
       }

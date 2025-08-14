@@ -16,6 +16,7 @@ import ProfileEditForm from "./pages/ProfileEditForm.jsx";
 import RegistrationForm from "./pages/registrationform";
 import SendOTPPage from "./pages/SendOTPPage";
 import Settings from "./pages/Settings";
+import Forget from "./pages/ForgotPassword.jsx";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/testimonial" element={<Testimonials />} />
         <Route path="/otp" element={<OTPPage />} />
         <Route path="/send-otp" element={<SendOTPPage />} />
+        <Route path="/forget" element={<Forget />} />
         {/* <Route path="/jobs" element={<Jobs />} />
         <Route path="/ProfileEditForm" element={<ProfileEditForm />} />
         <Route path="/dashboard" element={<Dashboard />} /> */}
@@ -56,9 +58,9 @@ function App() {
           element={
             <ProtectedRoute>
               <DashboardLayout>
-                <Dashboard/>
+                <Dashboard />
               </DashboardLayout>
-              <Dashboard/>
+              <Dashboard />
             </ProtectedRoute>
           }
         />

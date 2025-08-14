@@ -19,14 +19,13 @@ const OTPPage = () => {
   useEffect(() => {
     if (location.state?.email) {
       setEmail(location.state.email);
-      localStorage.setItem("otpEmail", location.state.email); // Store as backup
+      localStorage.setItem("otpEmail", location.state.email);
     } else {
-      // Try to get email from localStorage if not in state
       const storedEmail = localStorage.getItem("otpEmail");
       if (storedEmail) {
         setEmail(storedEmail);
       } else {
-        navigate("/forgot-password");
+        navigate("/forget");
       }
     }
   }, [location, navigate]);
@@ -45,7 +44,7 @@ const OTPPage = () => {
     const newOtp = [...otp];
     newOtp[index] = element.value;
     setOtp(newOtp);
-    setError(""); // Clear error when user types
+    setError("");
 
     if (element.nextSibling && element.value) {
       element.nextSibling.focus();
@@ -55,7 +54,6 @@ const OTPPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate all OTP digits are filled
     if (otp.some((digit) => !digit)) {
       setError("Please enter the complete 6-digit OTP code");
       return;
@@ -74,44 +72,33 @@ const OTPPage = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            // Add any required headers like Authorization if needed
           },
         }
       );
 
+      console.log("Verification response:", response.data); // Debug log
+
       if (response.data.success) {
-        // On successful verification
         localStorage.setItem("otpVerified", "true");
-        navigate("/change-password", {
+        // Changed from /change-password to /ForgotPassword
+        navigate("/ForgotPassword", {
           state: {
             email: email,
             otpVerified: true,
           },
         });
       } else {
-        setError(
-          response.data.message || "Invalid OTP. Please check and try again."
-        );
+        setError(response.data.message || "Invalid OTP. Please try again.");
       }
     } catch (error) {
-      console.error("OTP verification error:", error);
-      let errorMessage =
-        "An error occurred during verification. Please try again.";
+      console.error("Verification error:", error);
+      let errorMessage = "Verification failed. Please try again.";
 
       if (error.response) {
-        // Handle different HTTP status codes
-        if (error.response.status === 400) {
-          errorMessage = error.response.data?.message || "Invalid OTP format";
-        } else if (error.response.status === 401) {
-          errorMessage = "OTP expired or invalid";
-        } else if (error.response.status === 404) {
-          errorMessage = "Email not found";
-        } else if (error.response.data?.message) {
-          errorMessage = error.response.data.message;
-        }
+        errorMessage = error.response.data?.message || errorMessage;
+        console.error("Server response:", error.response.data); // Debug log
       } else if (error.request) {
-        errorMessage =
-          "No response from server. Please check your internet connection.";
+        errorMessage = "No server response. Check your connection.";
       }
 
       setError(errorMessage);
@@ -126,7 +113,7 @@ const OTPPage = () => {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        "https://prohires.strangled.net/mainapp/resend_otp_forgot_password/",
+        "https://prohires.strangled.net/mainapp/send_otp_forgot_password/",
         { email },
         {
           headers: {
@@ -136,14 +123,14 @@ const OTPPage = () => {
       );
 
       if (response.data.success) {
-        setCountdown(30); // Reset countdown
-        setOtp(["", "", "", "", "", ""]); // Clear OTP fields
+        setCountdown(30);
+        setOtp(["", "", "", "", "", ""]);
       } else {
         setError(response.data.message || "Failed to resend OTP");
       }
     } catch (error) {
-      console.error("Error resending OTP:", error);
-      setError("Failed to resend OTP. Please try again later.");
+      console.error("Resend error:", error);
+      setError("Failed to resend OTP. Please try again.");
     } finally {
       setIsLoading(false);
     }

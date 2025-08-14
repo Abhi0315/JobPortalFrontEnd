@@ -1,21 +1,21 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import HomePage from "./pages/homepage";
-import RegistrationForm from "./pages/registrationform";
-import Login from "./pages/login";
-import ProfileEditForm from "./pages/ProfileEditForm.jsx";
-import AboutUs from "./components/AboutUs.jsx";
-import Testimonials from "./components/Testimonials.jsx";
-
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
-import Dashboard from "./pages/dashboard";
+import AboutUs from "./components/AboutUs.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Settings from "./pages/Settings";
-import JobPage from "./pages/JobPage";
+import Testimonials from "./components/Testimonials.jsx";
+import DashboardLayout from "./pages/dashboard";
+import Dashboard from "./pages/dashboardMain";
+import HomePage from "./pages/homepage";
 import JobLayout from "./pages/job";
+import JobPage from "./pages/JobPage";
+import Login from "./pages/login";
 import OTPPage from "./pages/OTPPage";
+import ProfileEditForm from "./pages/ProfileEditForm.jsx";
+import RegistrationForm from "./pages/registrationform";
 import SendOTPPage from "./pages/SendOTPPage";
+import Settings from "./pages/Settings";
 
 function App() {
   return (
@@ -55,7 +55,10 @@ function App() {
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <Dashboard />
+              <DashboardLayout>
+                <Dashboard/>
+              </DashboardLayout>
+              <Dashboard/>
             </ProtectedRoute>
           }
         />

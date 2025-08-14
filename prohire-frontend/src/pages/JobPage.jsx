@@ -149,9 +149,9 @@
 // export default JobsPage;
 
 
+import axios from "axios";
 import { useEffect, useState } from "react";
 import JobCard from "../components/JobCard";
-import axios from "axios";
 import "../styles/JobsPage.css";
 
 const JobsPage = () => {
@@ -234,7 +234,20 @@ const JobsPage = () => {
 
   return (
     <div className="jobs-page-container">
-      <h1 className="jobs-page-title">Find Your Dream Job</h1>
+      <h1 className="jobs-page-title">
+  Find Your Dream Job
+  <span style={{
+    display: 'block',
+    fontSize: '1rem',
+    fontWeight: '400',
+    marginTop: '0.5rem',
+    color: '#4a3a8a',
+    background: 'none',
+    WebkitTextFillColor: 'initial'
+  }}>
+    Discover opportunities that match your skills
+  </span>
+</h1>
       
       {/* Search and Filter Bar */}
       <div className="search-filter-container">

@@ -2,7 +2,7 @@
   --dashboard-bg: #f9fafb;
   --content-bg: #ffffff;
   --content-padding: 1.5rem;
-  
+
   display: flex;
   min-height: 100vh;
   background: var(--dashboard-bg);
@@ -25,7 +25,7 @@
   .main-content {
     margin-left: 0 !important;
   }
-  
+
   .content-wrapper {
     padding: 1rem;
   }
@@ -33,8 +33,14 @@
 
 /* Animation for page transitions */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .content-wrapper > * {
@@ -88,8 +94,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Empty state */

@@ -27,12 +27,12 @@ const Sidebar = ({
         setCompanyLogo(data.logo);
 
         // 🔥 Handle menu list
-        const formattedMenus = (data.menus || []).map(item => ({
+        const formattedMenus = (data.menus || []).map((item) => ({
           ...item,
-          id: item.title.toLowerCase().replace(/\s+/g, '-'),
+          id: item.title.toLowerCase().replace(/\s+/g, "-"),
           icon: item.icon.startsWith("http")
             ? item.icon
-            : `https://prohires.strangled.net${item.icon}`
+            : `https://prohires.strangled.net${item.icon}`,
         }));
 
         setMenuItems(formattedMenus);
@@ -40,21 +40,23 @@ const Sidebar = ({
         console.error("Failed to load sidebar data:", err);
 
         // fallback menu and logo
-        setCompanyLogo("https://prohires.strangled.net/media/company/default_logo.png");
+        setCompanyLogo(
+          "https://prohires.strangled.net/media/company/default_logo.png"
+        );
 
         setMenuItems([
           {
             id: "dashboard",
             title: "Dashboard",
             url: "/dashboard",
-            icon: "https://prohires.strangled.net/media/sidebar_icons/home.png"
+            icon: "https://prohires.strangled.net/media/sidebar_icons/home.png",
           },
           {
             id: "settings",
             title: "Settings",
             url: "/settings",
-            icon: "https://prohires.strangled.net/media/sidebar_icons/settings.png"
-          }
+            icon: "https://prohires.strangled.net/media/sidebar_icons/settings.png",
+          },
         ]);
       } finally {
         setLoading(false);
@@ -82,33 +84,31 @@ const Sidebar = ({
   }
 
   const handleLogout = async () => {
-  try {
-    const token = localStorage.getItem("token");
+    try {
+      const token = localStorage.getItem("token");
 
-    // Optional: Call Django logout endpoint if it exists
-    if (token) {
-      await fetch("https://prohires.strangled.net/mainapp/user_logout/", {
-        method: "POST",
-        headers: {
-          "Authorization": `Token ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      // Optional: Call Django logout endpoint if it exists
+      if (token) {
+        await fetch("https://prohires.strangled.net/mainapp/user_logout/", {
+          method: "POST",
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+      }
+
+      // ✅ Clear all localStorage/sessionStorage
+      localStorage.clear();
+      sessionStorage.clear();
+
+      // ✅ Navigate to login and force a reload to clear memory/cache
+      navigate("/login", { replace: true });
+      window.location.reload();
+    } catch (error) {
+      console.error("Logout failed:", error);
     }
-
-    // ✅ Clear all localStorage/sessionStorage
-    localStorage.clear();
-    sessionStorage.clear();
-
-    // ✅ Navigate to login and force a reload to clear memory/cache
-    navigate("/login", { replace: true });
-    window.location.reload();
-  } catch (error) {
-    console.error("Logout failed:", error);
-  }
-};
-
-
+  };
 
   return (
     <aside
@@ -159,7 +159,8 @@ const Sidebar = ({
                     alt={item.title}
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = "https://prohires.strangled.net/media/sidebar_icons/default.png";
+                      e.target.src =
+                        "https://prohires.strangled.net/media/sidebar_icons/default.png";
                     }}
                   />
                 </div>

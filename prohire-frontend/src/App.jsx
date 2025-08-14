@@ -6,7 +6,6 @@ import AboutUs from "./components/AboutUs.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Testimonials from "./components/Testimonials.jsx";
 import DashboardLayout from "./pages/dashboard";
-import Dashboard from "./pages/dashboardMain";
 import HomePage from "./pages/homepage";
 import JobLayout from "./pages/job";
 import JobPage from "./pages/JobPage";
@@ -16,7 +15,7 @@ import ProfileEditForm from "./pages/ProfileEditForm.jsx";
 import RegistrationForm from "./pages/registrationform";
 import SendOTPPage from "./pages/SendOTPPage";
 import Settings from "./pages/Settings";
-import Forget from "./pages/ForgotPassword.jsx";
+// import Forget from "./pages/ForgotPassword.jsx";
 
 function App() {
   return (
@@ -30,7 +29,7 @@ function App() {
         <Route path="/testimonial" element={<Testimonials />} />
         <Route path="/otp" element={<OTPPage />} />
         <Route path="/send-otp" element={<SendOTPPage />} />
-        <Route path="/forget" element={<Forget />} />
+        {/* <Route path="/forget" element={<Forget />} /> */}
         {/* <Route path="/jobs" element={<Jobs />} />
         <Route path="/ProfileEditForm" element={<ProfileEditForm />} />
         <Route path="/dashboard" element={<Dashboard />} /> */}
@@ -53,17 +52,16 @@ function App() {
           }
         />
 
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <DashboardLayout>
-                <Dashboard />
-              </DashboardLayout>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+<Route
+  path="/dashboard"
+  element={
+    <ProtectedRoute>
+      <DashboardLayout>
+      </DashboardLayout>
+    </ProtectedRoute>
+  }
+/>
+
 
         <Route
           path="/jobs"

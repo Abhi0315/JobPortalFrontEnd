@@ -17,6 +17,109 @@ const Footer = () => {
   const [footerData, setFooterData] = useState({
     logo: "",
     companyName: "ProHire",
+    menus: [],
+    contactInfo: {
+      email: "",
+      phone: "",
+      address: "",
+    },
+    socialLinks: [],
+    legalText: "",
+    links: [],
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const slug = queryParams.get("slug") || "home";
+
+  // Check scroll position
+  const checkScrollTop = () => {
+    setShowScroll(window.pageYOffset > 400);
+  };
+
+  // Scroll to top function
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", checkScrollTop);
+    return () => window.removeEventListener("scroll", checkScrollTop);
+  }, []);
+
+  useEffect(() => {
+    const fetchFooterData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await fetch(
+          `https://prohires.strangled.net/headerfooter/footer_detail/`
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const apiData = await response.json();
+        console.log("API data received:", apiData);
+
+        let footerSection = null;
+
+        // Case 1: Old format with sections array
+        if (apiData.sections && Array.isArray(apiData.sections)) {
+          footerSection = apiData.sections.find(
+            (s) => s.section_type === "footer"
+          );
+        }
+
+        // Case 2: New flat format
+        if (!footerSection && apiData.company_name) {
+          footerSection = {
+            logo: apiData.logo || "",
+            companyName: apiData.company_name || "ProHire",
+            menus: apiData.menus || [],
+            contactInfo: {
+              email: apiData.contact_info?.email || "",
+              phone: apiData.contact_info?.phone || "",
+              address: apiData.contact_info?.address || "",
+            },
+            socialLinks: (apiData.social_links || []).map((social) => ({
+              name: social.name,
+              icon: getIconComponent(social.icon),
+              link: social.link || "#",
+            })),
+            legalText: apiData.legal_text || "",
+            links: apiData.legal_links || [],
+          };
+        }
+
+        if (!footerSection) {
+          throw new Error("No footer section found in API response");
+        }
+
+        setFooterData(footerSection);
+      } catch (err) {
+        console.error("Error fetching footer data:", err);
+        setError(err.message);
+        setFooterData(getDefaultFooterData());
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFooterData();
+  }, [slug]);
+
+  // Helper function to get default data
+  const getDefaultFooterData = () => ({
+    logo: "",
+    companyName: "ProHire",
     menus: [
       {
         title: "Product",
@@ -62,92 +165,30 @@ const Footer = () => {
     ],
   });
 
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const slug = queryParams.get("slug") || "home";
-
-  // Check scroll position
-  const checkScrollTop = () => {
-    if (!showScroll && window.pageYOffset > 400) {
-      setShowScroll(true);
-    } else if (showScroll && window.pageYOffset <= 400) {
-      setShowScroll(false);
+  // Helper function to map icon names to components
+  const getIconComponent = (iconName) => {
+    switch (iconName?.toLowerCase()) {
+      case "facebook":
+        return <FaFacebook />;
+      case "twitter":
+        return <FaTwitter />;
+      case "linkedin":
+        return <FaLinkedin />;
+      case "instagram":
+        return <FaInstagram />;
+      default:
+        return null;
     }
   };
 
-  // Scroll to top function
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
+  if (loading) {
+    return <div className="footer-loading">Loading footer...</div>;
+  }
 
-  useEffect(() => {
-    window.addEventListener("scroll", checkScrollTop);
-    return () => window.removeEventListener("scroll", checkScrollTop);
-  }, [showScroll]);
-
-  useEffect(() => {
-    const fetchFooterData = async () => {
-      try {
-        const response = await fetch(
-          `https://prohires.strangled.net/frontend/fetch_records?slug=${slug}`
-        );
-        const data = await response.json();
-
-        if (data.sections) {
-          const aboutSection = data.sections.find(
-            (s) => s.section_type === "about_us"
-          );
-          const contactSection = data.sections.find(
-            (s) => s.section_type === "contact_us"
-          );
-
-          setFooterData((prev) => ({
-            ...prev,
-            logo: aboutSection?.logo || prev.logo,
-            companyName: data.title || prev.companyName,
-            menus: [
-              {
-                title: "Product",
-                items: [
-                  { name: "AI Job Matching", link: "/ai-matching" },
-                  { name: "Company Verification", link: "/verified-employers" },
-                  { name: "Career Guidance", link: "/career-guidance" },
-                ],
-              },
-              {
-                title: "Company",
-                items: [
-                  { name: "About Us", link: "/about" },
-                  { name: "Team", link: "/team" },
-                  { name: "Careers", link: "/careers" },
-                ],
-              },
-              {
-                title: "Resources",
-                items: [
-                  { name: "Blog", link: "/blog" },
-                  { name: "Help Center", link: "/help" },
-                  { name: "Webinars", link: "/webinars" },
-                ],
-              },
-            ],
-            contactInfo: {
-              email: "contact@prohire.com",
-              phone: "+1 (555) 123-4567",
-              address: "123 Career Street, Hiring City, HC 12345",
-            },
-          }));
-        }
-      } catch (error) {
-        console.error("Error fetching footer data:", error);
-      }
-    };
-
-    fetchFooterData();
-  }, [slug]);
+  if (error) {
+    console.error("Footer Error:", error);
+    // Continue rendering with fallback data
+  }
 
   return (
     <>
@@ -166,6 +207,9 @@ const Footer = () => {
                     alt={footerData.companyName}
                     className="footer-logo mb-3"
                     style={{ maxHeight: "50px" }}
+                    onError={(e) => {
+                      e.target.style.display = "none";
+                    }}
                   />
                 ) : (
                   <h3 className="mb-3" style={{ color: "#2c1475" }}>
@@ -178,15 +222,21 @@ const Footer = () => {
                 </p>
 
                 <div className="contact-info mt-4">
-                  <div className="d-flex align-items-center mb-2">
-                    <FaEnvelope className="me-2" />
-                    <span>{footerData.contactInfo.email}</span>
-                  </div>
-                  <div className="d-flex align-items-center mb-2">
-                    <FaPhone className="me-2" />
-                    <span>{footerData.contactInfo.phone}</span>
-                  </div>
-                  <p className="mb-0">{footerData.contactInfo.address}</p>
+                  {footerData.contactInfo.email && (
+                    <div className="d-flex align-items-center mb-2">
+                      <FaEnvelope className="me-2" />
+                      <span>{footerData.contactInfo.email}</span>
+                    </div>
+                  )}
+                  {footerData.contactInfo.phone && (
+                    <div className="d-flex align-items-center mb-2">
+                      <FaPhone className="me-2" />
+                      <span>{footerData.contactInfo.phone}</span>
+                    </div>
+                  )}
+                  {footerData.contactInfo.address && (
+                    <p className="mb-0">{footerData.contactInfo.address}</p>
+                  )}
                 </div>
               </div>
             </Col>
@@ -194,42 +244,48 @@ const Footer = () => {
             {/* Footer Menus */}
             {footerData.menus.map((menu, index) => (
               <Col key={`menu-${index}`} md={4} lg={2} className="mb-4 mb-md-0">
-                <h5 className="footer-menu-title mb-3">{menu.title}</h5>
-                <ul className="footer-menu-list list-unstyled">
-                  {menu.items.map((item, itemIndex) => (
-                    <li
-                      key={`menu-item-${index}-${itemIndex}`}
-                      className="mb-2"
-                    >
-                      <a
-                        href={item.link}
-                        className="footer-menu-link"
-                        style={{ color: "#2c1475" }}
+                {menu.title && (
+                  <h5 className="footer-menu-title mb-3">{menu.title}</h5>
+                )}
+                {menu.items && menu.items.length > 0 && (
+                  <ul className="footer-menu-list list-unstyled">
+                    {menu.items.map((item, itemIndex) => (
+                      <li
+                        key={`menu-item-${index}-${itemIndex}`}
+                        className="mb-2"
                       >
-                        {item.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+                        <a
+                          href={item.link || "#"}
+                          className="footer-menu-link"
+                          style={{ color: "#2c1475" }}
+                        >
+                          {item.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </Col>
             ))}
 
             {/* Social Media */}
             <Col md={4} lg={2} className="mb-4 mb-md-0">
               <h5 className="footer-menu-title mb-3">Connect With Us</h5>
-              <div className="social-icons d-flex gap-3">
-                {footerData.socialLinks.map((social, index) => (
-                  <a
-                    key={`social-${index}`}
-                    href={social.link}
-                    className="social-icon"
-                    aria-label={social.name}
-                    style={{ color: "#2c1475", fontSize: "1.5rem" }}
-                  >
-                    {social.icon}
-                  </a>
-                ))}
-              </div>
+              {footerData.socialLinks.length > 0 && (
+                <div className="social-icons d-flex gap-3">
+                  {footerData.socialLinks.map((social, index) => (
+                    <a
+                      key={`social-${index}`}
+                      href={social.link}
+                      className="social-icon"
+                      aria-label={social.name}
+                      style={{ color: "#2c1475", fontSize: "1.5rem" }}
+                    >
+                      {social.icon}
+                    </a>
+                  ))}
+                </div>
+              )}
 
               <h5 className="footer-menu-title mt-4 mb-3">Newsletter</h5>
               <div className="newsletter-form">
@@ -255,29 +311,36 @@ const Footer = () => {
             style={{ borderColor: "rgba(44, 20, 117, 0.1)" }}
           >
             <Col md={6} className="mb-3 mb-md-0">
-              <p className="mb-0" style={{ color: "#2c1475" }}>
-                {footerData.legalText}
-              </p>
+              {footerData.legalText && (
+                <p className="mb-0" style={{ color: "#2c1475" }}>
+                  {footerData.legalText}
+                </p>
+              )}
             </Col>
             <Col md={6} className="text-md-end">
-              <ul className="list-inline mb-0">
-                {footerData.links.map((link, index) => (
-                  <li key={`legal-link-${index}`} className="list-inline-item">
-                    <a
-                      href={link.link}
-                      className="footer-legal-link"
-                      style={{ color: "#2c1475" }}
+              {footerData.links.length > 0 && (
+                <ul className="list-inline mb-0">
+                  {footerData.links.map((link, index) => (
+                    <li
+                      key={`legal-link-${index}`}
+                      className="list-inline-item"
                     >
-                      {link.name}
-                    </a>
-                    {index < footerData.links.length - 1 && (
-                      <span className="mx-2" style={{ color: "#2c1475" }}>
-                        ·
-                      </span>
-                    )}
-                  </li>
-                ))}
-              </ul>
+                      <a
+                        href={link.link || "#"}
+                        className="footer-legal-link"
+                        style={{ color: "#2c1475" }}
+                      >
+                        {link.name}
+                      </a>
+                      {index < footerData.links.length - 1 && (
+                        <span className="mx-2" style={{ color: "#2c1475" }}>
+                          ·
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </Col>
           </Row>
         </Container>

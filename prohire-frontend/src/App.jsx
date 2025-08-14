@@ -5,7 +5,7 @@ import "./App.css";
 import AboutUs from "./components/AboutUs.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Testimonials from "./components/Testimonials.jsx";
-import DashboardLayout from "./pages/dashboard";
+import DashboardSidebarHeader from "./pages/dashboard";
 import HomePage from "./pages/homepage";
 import JobLayout from "./pages/job";
 import JobPage from "./pages/JobPage";
@@ -15,6 +15,8 @@ import ProfileEditForm from "./pages/ProfileEditForm.jsx";
 import RegistrationForm from "./pages/registrationform";
 import SendOTPPage from "./pages/SendOTPPage";
 import Settings from "./pages/Settings";
+import DashboardContent from "./pages/DashboardContent.jsx";
+
 // import Forget from "./pages/ForgotPassword.jsx";
 
 function App() {
@@ -56,23 +58,21 @@ function App() {
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <DashboardLayout>
-              </DashboardLayout>
-
+              <DashboardSidebarHeader>
+                <DashboardContent></DashboardContent>
+              </DashboardSidebarHeader>
             </ProtectedRoute>
           }
         />
 
-<Route
-  path="/dashboard"
-  element={
-    <ProtectedRoute>
-      <DashboardLayout>
-      </DashboardLayout>
-    </ProtectedRoute>
-  }
-/>
-
+        {/* <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout></DashboardLayout>
+            </ProtectedRoute>
+          }
+        /> */}
 
         <Route
           path="/jobs"

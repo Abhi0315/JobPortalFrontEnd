@@ -5,7 +5,7 @@
   --header-border: #e5e7eb;
   --header-hover: #f3f4f6;
   --header-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  
+
   position: sticky;
   top: 0;
   display: flex;
@@ -181,7 +181,7 @@
   .app-header {
     padding: 0 1rem;
   }
-  
+
   .header-search {
     position: absolute;
     top: 100%;
@@ -192,11 +192,11 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     display: none;
   }
-  
+
   .header-search.active {
     display: block;
   }
-  
+
   .user-info {
     display: none;
   }

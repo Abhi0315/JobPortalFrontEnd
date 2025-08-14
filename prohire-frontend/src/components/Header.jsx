@@ -17,23 +17,23 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
   return (
     <header className="app-header">
       <div className="header-left">
-        <button 
+        <button
           className="sidebar-toggle"
           onClick={toggleSidebar}
           aria-label="Toggle sidebar"
         >
           <FiMenu size={20} />
         </button>
-        
+
         <h1 className="page-title">{currentTitle}</h1>
       </div>
 
       <div className="header-search">
         <div className="search-container">
           <FiSearch className="search-icon" size={18} />
-          <input 
-            type="text" 
-            placeholder="Search..." 
+          <input
+            type="text"
+            placeholder="Search..."
             className="search-input"
             aria-label="Search"
           />
@@ -45,11 +45,11 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
           <FiBell size={20} />
           <span className="notification-badge">3</span>
         </button>
-        
+
         <button className="icon-btn" aria-label="Settings">
           <FiSettings size={20} />
         </button>
-        
+
         <div className="user-profile">
           <div className="user-avatar">
             <span>PH</span>

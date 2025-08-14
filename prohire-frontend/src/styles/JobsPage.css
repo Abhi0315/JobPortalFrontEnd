@@ -260,3 +260,50 @@
     justify-content: center;
   }
 }
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem 0;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.pagination-button {
+  padding: 0.5rem 0.75rem;
+  background: #f1f5f9;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.pagination-button:hover {
+  background: #e5e7eb;
+}
+
+.pagination-button.active {
+  background: #1a73e8;
+  color: white;
+  font-weight: 600;
+  border-color: #1a73e8;
+}
+
+.pagination-button:disabled {
+  background: #f9fafb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.pagination-dots {
+  padding: 0 0.5rem;
+  color: #6b7280;
+}
+
+.pagination-wrapper {
+  display: inline-flex;
+  align-items: center;
+}

@@ -363,6 +363,50 @@ const JobsPage = () => {
           </div>
           
           {/* Pagination - same as before */}
+          {/* Pagination */}
+{totalPages > 1 && (
+  <div className="pagination">
+    <button
+      className="pagination-button"
+      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+      disabled={currentPage === 1}
+    >
+      Prev
+    </button>
+
+    {Array.from({ length: totalPages }, (_, i) => i + 1)
+      .filter(page =>
+        page === 1 ||
+        page === totalPages ||
+        Math.abs(currentPage - page) <= 2
+      )
+      .map((page, index, array) => {
+        const prevPage = array[index - 1];
+        const showDots = prevPage && page - prevPage > 1;
+
+        return (
+          <span key={page} className="pagination-wrapper">
+            {showDots && <span className="pagination-dots">...</span>}
+            <button
+              className={`pagination-button ${page === currentPage ? "active" : ""}`}
+              onClick={() => setCurrentPage(page)}
+            >
+              {page}
+            </button>
+          </span>
+        );
+      })}
+
+    <button
+      className="pagination-button"
+      onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+      disabled={currentPage === totalPages}
+    >
+      Next
+    </button>
+  </div>
+)}
+
         </>
       )}
     </div>

@@ -77,6 +77,7 @@ const LoginForm = () => {
   };
 
   useEffect(() => {
+    document.title = "ProHire | Login";
     const handlePopState = () => {
       navigate("/homepage", { replace: true });
     };

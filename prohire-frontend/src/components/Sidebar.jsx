@@ -10,7 +10,6 @@ const Sidebar = ({
   width,
   sidebarRef,
   startResizing,
-  handleLogout,
 }) => {
   const [menuItems, setMenuItems] = useState([]);
   const [companyLogo, setCompanyLogo] = useState(""); // 🔥 new state for logo
@@ -81,6 +80,35 @@ const Sidebar = ({
       </aside>
     );
   }
+
+  const handleLogout = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    // Optional: Call Django logout endpoint if it exists
+    if (token) {
+      await fetch("https://prohires.strangled.net/mainapp/user_logout/", {
+        method: "POST",
+        headers: {
+          "Authorization": `Token ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+    }
+
+    // ✅ Clear all localStorage/sessionStorage
+    localStorage.clear();
+    sessionStorage.clear();
+
+    // ✅ Navigate to login and force a reload to clear memory/cache
+    navigate("/login", { replace: true });
+    window.location.reload();
+  } catch (error) {
+    console.error("Logout failed:", error);
+  }
+};
+
+
 
   return (
     <aside

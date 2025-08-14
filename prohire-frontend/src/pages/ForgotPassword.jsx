@@ -46,7 +46,7 @@ const ForgotPassword = () => {
 
     try {
       const response = await axios.post(
-        "https://prohires.strangled.net/mainapp/reset_password/",
+        "https://prohires.strangled.net/mainapp/update_password/",
         {
           email,
           password,

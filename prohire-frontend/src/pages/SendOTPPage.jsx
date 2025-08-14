@@ -14,21 +14,6 @@ const SendOTPPage = () => {
 
   const imageUrl = ForgotPasswordImage;
 
-  useEffect(() => {
-    const fetchImage = async () => {
-      try {
-        const response = await axios.get(
-          "https://prohires.strangled.net${features.background_image}"
-        );
-        setImageUrl(response.data.imageUrl);
-      } catch (error) {
-        console.error("Error fetching image:", error);
-        setImageUrl("https://prohires.strangled.net${contact.image_url}");
-      }
-    };
-    fetchImage();
-  }, []);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");

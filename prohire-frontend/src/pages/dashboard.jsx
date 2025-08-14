@@ -1,7 +1,7 @@
-import { useState, useRef } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
+import Sidebar from "../components/Sidebar";
 import useSidebarResize from "../hooks/useSidebarResize";
 import "../styles/dashboard.css";
 
@@ -57,5 +57,7 @@ const DashboardLayout = ({ children }) => {
     </div>
   );
 };
+
+
 
 export default DashboardLayout;

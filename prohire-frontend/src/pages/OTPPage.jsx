@@ -64,7 +64,7 @@ const OTPPage = () => {
 
     try {
       const response = await axios.post(
-        "https://prohires.strangled.net/mainapp/verify_otp_email_verification/",
+        "https://prohires.strangled.net/mainapp/verify_forgot_password_otp/",
         {
           email,
           otp: otp.join(""),
@@ -79,9 +79,9 @@ const OTPPage = () => {
       console.log("Verification response:", response.data); // Debug log
 
       if (response.data.success) {
-        localStorage.setItem("otpVerified", "true");
+        localStorage.setItem("success", "true");
         // Changed from /change-password to /ForgotPassword
-        navigate("/ForgotPassword", {
+        navigate("/Forget", {
           state: {
             email: email,
             otpVerified: true,
@@ -113,7 +113,7 @@ const OTPPage = () => {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        "https://prohires.strangled.net/mainapp/send_otp_forgot_password/",
+        "https://prohires.strangled.net/mainapp/verify_forgot_password_otp/",
         { email },
         {
           headers: {

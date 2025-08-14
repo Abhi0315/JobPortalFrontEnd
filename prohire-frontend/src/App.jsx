@@ -15,7 +15,8 @@ import ProfileEditForm from "./pages/ProfileEditForm.jsx";
 import RegistrationForm from "./pages/registrationform";
 import SendOTPPage from "./pages/SendOTPPage";
 import Settings from "./pages/Settings";
-// import Forget from "./pages/ForgotPassword.jsx";
+import Forget from "./pages/ForgotPassword.jsx";
+import DashboardContent from "./pages/DashboardContent.jsx";
 
 function App() {
   return (
@@ -51,14 +52,14 @@ function App() {
           }
         />
 
-        <Route
+        {/* <Route
           path="/dashboard"
           element={
             <ProtectedRoute>
               <DashboardLayout></DashboardLayout>
             </ProtectedRoute>
           }
-        />
+        /> */}
 
         <Route
           path="/jobs"

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/ForgotPassword.css";
-import ForgotPasswordImage from "../assets/forgot-password.jpg";
+import ForgotPasswordImage from "../assets/password.jpg";
 
 const ForgotPassword = () => {
   const location = useLocation();
@@ -15,30 +15,108 @@ const ForgotPassword = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [imageUrl, setImageUrl] = useState(ForgotPasswordImage);
+  const [passwordStrength, setPasswordStrength] = useState({
+    level: "", // 'weak', 'medium', 'strong'
+    message: "",
+    score: 0, // 0-100 scale
+    percentage: 0, // 0-100%
+  });
 
   // Get email from location state if coming from OTP page
   useEffect(() => {
     if (location.state?.email) {
       setEmail(location.state.email);
     } else {
-      // If no email in state, redirect back to forgot password
       navigate("/forget");
     }
   }, [location, navigate]);
+
+  // Validate password strength on change
+  useEffect(() => {
+    if (password.length === 0) {
+      setPasswordStrength({
+        level: "",
+        message: "",
+        score: 0,
+        percentage: 0,
+      });
+      return;
+    }
+
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const isLongEnough = password.length >= 8;
+    const isVeryLong = password.length >= 12;
+
+    // Calculate strength score (0-100)
+    let score = 0;
+
+    // Length contributes up to 40 points
+    score += Math.min(40, (password.length / 12) * 40);
+
+    // Character variety contributes up to 60 points
+    if (hasUppercase) score += 10;
+    if (hasLowercase) score += 10;
+    if (hasNumber) score += 20;
+    if (hasSpecialChar) score += 20;
+
+    // Bonus for very long passwords
+    if (isVeryLong) score += 10;
+
+    // Cap at 100
+    score = Math.min(100, score);
+
+    // Calculate percentage for visual indicator
+    const percentage = Math.floor(score);
+
+    // Determine strength level and message
+    let level, message;
+    if (score < 40) {
+      level = "weak";
+      const charsNeeded = 8 - password.length;
+      message =
+        charsNeeded > 0
+          ? `Add ${charsNeeded} more character${
+              charsNeeded === 1 ? "" : "s"
+            } to meet minimum length`
+          : "Add uppercase, numbers or special characters";
+    } else if (score < 70) {
+      level = "medium";
+      const missing = [];
+      if (!hasUppercase) missing.push("uppercase letter");
+      if (!hasNumber) missing.push("number");
+      if (!hasSpecialChar) missing.push("special character");
+
+      message =
+        missing.length > 0
+          ? `Good start! Add ${missing.join(", ")} to strengthen it.`
+          : "Try making your password longer";
+    } else {
+      level = "strong";
+      message = "Strong password! Good job.";
+    }
+
+    setPasswordStrength({
+      level,
+      message,
+      score,
+      percentage,
+    });
+  }, [password]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    // Validate passwords match
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
 
-    // Validate password strength (optional)
     if (password.length < 8) {
-      setError("Password must be at least 8 characters");
+      setError("Password is too weak. Please use at least 8 characters.");
       return;
     }
 
@@ -61,10 +139,9 @@ const ForgotPassword = () => {
 
       if (response.data.success) {
         setSuccess(true);
-        // Clear local storage
         localStorage.removeItem("otpEmail");
         localStorage.removeItem("otpVerified");
-        navigate("/login");
+        navigate("/login", { replace: true });
       } else {
         setError(response.data.message || "Password reset failed");
       }
@@ -76,6 +153,13 @@ const ForgotPassword = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const getStrengthColor = () => {
+    const { score } = passwordStrength;
+    if (score < 40) return "#ef4444"; // red
+    if (score < 70) return "#f59e0b"; // amber
+    return "#10b981"; // green
   };
 
   return (
@@ -90,7 +174,7 @@ const ForgotPassword = () => {
                   Your password has been reset successfully!
                 </p>
                 <button
-                  onClick={() => navigate("/login")}
+                  onClick={() => navigate("/login", { replace: true })}
                   className="verify-btn"
                 >
                   Back to Login
@@ -103,7 +187,7 @@ const ForgotPassword = () => {
                 </p>
                 <form onSubmit={handleSubmit}>
                   <div className="input-group">
-                    <label htmlFor="password">New Password</label>
+                    <label htmlFor="password">New password</label>
                     <input
                       type="password"
                       id="password"
@@ -115,10 +199,32 @@ const ForgotPassword = () => {
                       required
                       minLength="8"
                     />
+                    {password.length > 0 && (
+                      <div className="password-strength-indicator">
+                        <div className="strength-bar-container">
+                          <div
+                            className="strength-bar"
+                            style={{
+                              width: `${passwordStrength.percentage}%`,
+                              backgroundColor: getStrengthColor(),
+                            }}
+                          ></div>
+                        </div>
+                        <div className="strength-message">
+                          <span
+                            className={`strength-label ${passwordStrength.level}`}
+                          >
+                            {passwordStrength.level.charAt(0).toUpperCase() +
+                              passwordStrength.level.slice(1)}
+                          </span>
+                          <p>{passwordStrength.message}</p>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div className="input-group">
-                    <label htmlFor="confirmPassword">Confirm Password</label>
+                    <label htmlFor="confirmPassword">Confirm password</label>
                     <input
                       type="password"
                       id="confirmPassword"

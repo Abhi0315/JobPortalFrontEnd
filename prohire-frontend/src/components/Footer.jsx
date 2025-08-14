@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import {
@@ -9,10 +10,12 @@ import {
   FaEnvelope,
   FaPhone,
   FaArrowUp,
+  FaArrowUp,
 } from "react-icons/fa";
 import "../styles/Footer.css";
 
 const Footer = () => {
+  const [showScroll, setShowScroll] = useState(false);
   const [showScroll, setShowScroll] = useState(false);
   const [footerData, setFooterData] = useState({
     logo: "",
@@ -287,6 +290,23 @@ const Footer = () => {
                 </div>
               )}
 
+              <h5 className="footer-menu-title mt-4 mb-3">Newsletter</h5>
+              <div className="newsletter-form">
+                <input
+                  type="email"
+                  placeholder="Your email"
+                  className="form-control mb-2"
+                  style={{ borderColor: "#2c1475" }}
+                />
+                <button
+                  className="btn btn-primary w-100"
+                  style={{ backgroundColor: "#2c1475", borderColor: "#2c1475" }}
+                >
+                  Subscribe
+                </button>
+              </div>
+            </Col>
+          </Row>
               <h5 className="footer-menu-title mt-4 mb-3">Newsletter</h5>
               <div className="newsletter-form">
                 <input

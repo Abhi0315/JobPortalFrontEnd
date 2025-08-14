@@ -6,7 +6,6 @@ import AboutUs from "./components/AboutUs.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Testimonials from "./components/Testimonials.jsx";
 import DashboardLayout from "./pages/dashboard";
-import Dashboard from "./pages/dashboardMain";
 import HomePage from "./pages/homepage";
 import JobLayout from "./pages/job";
 import JobPage from "./pages/JobPage";
@@ -53,6 +52,7 @@ function App() {
           }
         />
 
+<<<<<<< HEAD
         <Route
           path="/dashboard"
           element={
@@ -64,6 +64,18 @@ function App() {
             </ProtectedRoute>
           }
         />
+=======
+<Route
+  path="/dashboard"
+  element={
+    <ProtectedRoute>
+      <DashboardLayout>
+      </DashboardLayout>
+    </ProtectedRoute>
+  }
+/>
+
+>>>>>>> f87fa0c054d794f7bc9069e46d38d22e9bf50db2
 
         <Route
           path="/jobs"

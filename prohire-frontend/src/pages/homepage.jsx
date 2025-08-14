@@ -58,6 +58,8 @@ const Homepage = () => {
   const slug = queryParams.get("slug") || "home";
 
   useEffect(() => {
+    document.title = "ProHire | Home";
+
     fetch("https://prohires.strangled.net/headerfooter/header-footer")
       .then((res) => res.json())
       .then((data) => {

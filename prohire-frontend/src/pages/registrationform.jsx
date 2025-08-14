@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/RegistrationForm.css";
 import axios from "axios";
@@ -58,6 +58,10 @@ const RegistrationForm = () => {
       otpInputs.current[index + 1].focus();
     }
   };
+
+  useEffect(() => {
+    document.title = "ProHire | Register";
+  });
 
   const handleOtpKeyDown = (e, index) => {
     if (e.key === "Backspace" && !formData.otp[index] && index > 0) {

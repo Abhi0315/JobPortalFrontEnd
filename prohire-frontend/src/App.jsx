@@ -52,19 +52,17 @@ function App() {
           }
         />
 
-<<<<<<< HEAD
         <Route
           path="/dashboard"
           element={
             <ProtectedRoute>
               <DashboardLayout>
-                <Dashboard />
               </DashboardLayout>
-              <Dashboard />
+
             </ProtectedRoute>
           }
         />
-=======
+
 <Route
   path="/dashboard"
   element={
@@ -75,7 +73,6 @@ function App() {
   }
 />
 
->>>>>>> f87fa0c054d794f7bc9069e46d38d22e9bf50db2
 
         <Route
           path="/jobs"

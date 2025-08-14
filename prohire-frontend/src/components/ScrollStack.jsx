@@ -162,6 +162,21 @@ const ScrollStack = ({
     const scroller = scrollerRef.current;
     if (!scroller) return;
 
+    scroller.addEventListener("wheel", (e) => {
+      const atTop = scroller.scrollTop <= 0;
+      const atBottom =
+        scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight;
+
+      if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
+        // Pass scroll to the window
+        e.preventDefault();
+        window.scrollBy({
+          top: e.deltaY,
+          behavior: "smooth",
+        });
+      }
+    });
+
     const lenis = new Lenis({
       wrapper: scroller,
       content: scroller.querySelector(".scroll-stack-inner"),

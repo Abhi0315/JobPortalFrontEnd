@@ -10,6 +10,7 @@ import AboutUs from "../components/AboutUs";
 import Testimonials from "../components/Testimonials";
 import Footer from "../components/Footer";
 import SkeletonLoading from "../components/SkeletonLoading";
+import FAQ from "../components/FAQ";
 
 const Homepage = () => {
   const [menus, setMenus] = useState([]);
@@ -175,18 +176,56 @@ const Homepage = () => {
     return isValid;
   };
 
-  const handleSubmit = (e) => {
+  // Update the handleSubmit function
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log("Form submitted:", formData);
+
+    if (!validateForm()) return;
+
+    try {
+      setIsLoading(true);
+      const response = await fetch(
+        "https://prohires.strangled.net/frontend/contact_us/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const result = await response.json();
+      console.log("Success:", result);
+      alert("Thank you for your message! We'll get back to you soon.");
+
+      // Reset form
       setFormData({
         name: "",
         email: "",
         message: "",
       });
-      alert("Thank you for your message! We'll get back to you soon.");
+    } catch (error) {
+      console.error("Error:", error);
+      alert("There was an error submitting your message. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  // Update the submit button to show loading state
+  <Button
+    variant="primary"
+    type="submit"
+    className="contact-submit-btn rounded-pill"
+    disabled={isLoading}
+  >
+    {isLoading ? "Sending..." : "Send Message"}
+  </Button>;
 
   const SkeletonLoading = () => {
     return (
@@ -364,7 +403,6 @@ const Homepage = () => {
               </div>
             </Container>
           </section>
-
           {/* Features / Contents Section */}
           {featuresContent.contents.length > 0 && (
             <section
@@ -418,12 +456,11 @@ const Homepage = () => {
               </Container>
             </section>
           )}
-
           <section id="about">
             <AboutUs />
           </section>
           <Testimonials />
-
+          {/* Contact Us Section */}
           {/* Contact Us Section */}
           <section className="contact-section py-5" id="contact">
             <Container>
@@ -505,8 +542,20 @@ const Homepage = () => {
                         variant="primary"
                         type="submit"
                         className="contact-submit-btn rounded-pill"
+                        disabled={isLoading}
                       >
-                        Send Message
+                        {isLoading ? (
+                          <>
+                            <span
+                              className="spinner-border spinner-border-sm me-2"
+                              role="status"
+                              aria-hidden="true"
+                            ></span>
+                            Sending...
+                          </>
+                        ) : (
+                          "Send Message"
+                        )}
                       </Button>
                     </Form>
                   </Col>
@@ -532,7 +581,8 @@ const Homepage = () => {
                 </Row>
               </motion.div>
             </Container>
-          </section>
+          </section>{" "}
+          <FAQ />
           <Footer />
         </>
       )}

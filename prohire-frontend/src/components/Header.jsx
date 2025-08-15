@@ -5,6 +5,7 @@ import "../styles/header.css";
 const routeTitles = {
   "/dashboard": "Dashboard",
   "/jobs": "Jobs Management",
+  "/saved_jobs": "Saved Jobs",
   "/candidates": "Candidates",
   "/settings": "Settings",
   "/reports": "Analytics",

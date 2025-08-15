@@ -17,6 +17,7 @@ import SendOTPPage from "./pages/SendOTPPage";
 import Settings from "./pages/Settings";
 import Forget from "./pages/ForgotPassword.jsx";
 import DashboardContent from "./pages/DashboardContent.jsx";
+import SavedJobsLayout from "./pages/SavedJobs.jsx";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/otp" element={<OTPPage />} />
         <Route path="/send-otp" element={<SendOTPPage />} />
         <Route path="/forget" element={<Forget />} />
+        <Route path="/saved_jobs" element={<SavedJobsLayout />} />
 
         <Route
           path="/ProfileEditForm"

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { fetchSidebarData } from "../api/sidebar";
-import { MdLogout, MdChevronLeft, MdChevronRight } from "react-icons/md";
+import { MdLogout, MdChevronRight, MdMenu, MdClose } from "react-icons/md";
 import "../styles/sidebar.css";
 
 const Sidebar = ({
@@ -14,8 +14,17 @@ const Sidebar = ({
   const [menuItems, setMenuItems] = useState([]);
   const [companyLogo, setCompanyLogo] = useState("");
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const loadSidebarData = async () => {
@@ -23,12 +32,12 @@ const Sidebar = ({
         setLoading(true);
         const data = await fetchSidebarData();
 
-        // 🔥 Handle logo
-          setCompanyLogo(
-            data.logo.startsWith("http")
-              ? data.logo
-              : `https://prohires.strangled.net${data.logo}`
-          );
+        // Handle logo
+        setCompanyLogo(
+          data.logo.startsWith("http")
+            ? data.logo
+            : `https://prohires.strangled.net${data.logo}`
+        );
 
         // 🔥 Handle menu list
         const formattedMenus = (data.menus || []).map((item) => ({
@@ -72,7 +81,30 @@ const Sidebar = ({
 
   const handleNavigation = (url) => {
     navigate(url);
-    if (window.innerWidth <= 768) toggleSidebar();
+    if (isMobile) toggleSidebar();
+  };
+
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (token) {
+        await fetch("https://prohires.strangled.net/mainapp/user_logout/", {
+          method: "POST",
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+      }
+
+      localStorage.clear();
+      sessionStorage.clear();
+      navigate("/login", { replace: true });
+      window.location.reload();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   if (loading) {
@@ -87,33 +119,6 @@ const Sidebar = ({
     );
   }
 
-  const handleLogout = async () => {
-    try {
-      const token = localStorage.getItem("token");
-
-      // Optional: Call Django logout endpoint if it exists
-      if (token) {
-        await fetch("https://prohires.strangled.net/mainapp/user_logout/", {
-          method: "POST",
-          headers: {
-            Authorization: `Token ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-      }
-
-      // ✅ Clear all localStorage/sessionStorage
-      localStorage.clear();
-      sessionStorage.clear();
-
-      // ✅ Navigate to login and force a reload to clear memory/cache
-      navigate("/login", { replace: true });
-      window.location.reload();
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  };
-
   return (
     <aside
       ref={sidebarRef}
@@ -123,28 +128,24 @@ const Sidebar = ({
       <div className="sidebar-header">
         {isOpen ? (
           <>
-            {/* 🔥 Display logo if open */}
             <img
               src={companyLogo}
               alt="Company Logo"
               className="sidebar-logo"
             />
-            <button
-              className="sidebar-toggle"
-              onClick={toggleSidebar}
-              aria-label="Collapse sidebar"
-            >
-              <MdChevronLeft size={24} />
-            </button>
+            {isMobile && (
+              <button
+                className="sidebar-toggle"
+                onClick={toggleSidebar}
+                aria-label="Close sidebar"
+              >
+                <MdClose size={24} />
+              </button>
+            )}
           </>
         ) : (
-          <button
-            className="sidebar-toggle"
-            onClick={toggleSidebar}
-            aria-label="Expand sidebar"
-          >
-            <MdChevronRight size={24} />
-          </button>
+          <>
+          </>
         )}
       </div>
 
@@ -186,7 +187,7 @@ const Sidebar = ({
         </button>
       </div>
 
-      {isOpen && (
+      {isOpen && !isMobile && (
         <div
           className="sidebar-resizer"
           onMouseDown={startResizing}

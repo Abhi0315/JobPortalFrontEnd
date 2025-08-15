@@ -14,7 +14,7 @@ const SavedJobsLayout = ({ children }) => {
   useSidebarResize(sidebarRef, isResizing, setIsResizing, setSidebarWidth);
 
   const toggleSidebar = () => {
-    setIsSidebarOpen(prev => !prev);
+    setIsSidebarOpen((prev) => !prev);
   };
 
   const startResizing = () => {
@@ -37,21 +37,16 @@ const SavedJobsLayout = ({ children }) => {
         handleLogout={handleLogout}
       />
 
-      <div 
+      <div
         className="main-content"
-        style={{ 
-          marginLeft: isSidebarOpen ? `${sidebarWidth}px` : '72px',
-          transition: 'margin-left 0.3s ease'
+        style={{
+          marginLeft: isSidebarOpen ? `${sidebarWidth}px` : "72px",
+          transition: "margin-left 0.3s ease",
         }}
       >
-        <Header 
-          isSidebarOpen={isSidebarOpen}
-          toggleSidebar={toggleSidebar}
-        />
-        
-        <div className="content-wrapper">
-          {children}
-        </div>
+        <Header isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+
+        <div className="content-wrapper">{children}</div>
       </div>
     </div>
   );

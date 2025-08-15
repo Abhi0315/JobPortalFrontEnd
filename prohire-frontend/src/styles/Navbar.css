@@ -4,7 +4,6 @@
   background-color: #ffffff;
   padding: 0.75rem 1rem;
   border-bottom: 1px solid #eee;
-  transition: all 0.3s ease-in-out;
   font-family: "Poppins", sans-serif;
 }
 
@@ -14,18 +13,9 @@
   font-style: italic;
   color: #2c1475 !important;
   font-size: 1.8rem;
-  margin-right: 1rem;
 }
-
 .prohire-navbar .navbar-brand img {
   max-height: 40px;
-}
-
-.prohire-navbar .navbar-brand {
-  font-weight: bold;
-  font-size: 1.25rem;
-  color: #2c1475;
-  text-decoration: none;
 }
 
 .prohire-navbar .nav-link {
@@ -34,7 +24,6 @@
   padding: 0.5rem 1rem;
   transition: color 0.2s ease-in-out;
 }
-
 .prohire-navbar .nav-link:hover {
   color: #2c1475 !important;
 }
@@ -50,7 +39,6 @@
   transition: background-color 0.3s ease, color 0.3s ease,
     transform 0.2s ease-in-out;
 }
-
 .signup-btn:hover {
   background-color: white !important;
   color: white !important;
@@ -75,43 +63,61 @@
   box-shadow: 0 4px 10px rgba(0, 123, 255, 0.4);
 }
 
-/* Hamburger Menu Styles */
+/* Hide default Bootstrap toggler */
 .navbar-toggler {
+  display: none !important;
+}
+
+/* ---------- Animated Hamburger Menu ---------- */
+.hamburger-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 28px;
+  height: 20px;
+  background: none;
   border: none;
-  padding: 0.5rem;
+  cursor: pointer;
+  padding: 0;
+  margin-left: auto;
 }
 
-.navbar-toggler:focus {
-  box-shadow: none;
-  outline: none;
+.hamburger-menu span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: #2c1475;
+  border-radius: 2px;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  transform-origin: center;
 }
 
-.navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2844, 20, 117, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-  width: 1.5em;
-  height: 1.5em;
+/* Animate to cross */
+.hamburger-menu.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.hamburger-menu.open span:nth-child(2) {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+.hamburger-menu.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
 }
 
-/* Responsive Styles */
-@media (max-width: 1199.98px) {
-  .prohire-navbar .nav-link {
-    padding: 0.5rem 0.75rem;
+@media (min-width: 992px) {
+  .hamburger-menu {
+    display: none !important;
   }
 }
 
+/* --- Responsive tweaks unchanged --- */
 @media (max-width: 991.98px) {
   .prohire-navbar {
     padding: 0.5rem 1rem;
   }
-
-  .prohire-navbar .navbar-brand img {
-    max-height: 35px;
-  }
-
   .prohire-logo {
     font-size: 1.6rem;
   }
-
   .prohire-navbar .navbar-collapse {
     padding: 1rem 0;
     background-color: white;
@@ -119,67 +125,24 @@
     border-radius: 0.5rem;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
   }
-
   .prohire-navbar .nav-link {
-    padding: 0.5rem 1.5rem;
+    padding: 0.6rem 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid #f1f1f1;
   }
-
+  .prohire-navbar .nav-link:last-child {
+    border-bottom: none;
+  }
   .prohire-navbar .d-flex {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     padding: 0 1.5rem;
     width: 100%;
   }
-
   .btn-outline-secondary,
   .signup-btn {
     width: 100%;
-    margin: 0.5rem 0;
+    margin: 0.4rem 0;
     text-align: center;
-  }
-
-  .btn-outline-secondary {
-    margin-left: 0 !important;
-  }
-}
-
-@media (max-width: 767.98px) {
-  .prohire-logo {
-    font-size: 1.5rem;
-  }
-
-  .prohire-navbar .navbar-brand img {
-    max-height: 30px;
-  }
-}
-
-@media (max-width: 575.98px) {
-  .prohire-logo {
-    font-size: 1.4rem;
-  }
-
-  .prohire-navbar .navbar-brand {
-    font-size: 1.1rem;
-  }
-
-  .prohire-navbar .nav-link {
-    padding: 0.4rem 1.25rem;
-    font-size: 0.95rem;
-  }
-
-  .btn-outline-secondary,
-  .signup-btn {
-    padding: 7px 16px !important;
-    font-size: 0.95rem;
-  }
-}
-
-@media (max-width: 400px) {
-  .prohire-logo {
-    font-size: 1.3rem;
-  }
-
-  .prohire-navbar .navbar-brand img {
-    max-height: 28px;
   }
 }

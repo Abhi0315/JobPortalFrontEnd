@@ -124,7 +124,7 @@ const ProfileEditForm = () => {
         const response = await axios.put("/api/user/profile", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Token ${localStorage.getItem("token")}`,
           },
         });
 
@@ -150,15 +150,23 @@ const ProfileEditForm = () => {
     }
 
     try {
-      await axios.delete("/api/user/account", {
-        data: { password: deletePassword },
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      window.location.href = "/";
+      await axios.delete(
+        "https://prohires.strangled.net/mainapp/delete_user_profile/",
+        {
+          data: { password: deletePassword },
+          headers: {
+            Authorization: `Token ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      // Clear local storage and redirect
+      localStorage.removeItem("token");
+      window.location.href = "/login"; // Redirect to login page
     } catch (err) {
-      setDeleteError("Incorrect password or deletion failed");
+      setDeleteError(
+        err.response?.data?.message || "Incorrect password or deletion failed"
+      );
     }
   };
 

@@ -7,6 +7,7 @@ import "../styles/Navbar.css";
 const ProHireNavbar = () => {
   const [menus, setMenus] = useState([]);
   const [logo, setLogo] = useState("");
+  const [navOpen, setNavOpen] = useState(false); // Controls collapse
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,8 +20,17 @@ const ProHireNavbar = () => {
       .catch((err) => console.error("Error fetching header data:", err));
   }, []);
 
+  // Close collapse on desktop resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 992) setNavOpen(false);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
-    <Navbar expand="lg" className="prohire-navbar shadow-sm">
+    <Navbar expand="lg" className="prohire-navbar shadow-sm" expanded={navOpen}>
       <Container fluid>
         <Navbar.Brand href="/" className="prohire-logo">
           {logo ? (
@@ -34,8 +44,19 @@ const ProHireNavbar = () => {
           )}
         </Navbar.Brand>
 
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        {/* Custom Hamburger Toggle */}
+        <button
+          className={`hamburger-menu d-lg-none ${navOpen ? "open" : ""}`}
+          aria-controls="basic-navbar-nav"
+          aria-expanded={navOpen}
+          onClick={() => setNavOpen((prev) => !prev)}
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
 
+        {/* Collapsible Menu */}
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             {menus.map((menu) => (

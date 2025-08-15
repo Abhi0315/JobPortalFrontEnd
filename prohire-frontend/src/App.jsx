@@ -17,7 +17,7 @@ import SendOTPPage from "./pages/SendOTPPage";
 import Settings from "./pages/Settings";
 import Forget from "./pages/ForgotPassword.jsx";
 import DashboardContent from "./pages/DashboardContent.jsx";
-import SavedJobsLayout from "./pages/SavedJobs.jsx";
+import SavedJobsLayout from "./pages/SavedLayout.jsx";
 
 function App() {
   return (

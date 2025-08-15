@@ -12,7 +12,7 @@ const Sidebar = ({
   startResizing,
 }) => {
   const [menuItems, setMenuItems] = useState([]);
-  const [companyLogo, setCompanyLogo] = useState(""); // 🔥 new state for logo
+  const [companyLogo, setCompanyLogo] = useState("");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -24,7 +24,11 @@ const Sidebar = ({
         const data = await fetchSidebarData();
 
         // 🔥 Handle logo
-        setCompanyLogo(data.logo);
+          setCompanyLogo(
+            data.logo.startsWith("http")
+              ? data.logo
+              : `https://prohires.strangled.net${data.logo}`
+          );
 
         // 🔥 Handle menu list
         const formattedMenus = (data.menus || []).map((item) => ({

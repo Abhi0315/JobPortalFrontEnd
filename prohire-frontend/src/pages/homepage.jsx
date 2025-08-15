@@ -314,96 +314,176 @@ const Homepage = () => {
       ) : (
         <>
           {/* Hero Section */}
-          <section className="hero-section">
-            <Container>
-              <div className="row align-items-center">
-                <div className="col-lg-6 hero-image-col">
-                  <div className="hero-image-wrapper">
-                    {heroContent.heroImage ? (
+          {/* Hero Section - Redesigned */}
+          <section className="hero-section-redesigned">
+            <div className="hero-container">
+              <div className="hero-content-wrapper">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="hero-text-content"
+                >
+                  <div className="hero-badge">
+                    <span>
+                      {heroContent.subtitle || "Innovative Hiring Solutions"}
+                    </span>
+                  </div>
+
+                  <h1 className="hero-main-title">
+                    {heroContent.title.split(" ").map((word, i) => (
+                      <motion.span
+                        key={i}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                      >
+                        {word}{" "}
+                      </motion.span>
+                    ))}
+                  </h1>
+
+                  <p className="hero-description">
+                    {heroContent.description ||
+                      "Transform your hiring process with our cutting-edge solutions"}
+                  </p>
+
+                  <div className="hero-features-grid">
+                    {heroContent.contents?.slice(0, 4).map((item, index) => (
+                      <motion.div
+                        key={index}
+                        className="feature-item"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        <div className="feature-icon">
+                          <svg viewBox="0 0 24 24" width="24" height="24">
+                            <path
+                              fill="currentColor"
+                              d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"
+                            />
+                          </svg>
+                        </div>
+                        <span>{item.title}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  <div className="hero-cta-buttons">
+                    <motion.button
+                      className="primary-cta"
+                      onClick={() =>
+                        navigate(heroContent.buttonLink || "/register")
+                      }
+                      whileHover={{
+                        y: -3,
+                        boxShadow: "0 10px 20px rgba(44, 20, 117, 0.3)",
+                      }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      {heroContent.buttonText || "Get Started"}
+                    </motion.button>
+
+                    <button
+                      className="secondary-cta"
+                      onClick={() => navigate("/demo")}
+                    >
+                      <span>Live Demo</span>
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <path
+                          d="M5 12H19M19 12L12 5M19 12L12 19"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </motion.div>
+
+                <div className="hero-image-container">
+                  {heroContent.heroImage ? (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.3, duration: 0.8 }}
+                      className="image-wrapper"
+                    >
                       <img
                         src={heroContent.heroImage}
                         alt={heroContent.title}
-                        className="hero-image"
+                        className="hero-main-image"
                       />
-                    ) : (
-                      <div></div>
-                    )}
-                  </div>
-                </div>
 
-                <div className="col-lg-6 hero-content">
-                  <motion.div
-                    variants={containerVariants}
-                    initial="hidden"
-                    animate="visible"
-                  >
-                    <motion.h1 className="hero-title" variants={itemVariants}>
-                      {heroContent.title}{" "}
-                      <span className="hero-subtitle">
-                        {heroContent.subtitle}
-                      </span>
-                    </motion.h1>
-                    <motion.p className="hero-text" variants={itemVariants}>
-                      {heroContent.description}
-                    </motion.p>
-
-                    <motion.div
-                      className="hero-highlights"
-                      variants={itemVariants}
-                    >
-                      {heroContent.contents &&
-                        heroContent.contents.length > 0 && (
-                          <ul className="hero-features-list">
-                            {heroContent.contents.map((item, index) => (
-                              <li key={index}>{item.title}</li>
-                            ))}
-                          </ul>
-                        )}
+                      {/* Decorative elements */}
+                      <div className="decorative-circle circle-1"></div>
+                      <div className="decorative-circle circle-2"></div>
+                      <div className="decorative-circle circle-3"></div>
                     </motion.div>
-
-                    <motion.div
-                      className="hero-btn-group"
-                      variants={itemVariants}
-                    >
-                      {heroContent.buttonText && (
-                        <Button
-                          variant="primary"
-                          className="hero-btn rounded-pill me-3"
-                          onClick={() => navigate(heroContent.buttonLink)}
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          {heroContent.buttonText}
-                        </Button>
-                      )}
-                      <Button
-                        variant="outline-primary"
-                        className="hero-demo-btn rounded-pill"
-                        onClick={() => navigate("/demo")}
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
+                  ) : (
+                    <div className="image-placeholder">
+                      <svg
+                        width="100"
+                        height="100"
+                        viewBox="0 0 24 24"
+                        fill="none"
                       >
-                        Live Demo
-                      </Button>
-                    </motion.div>
-
-                    <motion.div
-                      className="trust-indicators"
-                      variants={itemVariants}
-                    >
-                      <div className="trusted-by">Trusted by:</div>
-                      <div className="trust-logos">
-                        <span>Abhiram</span>
-                        <span>Devanand</span>
-                        <span>Abhijeet</span>
-                        <span>Dipak</span>
-                        <span>Amol</span>
-                      </div>
-                    </motion.div>
-                  </motion.div>
+                        <path
+                          d="M4 16L8.586 11.414C8.961 11.039 9.47 10.828 10 10.828C10.53 10.828 11.039 11.039 11.414 11.414L16 16M14 14L15.586 12.414C15.961 12.039 16.47 11.828 17 11.828C17.53 11.828 18.039 12.039 18.414 12.414L20 14M14 8H14.01M6 20H18C19.105 20 20 19.105 20 18V6C20 4.895 19.105 4 18 4H6C4.895 4 4 4.895 4 6V18C4 19.105 4.895 20 6 20Z"
+                          stroke="#2C1475"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  )}
                 </div>
               </div>
-            </Container>
+
+              {/* <div className="trusted-by-section">
+                <span>Trusted by leading companies:</span>
+                <div className="company-logos">
+                  {["Abhiram", "Devanand", "Abhijeet", "Dipak", "Amol"].map(
+                    (name, i) => (
+                      <motion.span
+                        key={i}
+                        whileHover={{ scale: 1.1 }}
+                        transition={{ type: "spring", stiffness: 400 }}
+                      >
+                        {name}
+                      </motion.span>
+                    )
+                  )}
+                </div>
+              </div> */}
+            </div>
+
+            {/* Wave divider */}
+            <div className="wave-divider">
+              <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path
+                  d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z"
+                  opacity=".25"
+                  fill="#2C1475"
+                ></path>
+                <path
+                  d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z"
+                  opacity=".5"
+                  fill="#2C1475"
+                ></path>
+                <path
+                  d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"
+                  fill="#2C1475"
+                ></path>
+              </svg>
+            </div>
           </section>
           {/* Features / Contents Section */}
           {featuresContent.contents.length > 0 && (

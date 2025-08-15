@@ -7,7 +7,7 @@ const DashboardContent = () => {
   const [dashboardData, setDashboardData] = useState({
     stats: [],
     recommendedJobs: [],
-    recentlyViewed: [],
+    recentViewedJobs: [],
     loading: true,
     error: null,
     showAllRecommended: false,
@@ -17,107 +17,82 @@ const DashboardContent = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        setTimeout(() => {
-          setDashboardData({
-            stats: [
-              {
-                id: "jobs-applied",
-                label: "Jobs Applied",
-                value: 12,
-                icon: "📝",
-              },
-              { id: "saved-jobs", label: "Saved Jobs", value: 5, icon: "💾" },
-              {
-                id: "jobs-viewed",
-                label: "Jobs Viewed",
-                value: 34,
-                icon: "👀",
-              },
-              {
-                id: "active-alerts",
-                label: "Active Alerts",
-                value: 2,
-                icon: "🔔",
-              },
-            ],
-            recommendedJobs: [
-              {
-                id: "job-1",
-                title: "Senior Frontend Developer",
-                company: "TechCorp Inc.",
-                location: "Remote",
-                type: "Full-Time",
-                salary: "$120,000 - $160,000",
-                posted: "2 days ago",
-                logo: "💻",
-              },
-              {
-                id: "job-2",
-                title: "UX Designer",
-                company: "Creative Solutions",
-                location: "New York, NY",
-                type: "Contract",
-                salary: "$80 - $100/hr",
-                posted: "1 week ago",
-                logo: "🎨",
-              },
-              {
-                id: "job-3",
-                title: "Product Manager",
-                company: "Innovate Labs",
-                location: "San Francisco, CA",
-                type: "Full-Time",
-                salary: "$130,000 - $160,000",
-                posted: "3 days ago",
-                logo: "📊",
-              },
-              {
-                id: "job-4",
-                title: "Data Scientist",
-                company: "Analytics Pro",
-                location: "Boston, MA",
-                type: "Full-Time",
-                salary: "$110,000 - $140,000",
-                posted: "5 days ago",
-                logo: "🔍",
-              },
-            ],
-            recentlyViewed: [
-              {
-                id: "viewed-1",
-                title: "Marketing Director",
-                company: "Growth Partners",
-                viewedDate: "2023-05-16",
-                logo: "📈",
-              },
-              {
-                id: "viewed-2",
-                title: "Data Scientist",
-                company: "Analytics Pro",
-                viewedDate: "2023-05-14",
-                logo: "🔍",
-              },
-              {
-                id: "viewed-3",
-                title: "HR Manager",
-                company: "PeopleFirst",
-                viewedDate: "2023-05-12",
-                logo: "👥",
-              },
-              {
-                id: "viewed-4",
-                title: "Backend Engineer",
-                company: "DataSystems",
-                viewedDate: "2023-05-10",
-                logo: "⚙️",
-              },
-            ],
-            loading: false,
-            error: null,
-            showAllRecommended: false,
-            showAllViewed: false,
-          });
-        }, 800);
+        const authToken = localStorage.getItem("token");
+
+        const response = await fetch(
+          "https://prohires.strangled.net/job/dashboard_data/",
+          {
+            headers: {
+              Authorization: `Token ${authToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const apiResponse = await response.json();
+
+        setDashboardData({
+          stats: [
+            {
+              id: "jobs-applied",
+              label: "Jobs Applied",
+              value: 12,
+              icon: "📝",
+            },
+            {
+              id: "saved-jobs",
+              label: "Saved Jobs",
+              value: apiResponse.saved_jobs_count,
+              icon: "💾",
+            },
+            {
+              id: "jobs-viewed",
+              label: "Jobs Viewed",
+              value: apiResponse.viewed_jobs_count,
+              icon: "👀",
+            },
+            {
+              id: "active-alerts",
+              label: "Active Alerts",
+              value: 2,
+              icon: "🔔",
+            },
+          ],
+          recommendedJobs: apiResponse.recommended_jobs.map((job) => ({
+            id: job.job_id,
+            title: job.title,
+            company: job.employer.name,
+            location: job.location
+              ? `${job.location.city}, ${job.location.state}`
+              : "Remote",
+            type: job.employment_type,
+            posted: job.posted_at
+              ? new Date(job.posted_at).toLocaleDateString()
+              : "Recently",
+            logo: job.employer.employer_logo || "🏢",
+            isRemote: job.is_remote,
+            applyLink: job.apply_option?.apply_link,
+          })),
+          recentViewedJobs: apiResponse.recent_viewed_jobs.map((job) => ({
+            id: job.job_id,
+            title: job.title,
+            company: job.employer.name,
+            location: job.location
+              ? `${job.location.city}, ${job.location.state}`
+              : "Remote",
+            viewedDate: job.posted_at
+              ? new Date(job.posted_at).toLocaleDateString()
+              : "Recently",
+            logo: job.employer.employer_logo || "🏢",
+            applyLink: job.apply_option?.apply_link,
+          })),
+          loading: false,
+          error: null,
+        });
       } catch (err) {
         setDashboardData((prev) => ({
           ...prev,
@@ -130,8 +105,11 @@ const DashboardContent = () => {
     fetchDashboardData();
   }, []);
 
-  const handleJobAction = (action, jobId) => {
+  const handleJobAction = (action, jobId, applyLink) => {
     console.log(`${action} job with id: ${jobId}`);
+    if (action === "apply" && applyLink) {
+      window.open(applyLink, "_blank");
+    }
   };
 
   const toggleShowMore = (section) => {
@@ -175,17 +153,11 @@ const DashboardContent = () => {
     : dashboardData.recommendedJobs.slice(0, 3);
 
   const displayedViewedJobs = dashboardData.showAllViewed
-    ? dashboardData.recentlyViewed
-    : dashboardData.recentlyViewed.slice(0, 3);
+    ? dashboardData.recentViewedJobs
+    : dashboardData.recentViewedJobs.slice(0, 3);
 
   return (
     <div className="dashboard-container">
-      {/* Welcome Header */}
-      {/* <header className="dashboard-header">
-        <h1>Welcome Back!</h1>
-        <p>Here's what's happening with your job search today</p>
-      </header> */}
-
       {/* Stats Section */}
       <section className="stats-section">
         <div className="grid-container">
@@ -210,21 +182,37 @@ const DashboardContent = () => {
           <div className="jobs-list">
             {displayedRecommendedJobs.map((job) => (
               <div key={job.id} className="job-card">
-                <div className="job-logo">{job.logo}</div>
+                <div className="job-logo">
+                  {job.logo.startsWith("/media") ? (
+                    <img
+                      src={`https://prohires.strangled.net${job.logo}`}
+                      alt={job.company}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src =
+                          "https://prohires.strangled.net/media/employer_logo/default.png";
+                      }}
+                    />
+                  ) : (
+                    <div className="logo-placeholder">{job.logo}</div>
+                  )}
+                </div>
                 <div className="job-info">
                   <h3 className="job-title">{job.title}</h3>
                   <p className="job-company">{job.company}</p>
                   <div className="job-meta">
                     <span>{job.location}</span>
                     <span>{job.type}</span>
-                    <span>{job.salary}</span>
+                    {job.isRemote && <span>Remote</span>}
                   </div>
                   <p className="job-posted">Posted: {job.posted}</p>
                 </div>
                 <div className="job-actions">
                   <button
                     className="action-btn apply-btn primary-action"
-                    onClick={() => handleJobAction("apply", job.id)}
+                    onClick={() =>
+                      handleJobAction("apply", job.id, job.applyLink)
+                    }
                   >
                     Apply
                   </button>
@@ -259,21 +247,40 @@ const DashboardContent = () => {
           <div className="jobs-list">
             {displayedViewedJobs.map((job) => (
               <div key={job.id} className="job-card">
-                <div className="job-logo">{job.logo}</div>
+                <div className="job-logo">
+                  {job.logo.startsWith("/media") ? (
+                    <img
+                      src={`https://prohires.strangled.net${job.logo}`}
+                      alt={job.company}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src =
+                          "https://prohires.strangled.net/media/employer_logo/default.png";
+                      }}
+                    />
+                  ) : (
+                    <div className="logo-placeholder">{job.logo}</div>
+                  )}
+                </div>
                 <div className="job-info">
                   <h3 className="job-title">{job.title}</h3>
                   <p className="job-company">{job.company}</p>
+                  <p className="job-location">{job.location}</p>
                   <p className="job-date">Viewed: {job.viewedDate}</p>
                 </div>
-                <button
-                  className="view-again-btn"
-                  onClick={() => handleJobAction("view", job.id)}
-                >
-                  View Again
-                </button>
+                <div className="job-actions">
+                  <button
+                    className="action-btn view-again-btn"
+                    onClick={() =>
+                      handleJobAction("view", job.id, job.applyLink)
+                    }
+                  >
+                    View Again
+                  </button>
+                </div>
               </div>
             ))}
-            {dashboardData.recentlyViewed.length > 3 && (
+            {dashboardData.recentViewedJobs.length > 3 && (
               <button
                 className="show-more-link"
                 onClick={() => toggleShowMore("showAllViewed")}
@@ -285,7 +292,6 @@ const DashboardContent = () => {
         </section>
       </div>
     </div>
-    //Hello world
   );
 };
 

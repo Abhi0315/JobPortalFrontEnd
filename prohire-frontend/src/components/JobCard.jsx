@@ -1,202 +1,5 @@
-// // src/components/JobCard.jsx
-// import React, { useState } from "react";
-// import "../styles/JobCard.css";
-// import axios from "axios";
-
-// const JobCard = ({ job }) => {
-//   const {
-//     job_id,
-//     title,
-//     description,
-//     is_remote,
-//     employment_type,
-//     employment_types,
-//     posted_at,
-//     min_salary,
-//     max_salary,
-//     salary_period,
-//     employer,
-//     location,
-//     apply_options,
-//     skills_required,
-//     experience_required,
-//     education_required
-//   } = job;
-
-//   const [expanded, setExpanded] = useState(false);
-//   const [isSaved, setIsSaved] = useState(false);
-
-//   const toggleExpand = () => setExpanded(!expanded);
-  
-//   const shortDescription = description?.split("\n")[0]?.slice(0, 150) + "...";
-//   const fullDescription = description || "No description provided";
-
-//   const applyLink = apply_options?.[0]?.apply_link;
-//   const jobType = employment_type || employment_types?.[0]?.type || "N/A";
-
-//   const locationStr = is_remote
-//     ? "🌍 Remote"
-//     : `${location?.city || ""}, ${location?.state || ""}`;
-
-//   const salaryStr = min_salary && max_salary
-//     ? `₹${min_salary.toLocaleString()} - ₹${max_salary.toLocaleString()}${salary_period ? ` / ${salary_period}` : ""}`
-//     : "Salary: Not disclosed";
-
-//   const postedDate = posted_at ? new Date(posted_at) : null;
-//   const daysAgo = postedDate ? Math.floor((new Date() - postedDate) / (1000 * 60 * 60 * 24)) : null;
-
-//   const handleSaveJob = async (e, jobId) => {
-//   e.stopPropagation();
-
-//   const token = localStorage.getItem('token');
-
-//   if (!token){
-//     console.error("No auth provided")
-//     return ;
-//     }
-
-
-
-//   try {
-//     const response = await axios.post(
-//       'https://prohires.strangled.net/job/save_jobs/',
-//       { job_id: jobId },
-//       {
-//         headers: {
-//           Authorization: `Token ${token}`, // 👈 Include token in the header
-//           'Content-Type': 'application/json'
-//         }
-//       }
-//     );
-
-//     if (response.status === 200 || response.status === 201) {
-//       setIsSaved(true); // You could also use response.data to update state more precisely
-//     } else {
-//       console.error('Failed to save job');
-//     }
-//   } catch (error) {
-//     console.error('Error saving job:', error);
-//   }
-// };
-
-//   return (
-//     <div className={`job-card ${expanded ? 'expanded' : ''}`} onClick={toggleExpand}>
-//       <div className="job-card-header">
-//         <div className="job-title-wrapper">
-//           <h2>{title}</h2>
-//           <span className="job-id">#{job_id.slice(0, 8)}</span>
-//         </div>
-// <button 
-//   className={`save-job-btn ${isSaved ? 'saved' : ''}`}
-//   onClick={(e) => handleSaveJob(e, job_id)}
-//   aria-label={isSaved ? "Unsave job" : "Save job"}
-// >
-//   {isSaved ? '✓ Saved' : '+ Save'}
-// </button>
-
-//       </div>
-
-//       <div className="employer-info">
-//         {employer?.employer_logo ? (
-//           <img src={employer.employer_logo} alt={employer.name} className="employer-logo" />
-//         ) : (
-//           <div className="placeholder-logo">{employer.name?.charAt(0)}</div>
-//         )}
-//         <div className="employer-details">
-//           <span className="employer-name">{employer.name}</span>
-//           {employer.website && (
-//             <a
-//               href={employer.website}
-//               target="_blank"
-//               rel="noopener noreferrer"
-//               className="employer-website"
-//               onClick={e => e.stopPropagation()}
-//             >
-//               Visit Website
-//             </a>
-//           )}
-//         </div>
-//       </div>
-
-//       <div className="job-details">
-//         <p className={`job-desc ${expanded ? 'expanded' : ''}`}>
-//           {expanded ? fullDescription : shortDescription}
-//         </p>
-        
-//         {expanded && (
-//           <div className="job-requirements">
-//             {skills_required && (
-//               <div className="requirements-section">
-//                 <h4>Skills Required:</h4>
-//                 <div className="skills-list">
-//                   {skills_required.map((skill, index) => (
-//                     <span key={index} className="skill-tag">{skill}</span>
-//                   ))}
-//                 </div>
-//               </div>
-//             )}
-            
-//             {experience_required && (
-//               <div className="requirements-section">
-//                 <h4>Experience:</h4>
-//                 <p>{experience_required}</p>
-//               </div>
-//             )}
-            
-//             {education_required && (
-//               <div className="requirements-section">
-//                 <h4>Education:</h4>
-//                 <p>{education_required}</p>
-//               </div>
-//             )}
-//           </div>
-//         )}
-//       </div>
-
-//       <div className="job-meta">
-//         <div className="meta-item">
-//           <span className="meta-icon">📍</span>
-//           <span>{locationStr}</span>
-//         </div>
-//         <div className="meta-item">
-//           <span className="meta-icon">🕒</span>
-//           <span>{jobType}</span>
-//         </div>
-//         <div className="meta-item">
-//           <span className="meta-icon">💰</span>
-//           <span>{salaryStr}</span>
-//         </div>
-//         {postedDate && (
-//           <div className="meta-item">
-//             <span className="meta-icon">📅</span>
-//             <span>
-//               {postedDate.toLocaleDateString()} 
-//               {daysAgo !== null && ` (${daysAgo} ${daysAgo === 1 ? 'day' : 'days'} ago)`}
-//             </span>
-//           </div>
-//         )}
-//       </div>
-
-//       {applyLink && (
-//         <div className="job-footer">
-//           <a
-//             href={applyLink}
-//             className="apply-button"
-//             target="_blank"
-//             rel="noopener noreferrer"
-//             onClick={e => e.stopPropagation()}
-//           >
-//             Apply Now
-//           </a>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default JobCard;
-
 import React, { useState } from "react";
+import { FaRegBookmark, FaBookmark } from "react-icons/fa";
 import "../styles/JobCard.css";
 import axios from "axios";
 
@@ -217,15 +20,18 @@ const JobCard = ({ job }) => {
     apply_options,
     skills_required = [],
     experience_required,
-    education_required
+    education_required,
   } = job;
 
   const [expanded, setExpanded] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [logoError, setLogoError] = useState(false);
 
   const toggleExpand = () => setExpanded(!expanded);
-  
-  const shortDescription = description?.split("\n")[0]?.slice(0, 150) + (description?.length > 150 ? "..." : "");
+
+  const shortDescription =
+    description?.split("\n")[0]?.slice(0, 150) +
+    (description?.length > 150 ? "..." : "");
   const fullDescription = description || "No description provided";
 
   const applyLink = apply_options?.[0]?.apply_link;
@@ -233,64 +39,109 @@ const JobCard = ({ job }) => {
 
   const locationStr = is_remote
     ? "🌍 Remote"
-    : location?.city 
-      ? `${location.city}${location.state ? `, ${location.state}` : ''}${location.country ? `, ${location.country}` : ''}`
-      : "Location not specified";
+    : location?.city
+    ? `${location.city}${location.state ? `, ${location.state}` : ""}${
+        location.country ? `, ${location.country}` : ""
+      }`
+    : "Location not specified";
 
-  const salaryStr = min_salary && max_salary
-    ? `₹${min_salary.toLocaleString()} - ₹${max_salary.toLocaleString()}${salary_period ? ` / ${salary_period}` : ""}`
-    : "Salary not disclosed";
+  const salaryStr =
+    min_salary && max_salary
+      ? `₹${min_salary.toLocaleString()} - ₹${max_salary.toLocaleString()}${
+          salary_period ? ` / ${salary_period}` : ""
+        }`
+      : "Salary not disclosed";
 
   const postedDate = posted_at ? new Date(posted_at) : null;
-  const daysAgo = postedDate ? Math.floor((new Date() - postedDate) / (1000 * 60 * 60 * 24)) : null;
+  const daysAgo = postedDate
+    ? Math.floor((new Date() - postedDate) / (1000 * 60 * 60 * 24))
+    : null;
 
   const handleSaveJob = async (e) => {
     e.stopPropagation();
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) return;
 
     try {
+      // Toggle save state immediately for better UX
+      setIsSaved(!isSaved);
+
       await axios.post(
-        'https://prohires.strangled.net/job/save_jobs/',
+        "https://prohires.strangled.net/job/save_jobs/",
         { job_id },
         { headers: { Authorization: `Token ${token}` } }
       );
-      setIsSaved(true);
+
+      // The API call will confirm the state change
     } catch (error) {
-      console.error('Error saving job:', error);
+      console.error("Error saving job:", error);
+      // Revert if API call fails
+      setIsSaved(!isSaved);
     }
   };
 
+  // Construct the full logo URL
+  const getLogoUrl = () => {
+    if (!employer?.employer_logo) return null;
+    // Check if the logo path is already a full URL
+    if (employer.employer_logo.startsWith("http")) {
+      return employer.employer_logo;
+    }
+    // Prepend the base URL if it's a relative path
+    return `https://prohires.strangled.net${employer.employer_logo}`;
+  };
+
+  const logoUrl = getLogoUrl();
+
   return (
-    <div className={`job-card ${expanded ? 'expanded' : ''}`}>
+    <div className={`job-card ${expanded ? "expanded" : ""}`}>
       <div className="job-card-header" onClick={toggleExpand}>
         <div className="job-title-wrapper">
-          {employer?.employer_logo && (
-            <img src={employer.employer_logo} alt={employer.name} className="employer-logo-small" />
+          {logoUrl && !logoError ? (
+            <img
+              src={logoUrl}
+              alt={employer.name}
+              className="employer-logo-small"
+              onError={() => setLogoError(true)}
+            />
+          ) : (
+            <div className="employer-logo-placeholder">
+              {employer.name?.charAt(0).toUpperCase()}
+            </div>
           )}
           <div>
             <h2>{title}</h2>
             <div className="employer-name">{employer.name}</div>
           </div>
         </div>
-        
+
         <div className="job-card-actions">
-          <button 
-            className={`save-job-btn ${isSaved ? 'saved' : ''}`}
+          <button
+            className={`save-job-btn ${isSaved ? "saved" : ""}`}
             onClick={handleSaveJob}
             aria-label={isSaved ? "Unsave job" : "Save job"}
           >
-            {isSaved ? '✓ Saved' : 'Save'}
+            {isSaved ? (
+              <>
+                <FaBookmark className="save-icon" /> Saved
+              </>
+            ) : (
+              <>
+                <FaRegBookmark className="save-icon" /> Save
+              </>
+            )}
           </button>
           {postedDate && (
             <div className="posted-date">
-              {daysAgo === 0 ? "Today" : `${daysAgo} ${daysAgo === 1 ? 'day' : 'days'} ago`}
+              {daysAgo === 0
+                ? "Today"
+                : `${daysAgo} ${daysAgo === 1 ? "day" : "days"} ago`}
             </div>
           )}
         </div>
       </div>
 
-      <div className={`job-card-body ${expanded ? 'expanded' : ''}`}>
+      <div className={`job-card-body ${expanded ? "expanded" : ""}`}>
         <div className="job-highlights">
           <div className="highlight-item">
             <span className="highlight-icon">📍</span>
@@ -309,7 +160,7 @@ const JobCard = ({ job }) => {
         <div className="job-description">
           <p>{expanded ? fullDescription : shortDescription}</p>
           <button className="read-more" onClick={toggleExpand}>
-            {expanded ? 'Show less' : 'Read more'}
+            {expanded ? "Show less" : "Read more"}
           </button>
         </div>
 
@@ -318,7 +169,9 @@ const JobCard = ({ job }) => {
             <h4>Skills:</h4>
             <div className="skills-list">
               {skills_required.map((skill, index) => (
-                <span key={index} className="skill-tag">{skill}</span>
+                <span key={index} className="skill-tag">
+                  {skill}
+                </span>
               ))}
             </div>
           </div>
@@ -347,7 +200,7 @@ const JobCard = ({ job }) => {
             className="apply-button"
             target="_blank"
             rel="noopener noreferrer"
-            onClick={e => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
           >
             Apply Now
           </a>
@@ -358,7 +211,7 @@ const JobCard = ({ job }) => {
             className="company-website"
             target="_blank"
             rel="noopener noreferrer"
-            onClick={e => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
           >
             Visit Company
           </a>

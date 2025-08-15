@@ -28,6 +28,19 @@ const OTPPage = () => {
         navigate("/forget");
       }
     }
+
+    // Prevent going back without verification
+    const handleBackButton = (e) => {
+      if (!localStorage.getItem("otpVerified")) {
+        navigate("/login", { replace: true });
+      }
+    };
+
+    window.addEventListener("popstate", handleBackButton);
+
+    return () => {
+      window.removeEventListener("popstate", handleBackButton);
+    };
   }, [location, navigate]);
 
   // Countdown timer
@@ -76,32 +89,21 @@ const OTPPage = () => {
         }
       );
 
-      console.log("Verification response:", response.data); // Debug log
-
       if (response.data.success) {
-        localStorage.setItem("success", "true");
-        // Changed from /change-password to /ForgotPassword
+        localStorage.setItem("otpVerified", "true");
         navigate("/Forget", {
           state: {
             email: email,
             otpVerified: true,
           },
+          replace: true,
         });
       } else {
         setError(response.data.message || "Invalid OTP. Please try again.");
       }
     } catch (error) {
       console.error("Verification error:", error);
-      let errorMessage = "Verification failed. Please try again.";
-
-      if (error.response) {
-        errorMessage = error.response.data?.message || errorMessage;
-        console.error("Server response:", error.response.data); // Debug log
-      } else if (error.request) {
-        errorMessage = "No server response. Check your connection.";
-      }
-
-      setError(errorMessage);
+      setError("Verification failed. Please try again.");
     } finally {
       setIsLoading(false);
     }

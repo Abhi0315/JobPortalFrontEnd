@@ -39,6 +39,7 @@
   transition: var(--header-transition);
 }
 
+
 .sidebar-toggle:hover {
   background: var(--header-hover);
   transform: rotate(90deg);
@@ -257,5 +258,17 @@
 @media (max-width: 480px) {
   .page-title {
     display: none;
+  }
+}
+
+
+.mobile-only {
+  display: none;
+}
+
+/* Show only on mobile screens */
+@media (max-width: 768px) {
+  .mobile-only {
+    display: flex;
   }
 }

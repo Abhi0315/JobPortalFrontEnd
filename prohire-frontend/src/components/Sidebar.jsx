@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { fetchSidebarData } from "../api/sidebar";
-import { MdLogout, MdChevronRight, MdMenu, MdClose } from "react-icons/md";
+import { MdLogout, MdChevronRight, MdMenu, MdClose, MdChevronLeft } from "react-icons/md";
 import "../styles/sidebar.css";
 
 const Sidebar = ({
@@ -13,15 +13,20 @@ const Sidebar = ({
 }) => {
   const [menuItems, setMenuItems] = useState([]);
   const [companyLogo, setCompanyLogo] = useState("");
+  const [companyName, setCompanyName] = useState("");
   const [loading, setLoading] = useState(true);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(false);
+  const [activePath, setActivePath] = useState("");
   const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const location = useLocation();
+  const overlayRef = useRef(null);
+  const animationTimeoutRef = useRef(null);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
+      setIsMobile(window.innerWidth <= 1024);
     };
+    handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -32,14 +37,14 @@ const Sidebar = ({
         setLoading(true);
         const data = await fetchSidebarData();
 
-        // Handle logo
         setCompanyLogo(
           data.logo.startsWith("http")
             ? data.logo
             : `https://prohires.strangled.net${data.logo}`
         );
 
-        // 🔥 Handle menu list
+        setCompanyName(data.company_name || "ProHires");
+
         const formattedMenus = (data.menus || []).map((item) => ({
           ...item,
           id: item.title.toLowerCase().replace(/\s+/g, "-"),
@@ -51,12 +56,10 @@ const Sidebar = ({
         setMenuItems(formattedMenus);
       } catch (err) {
         console.error("Failed to load sidebar data:", err);
-
-        // fallback menu and logo
         setCompanyLogo(
           "https://prohires.strangled.net/media/company/default_logo.png"
         );
-
+        setCompanyName("ProHires");
         setMenuItems([
           {
             id: "dashboard",
@@ -79,15 +82,25 @@ const Sidebar = ({
     loadSidebarData();
   }, []);
 
+  // Set active path without animation on initial load
+  useEffect(() => {
+    setActivePath(location.pathname);
+  }, [location.pathname]);
+
   const handleNavigation = (url) => {
-    navigate(url);
-    if (isMobile) toggleSidebar();
+    if (location.pathname !== url) {
+      setActivePath(url);
+      navigate(url);
+    }
+    if (isMobile) {
+      toggleSidebar();
+      document.body.classList.remove('no-scroll');
+    }
   };
 
   const handleLogout = async () => {
     try {
       const token = localStorage.getItem("token");
-
       if (token) {
         await fetch("https://prohires.strangled.net/mainapp/user_logout/", {
           method: "POST",
@@ -97,7 +110,6 @@ const Sidebar = ({
           },
         });
       }
-
       localStorage.clear();
       sessionStorage.clear();
       navigate("/login", { replace: true });
@@ -107,12 +119,17 @@ const Sidebar = ({
     }
   };
 
+  const handleOverlayClick = () => {
+    toggleSidebar();
+    document.body.classList.remove('no-scroll');
+  };
+
   if (loading) {
     return (
       <aside
         ref={sidebarRef}
-        className={`sidebar-loading ${isOpen ? "open" : "collapsed"}`}
-        style={{ width: isOpen ? `${width}px` : "72px" }}
+        className="sidebar-loading"
+        style={{ width: isOpen ? `${width}px` : "84px" }}
       >
         <div className="loading-spinner"></div>
       </aside>
@@ -120,81 +137,104 @@ const Sidebar = ({
   }
 
   return (
-    <aside
-      ref={sidebarRef}
-      className={`sidebar ${isOpen ? "open" : "collapsed"}`}
-      style={{ width: isOpen ? `${width}px` : "72px" }}
-    >
-      <div className="sidebar-header">
-        {isOpen ? (
-          <>
-            <img
-              src={companyLogo}
-              alt="Company Logo"
-              className="sidebar-logo"
-            />
-            {isMobile && (
+    <>
+      {isMobile && isOpen && (
+        <div 
+          ref={overlayRef}
+          className="sidebar-overlay"
+          onClick={handleOverlayClick}
+        />
+      )}
+      
+      <aside
+        ref={sidebarRef}
+        className={`sidebar ${isOpen ? "open" : "collapsed"}`}
+        style={{ width: isOpen ? `${width}px` : "84px" }}
+      >
+        <div className="sidebar-header">
+          {isOpen ? (
+            <>
+              <div className="sidebar-logo-container">
+                <img
+                  src={companyLogo}
+                  alt="Company Logo"
+                  className="sidebar-logo"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "https://prohires.strangled.net/media/company/default_logo.png";
+                  }}
+                />
+                <h3 className="app-name">{companyName}</h3>
+              </div>
               <button
                 className="sidebar-toggle"
                 onClick={toggleSidebar}
-                aria-label="Close sidebar"
+                aria-label="Collapse sidebar"
               >
-                <MdClose size={24} />
+                <MdChevronLeft size={24} />
               </button>
-            )}
-          </>
-        ) : (
-          <>
-          </>
+            </>
+          ) : (
+            <button
+              className="sidebar-toggle"
+              onClick={toggleSidebar}
+              aria-label="Expand sidebar"
+            >
+              <MdMenu size={24} />
+            </button>
+          )}
+        </div>
+
+        <nav className="sidebar-nav">
+          <ul>
+            {menuItems.map((item) => (
+              <li key={item.id}>
+                <button
+                  className={`nav-item ${activePath.startsWith(item.url) ? "active" : ""}`}
+                  onClick={() => handleNavigation(item.url)}
+                  aria-label={item.title}
+                >
+                  <div className="nav-icon">
+                    <img
+                      src={item.icon}
+                      alt={item.title}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "https://prohires.strangled.net/media/sidebar_icons/default.png";
+                      }}
+                    />
+                  </div>
+                  {isOpen ? (
+                    <span className="nav-text">{item.title}</span>
+                  ) : (
+                    <span className="tooltip">{item.title}</span>
+                  )}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="sidebar-footer">
+          <button
+            className="logout-btn"
+            onClick={handleLogout}
+            aria-label="Logout"
+          >
+            <MdLogout size={20} />
+            {isOpen && <span>Logout</span>}
+          </button>
+        </div>
+
+        {isOpen && !isMobile && (
+          <div
+            className="sidebar-resizer"
+            onMouseDown={startResizing}
+            aria-label="Resize sidebar"
+          />
         )}
-      </div>
-
-      <nav className="sidebar-nav">
-        <ul>
-          {menuItems.map((item) => (
-            <li key={item.id}>
-              <button
-                className={`nav-item ${pathname === item.url ? "active" : ""}`}
-                onClick={() => handleNavigation(item.url)}
-                aria-label={item.title}
-              >
-                <div className="nav-icon">
-                  <img
-                    src={item.icon}
-                    alt={item.title}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src =
-                        "https://prohires.strangled.net/media/sidebar_icons/default.png";
-                    }}
-                  />
-                </div>
-                {isOpen && <span className="nav-text">{item.title}</span>}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
-      <div className="sidebar-footer">
-        <button
-          className="logout-btn"
-          onClick={handleLogout}
-          aria-label="Logout"
-        >
-          <MdLogout size={20} />
-          {isOpen && <span>Logout</span>}
-        </button>
-      </div>
-
-      {isOpen && !isMobile && (
-        <div
-          className="sidebar-resizer"
-          onMouseDown={startResizing}
-          aria-label="Resize sidebar"
-        />
-      )}
-    </aside>
+      </aside>
+    </>
   );
 };
 

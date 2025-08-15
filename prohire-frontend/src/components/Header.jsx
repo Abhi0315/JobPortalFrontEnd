@@ -62,12 +62,9 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
       try {
         setLoading(true);
 
-        // 1. Fetch user profile
         const profileResponse = await axios.get(
           "https://prohires.strangled.net/mainapp/get_user_profile",
-          {
-            headers: { Authorization: `Token ${token}` },
-          }
+          { headers: { Authorization: `Token ${token}` } }
         );
 
         const { data } = profileResponse.data;
@@ -82,15 +79,12 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
           initials,
         });
 
-        // 2. Fetch profile menu items
+        // Fetch profile menu items
         const menuResponse = await axios.get(
           "https://prohires.strangled.net/job/profile_button_items",
-          {
-            headers: { Authorization: `Token ${token}` },
-          }
+          { headers: { Authorization: `Token ${token}` } }
         );
 
-        // Process menu items with proper defaults
         const processedItems = (menuResponse.data.items || []).map((item) => ({
           ...item,
           visible: item.visible !== false,
@@ -101,7 +95,6 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
       } catch (error) {
         console.error("Error fetching data:", error);
 
-        // Fallback data
         setUserData({
           name: "User",
           fullName: "User Name",
@@ -110,41 +103,11 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
           initials: "UN",
         });
 
-        // Fallback menu items
         setProfileMenuItems([
-          {
-            id: 1,
-            label: "Profile",
-            icon: "FiUser",
-            path: "/ProfileEditForm",
-            type: "link",
-            visible: true,
-            order: 1,
-          },
-          {
-            id: 2,
-            label: "Settings",
-            icon: "FiSettings",
-            path: "/settings",
-            type: "link",
-            visible: true,
-            order: 2,
-          },
-          {
-            id: 3,
-            type: "divider",
-            visible: true,
-            order: 3,
-          },
-          {
-            id: 4,
-            label: "Logout",
-            icon: "FiLogOut",
-            action: "logout",
-            type: "action",
-            visible: true,
-            order: 4,
-          },
+          { id: 1, label: "Profile", icon: "FiUser", path: "/ProfileEditForm", type: "link", visible: true, order: 1 },
+          { id: 2, label: "Settings", icon: "FiSettings", path: "/settings", type: "link", visible: true, order: 2 },
+          { id: 3, type: "divider", visible: true, order: 3 },
+          { id: 4, label: "Logout", icon: "FiLogOut", action: "logout", type: "action", visible: true, order: 4 },
         ]);
 
         if (error.response?.status === 401) {
@@ -166,9 +129,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleLogout = () => {
@@ -178,7 +139,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
 
   const getIconComponent = (iconName) => {
     if (!iconName) return null;
-    if (iconName.startsWith("/media")) return null; // Handle image icons separately
+    if (iconName.startsWith("/media")) return null;
     return iconComponents[iconName] || null;
   };
 
@@ -195,7 +156,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
     return (
       <header className="app-header">
         <div className="header-left">
-          <button className="sidebar-toggle" onClick={toggleSidebar}>
+          <button className="sidebar-toggle mobile-only" onClick={toggleSidebar}>
             <FiMenu size={20} />
           </button>
           <h1 className="page-title">Loading...</h1>
@@ -208,7 +169,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
     <header className="app-header">
       <div className="header-left">
         <button
-          className="sidebar-toggle"
+          className="sidebar-toggle mobile-only"
           onClick={toggleSidebar}
           aria-label="Toggle sidebar"
         >
@@ -250,9 +211,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
                 }}
               />
             ) : null}
-            <span
-              style={{ display: userData.profilePicture ? "none" : "block" }}
-            >
+            <span style={{ display: userData.profilePicture ? "none" : "block" }}>
               {userData.initials}
             </span>
           </div>
@@ -267,12 +226,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
                 .sort((a, b) => (a.order || 0) - (b.order || 0))
                 .map((item) => {
                   if (item.type === "divider") {
-                    return (
-                      <div
-                        key={`divider-${item.id}`}
-                        className="dropdown-divider"
-                      ></div>
-                    );
+                    return <div key={`divider-${item.id}`} className="dropdown-divider"></div>;
                   }
 
                   const IconComponent = getIconComponent(item.icon);

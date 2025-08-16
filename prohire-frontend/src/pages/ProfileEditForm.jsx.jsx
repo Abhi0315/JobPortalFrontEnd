@@ -20,17 +20,17 @@ import "../styles/ProfileEditForm.css";
 
 const ProfileEditForm = () => {
   const [userData, setUserData] = useState({
-    firstName: "",
-    lastName: "",
-    phoneNumber: "",
+    first_name: "",
+    last_name: "",
+    phone_number: "",
     email: "",
-    profilePicture: "",
+    profile_picture: "",
     address: "",
     city: "",
     state: "",
     country: "",
     pincode: "",
-    resume: "",
+    resume_link: "",
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -41,11 +41,12 @@ const ProfileEditForm = () => {
   const [editingField, setEditingField] = useState(null);
   const [tempValue, setTempValue] = useState("");
 
+  // Fetch user profile
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          "https://prohires.strangled.net/mainapp/get_user_profile",
+          "https://prohires.strangled.net/mainapp/get_user_profile/",
           {
             headers: {
               Authorization: `Token ${localStorage.getItem("token")}`,
@@ -58,17 +59,17 @@ const ProfileEditForm = () => {
           user.addresses && user.addresses.length > 0 ? user.addresses[0] : {};
 
         setUserData({
-          firstName: user.name || "",
-          lastName: user.last_name || "",
-          phoneNumber: user.phone_number || "",
+          first_name: user.first_name || "",
+          last_name: user.last_name || "",
+          phone_number: user.phone_number || "",
           email: user.email || "",
-          profilePicture: user.profile_picture || "",
+          profile_picture: user.profile_picture || "",
           address: address.address || "",
           city: address.city || "",
           state: address.state || "",
           country: address.country || "",
           pincode: address.pincode || "",
-          resume: user.resume_link || "",
+          resume_link: user.resume_link || "",
         });
 
         setLoading(false);
@@ -81,6 +82,7 @@ const ProfileEditForm = () => {
     fetchUserData();
   }, []);
 
+  // Editing
   const startEditing = (fieldName) => {
     setEditingField(fieldName);
     setTempValue(userData[fieldName]);
@@ -91,17 +93,24 @@ const ProfileEditForm = () => {
     setTempValue("");
   };
 
+  // Save field update
   const saveEditing = async (fieldName) => {
     try {
-      const updatedData = { ...userData, [fieldName]: tempValue };
+      const formData = new FormData();
+      formData.append(fieldName, tempValue);
 
-      await axios.put("/api/user/profile", updatedData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      await axios.put(
+        "https://prohires.strangled.net/mainapp/update_user_profile/",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Token ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
-      setUserData(updatedData);
+      setUserData((prev) => ({ ...prev, [fieldName]: tempValue }));
       setEditingField(null);
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
@@ -110,10 +119,12 @@ const ProfileEditForm = () => {
     }
   };
 
+  // Handle temp input
   const handleTempChange = (e) => {
     setTempValue(e.target.value);
   };
 
+  // Handle file upload
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -121,17 +132,21 @@ const ProfileEditForm = () => {
         const formData = new FormData();
         formData.append(e.target.name, file);
 
-        const response = await axios.put("/api/user/profile", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Token ${localStorage.getItem("token")}`,
-          },
-        });
+        await axios.put(
+          "https://prohires.strangled.net/mainapp/update_user_profile/",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Token ${localStorage.getItem("token")}`,
+            },
+          }
+        );
 
         setUserData((prev) => ({
           ...prev,
           [e.target.name]:
-            e.target.name === "profilePicture"
+            e.target.name === "profile_picture"
               ? URL.createObjectURL(file)
               : file.name,
         }));
@@ -143,6 +158,7 @@ const ProfileEditForm = () => {
     }
   };
 
+  // Delete account
   const handleDeleteAccount = async () => {
     if (!deletePassword) {
       setDeleteError("Please enter your password");
@@ -160,9 +176,8 @@ const ProfileEditForm = () => {
         }
       );
 
-      // Clear local storage and redirect
       localStorage.removeItem("token");
-      window.location.href = "/login"; // Redirect to login page
+      window.location.href = "/login";
     } catch (err) {
       setDeleteError(
         err.response?.data?.message || "Incorrect password or deletion failed"
@@ -252,12 +267,12 @@ const ProfileEditForm = () => {
           </div>
           <div className="picture-container">
             <div className="avatar-wrapper">
-              {userData.profilePicture ? (
+              {userData.profile_picture ? (
                 <img
                   src={
-                    typeof userData.profilePicture === "string"
-                      ? userData.profilePicture
-                      : URL.createObjectURL(userData.profilePicture)
+                    typeof userData.profile_picture === "string"
+                      ? userData.profile_picture
+                      : URL.createObjectURL(userData.profile_picture)
                   }
                   alt="Profile"
                   className="profile-avatar"
@@ -271,7 +286,7 @@ const ProfileEditForm = () => {
                 <FiCamera className="camera-icon" />
                 <input
                   type="file"
-                  name="profilePicture"
+                  name="profile_picture"
                   accept="image/*"
                   onChange={handleFileChange}
                 />
@@ -288,12 +303,12 @@ const ProfileEditForm = () => {
           <div className="form-grid">
             <div className="form-field">
               <label>First Name</label>
-              {renderEditableField("firstName", "First Name", "text", FiUser)}
+              {renderEditableField("first_name", "First Name", "text", FiUser)}
             </div>
 
             <div className="form-field">
               <label>Last Name</label>
-              {renderEditableField("lastName", "Last Name")}
+              {renderEditableField("last_name", "Last Name")}
             </div>
 
             <div className="form-field">
@@ -309,7 +324,7 @@ const ProfileEditForm = () => {
             <div className="form-field">
               <label>Phone Number</label>
               {renderEditableField(
-                "phoneNumber",
+                "phone_number",
                 "Phone Number",
                 "tel",
                 FiPhone
@@ -357,29 +372,21 @@ const ProfileEditForm = () => {
             <h2>Resume</h2>
           </div>
           <div className="resume-container">
-            {userData.resume ? (
+            {userData.resume_link ? (
               <div className="resume-card">
                 <FiFile className="resume-icon" />
                 <div className="resume-details">
                   <div className="resume-name">
-                    {(() => {
-                      if (typeof userData.resume === "string") {
-                        return userData.resume.split("/").pop();
-                      } else if (
-                        userData.resume instanceof File ||
-                        userData.resume?.name
-                      ) {
-                        return userData.resume.name;
-                      }
-                      return "Resume";
-                    })()}
+                    {typeof userData.resume_link === "string"
+                      ? userData.resume_link.split("/").pop()
+                      : userData.resume_link.name || "Resume"}
                   </div>
                   <div className="resume-actions">
                     <a
                       href={
-                        typeof userData.resume === "string"
-                          ? userData.resume
-                          : URL.createObjectURL(userData.resume)
+                        typeof userData.resume_link === "string"
+                          ? userData.resume_link
+                          : URL.createObjectURL(userData.resume_link)
                       }
                       target="_blank"
                       rel="noopener noreferrer"
@@ -389,9 +396,9 @@ const ProfileEditForm = () => {
                     </a>
                     <a
                       href={
-                        typeof userData.resume === "string"
-                          ? userData.resume
-                          : URL.createObjectURL(userData.resume)
+                        typeof userData.resume_link === "string"
+                          ? userData.resume_link
+                          : URL.createObjectURL(userData.resume_link)
                       }
                       download
                       className="resume-btn"
@@ -408,7 +415,7 @@ const ProfileEditForm = () => {
               </div>
             )}
             <label className="resume-upload-btn">
-              {userData.resume ? "Update Resume" : "Upload Resume"}
+              {userData.resume_link ? "Update Resume" : "Upload Resume"}
               <input
                 type="file"
                 name="resume"

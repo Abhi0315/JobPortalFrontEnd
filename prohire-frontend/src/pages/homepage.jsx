@@ -446,23 +446,6 @@ const Homepage = () => {
                   )}
                 </div>
               </div>
-
-              {/* <div className="trusted-by-section">
-                <span>Trusted by leading companies:</span>
-                <div className="company-logos">
-                  {["Abhiram", "Devanand", "Abhijeet", "Dipak", "Amol"].map(
-                    (name, i) => (
-                      <motion.span
-                        key={i}
-                        whileHover={{ scale: 1.1 }}
-                        transition={{ type: "spring", stiffness: 400 }}
-                      >
-                        {name}
-                      </motion.span>
-                    )
-                  )}
-                </div>
-              </div> */}
             </div>
 
             {/* Wave divider */}
@@ -542,8 +525,6 @@ const Homepage = () => {
             <AboutUs />
           </section>
           <Testimonials />
-          {/* Contact Us Section */}
-          {/* Contact Us Section */}
           <section className="contact-section py-5" id="contact">
             <Container>
               <motion.div

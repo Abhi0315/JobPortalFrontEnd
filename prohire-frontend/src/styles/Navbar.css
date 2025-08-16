@@ -15,33 +15,43 @@
   align-items: center;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0.8rem 2rem;
+  padding: 1rem 2rem; /* Increased vertical padding */
+  height: 72px; /* Set a fixed height for the navbar */
 }
 
-/* Left group styling */
-.nav-left-group {
+/* Ensure nav items are vertically centered */
+.nav-left-group,
+.nav-right-group,
+.desktop-menu {
+  height: 100%;
   display: flex;
   align-items: center;
-  gap: 3rem;
-  margin-right: auto;
+}
+
+/* Adjust menu items if needed */
+.desktop-menu a {
+  padding: 0.5rem 0; /* Add some vertical padding to links */
 }
 
 .logo {
   display: flex;
   align-items: center;
-  font-size: 1.8rem;
+  font-size: 2.2rem; /* Increased from 1.8rem */
   font-weight: 700;
   color: #2c1475;
   text-decoration: none;
   font-style: italic;
+  height: 100%; /* Ensure it takes full height of navbar */
+  padding: 0.5rem 0; /* Add some vertical padding if needed */
 }
 
 .logo-img {
-  height: 40px;
+  height: 48px; /* Increased from 40px */
   object-fit: contain;
   border-radius: 8px;
   background: #fff;
   padding: 4px;
+  margin-right: 0.75rem; /* Add some spacing between image and text */
 }
 
 /* Navigation links */

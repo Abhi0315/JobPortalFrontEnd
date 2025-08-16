@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import DashboardSidebarHeader from "./dashboard";
 import "../styles/dashboard.css";
 import "../styles/DashboardContent.css";
 
@@ -121,18 +120,17 @@ const DashboardContent = () => {
 
   if (dashboardData.loading) {
     return (
-      <DashboardSidebarHeader>
+
         <div className="loading-state">
           <div className="loading-spinner"></div>
           <p>Loading your dashboard...</p>
         </div>
-      </DashboardSidebarHeader>
+
     );
   }
 
   if (dashboardData.error) {
     return (
-      <DashboardSidebarHeader>
         <div className="error-state">
           <div className="error-icon">⚠️</div>
           <h3>Something went wrong</h3>
@@ -144,7 +142,6 @@ const DashboardContent = () => {
             Try Again
           </button>
         </div>
-      </DashboardSidebarHeader>
     );
   }
 

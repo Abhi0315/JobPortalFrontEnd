@@ -59,7 +59,7 @@ const ProfileEditForm = () => {
           user.addresses && user.addresses.length > 0 ? user.addresses[0] : {};
 
         setUserData({
-          first_name: user.first_name || "",
+          first_name: user.name || "",
           last_name: user.last_name || "",
           phone_number: user.phone_number || "",
           email: user.email || "",

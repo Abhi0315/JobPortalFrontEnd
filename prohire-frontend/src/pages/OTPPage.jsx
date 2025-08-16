@@ -20,11 +20,13 @@ const OTPPage = () => {
     if (location.state?.email) {
       setEmail(location.state.email);
       localStorage.setItem("otpEmail", location.state.email);
+      localStorage.setItem("otpEmail", location.state.email);
     } else {
       const storedEmail = localStorage.getItem("otpEmail");
       if (storedEmail) {
         setEmail(storedEmail);
       } else {
+        navigate("/forget");
         navigate("/forget");
       }
     }
@@ -58,6 +60,7 @@ const OTPPage = () => {
     newOtp[index] = element.value;
     setOtp(newOtp);
     setError("");
+    setError("");
 
     if (element.nextSibling && element.value) {
       element.nextSibling.focus();
@@ -89,6 +92,8 @@ const OTPPage = () => {
         }
       );
 
+      console.log("Verification response:", response.data); // Debug log
+
       if (response.data.success) {
         localStorage.setItem("otpVerified", "true");
         navigate("/Forget", {
@@ -99,6 +104,7 @@ const OTPPage = () => {
           replace: true,
         });
       } else {
+        setError(response.data.message || "Invalid OTP. Please try again.");
         setError(response.data.message || "Invalid OTP. Please try again.");
       }
     } catch (error) {
@@ -127,10 +133,14 @@ const OTPPage = () => {
       if (response.data.success) {
         setCountdown(30);
         setOtp(["", "", "", "", "", ""]);
+        setCountdown(30);
+        setOtp(["", "", "", "", "", ""]);
       } else {
         setError(response.data.message || "Failed to resend OTP");
       }
     } catch (error) {
+      console.error("Resend error:", error);
+      setError("Failed to resend OTP. Please try again.");
       console.error("Resend error:", error);
       setError("Failed to resend OTP. Please try again.");
     } finally {

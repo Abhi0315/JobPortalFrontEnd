@@ -19,6 +19,7 @@ const routeTitles = {
   "/jobs": "Jobs Management",
   "/saved_jobs": "Saved Jobs",
   "/candidates": "Candidates",
+  "/jobs_save": "Saved Jobs",
   "/settings": "Settings",
   "/reports": "Analytics",
 };

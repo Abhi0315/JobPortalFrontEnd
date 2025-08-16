@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "../styles/ProfileEditForm.css";
 import {
   FiEdit2,
   FiSave,
@@ -14,9 +15,10 @@ import {
   FiCamera,
   FiDownload,
   FiEye,
+  FiChevronRight,
+  FiUpload,
+  FiCheck,
 } from "react-icons/fi";
-
-import "../styles/ProfileEditForm.css";
 
 const ProfileEditForm = () => {
   const [userData, setUserData] = useState({
@@ -40,6 +42,7 @@ const ProfileEditForm = () => {
   const [deleteError, setDeleteError] = useState("");
   const [editingField, setEditingField] = useState(null);
   const [tempValue, setTempValue] = useState("");
+  const [activeSection, setActiveSection] = useState("personal");
 
   // Fetch user profile
   useEffect(() => {
@@ -125,12 +128,12 @@ const ProfileEditForm = () => {
   };
 
   // Handle file upload
-  const handleFileChange = async (e) => {
+  const handleFileChange = async (e, fieldName) => {
     const file = e.target.files[0];
     if (file) {
       try {
         const formData = new FormData();
-        formData.append(e.target.name, file);
+        formData.append(fieldName, file);
 
         await axios.put(
           "https://prohires.strangled.net/mainapp/update_user_profile/",
@@ -145,8 +148,8 @@ const ProfileEditForm = () => {
 
         setUserData((prev) => ({
           ...prev,
-          [e.target.name]:
-            e.target.name === "profile_picture"
+          [fieldName]:
+            fieldName === "profile_picture"
               ? URL.createObjectURL(file)
               : file.name,
         }));
@@ -193,34 +196,38 @@ const ProfileEditForm = () => {
   ) => {
     if (editingField === fieldName) {
       return (
-        <div className="editing-container">
-          <div className="input-group">
-            {IconComponent && <IconComponent className="input-icon" />}
+        <div className="editing-field-container">
+          <div className="editing-input-group">
+            {IconComponent && (
+              <div className="input-icon-container">
+                <IconComponent className="input-icon" />
+              </div>
+            )}
             <input
               type={type}
               value={tempValue}
               onChange={handleTempChange}
               autoFocus
+              className={`editing-input ${IconComponent ? "with-icon" : ""}`}
               placeholder={`Enter ${label.toLowerCase()}`}
-              className="edit-input"
             />
           </div>
-          <div className="action-buttons">
+          <div className="editing-action-buttons">
             <button
               type="button"
               onClick={() => saveEditing(fieldName)}
-              className="action-btn save"
+              className="action-button save-button"
               aria-label={`Save ${label}`}
             >
-              <FiSave />
+              <FiCheck className="action-icon" />
             </button>
             <button
               type="button"
               onClick={cancelEditing}
-              className="action-btn cancel"
+              className="action-button cancel-button"
               aria-label="Cancel editing"
             >
-              <FiX />
+              <FiX className="action-icon" />
             </button>
           </div>
         </div>
@@ -228,263 +235,401 @@ const ProfileEditForm = () => {
     }
 
     return (
-      <div className="field-container">
+      <div className="field-display-container">
         <div className="field-content">
           {IconComponent && <IconComponent className="field-icon" />}
-          <span className={!userData[fieldName] ? "empty-field" : ""}>
+          <span
+            className={`field-value ${!userData[fieldName] ? "empty" : ""}`}
+          >
             {userData[fieldName] || `No ${label.toLowerCase()} provided`}
           </span>
         </div>
         <button
           type="button"
           onClick={() => startEditing(fieldName)}
-          className="edit-btn"
+          className="edit-button"
           aria-label={`Edit ${label}`}
         >
-          <FiEdit2 />
+          <FiEdit2 className="edit-icon" />
         </button>
       </div>
     );
   };
 
-  if (loading) return <div className="loading-screen">Loading profile...</div>;
-  if (error) return <div className="error-message">{error}</div>;
+  if (loading)
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+      </div>
+    );
+  if (error)
+    return (
+      <div className="error-container">
+        <div className="error-message">
+          <svg className="error-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path
+              fillRule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <p>{error}</p>
+        </div>
+      </div>
+    );
 
   return (
-    <div className="profile-edit-wrapper">
-      <div className="profile-header">
-        <h1>Profile Settings</h1>
-        {success && (
-          <div className="success-banner">Profile updated successfully!</div>
-        )}
-      </div>
-
-      <div className="profile-sections">
-        {/* Profile Picture Section */}
-        <section className="profile-section picture-section">
-          <div className="section-header">
-            <h2>Profile Picture</h2>
+    <div className="profile-edit-fullscreen">
+      {/* Success Notification */}
+      {success && (
+        <div className="success-notification">
+          <div className="success-content">
+            <FiCheck className="success-icon" />
+            <p>Profile updated successfully</p>
           </div>
-          <div className="picture-container">
-            <div className="avatar-wrapper">
-              {userData.profile_picture ? (
-                <img
-                  src={
-                    typeof userData.profile_picture === "string"
-                      ? userData.profile_picture
-                      : URL.createObjectURL(userData.profile_picture)
-                  }
-                  alt="Profile"
-                  className="profile-avatar"
-                />
-              ) : (
-                <div className="avatar-placeholder">
-                  <FiUser size={48} />
-                </div>
-              )}
-              <label className="avatar-upload-btn">
-                <FiCamera className="camera-icon" />
-                <input
-                  type="file"
-                  name="profile_picture"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                />
-              </label>
-            </div>
-          </div>
-        </section>
-
-        {/* Personal Information Section */}
-        <section className="profile-section">
-          <div className="section-header">
-            <h2>Personal Information</h2>
-          </div>
-          <div className="form-grid">
-            <div className="form-field">
-              <label>First Name</label>
-              {renderEditableField("first_name", "First Name", "text", FiUser)}
-            </div>
-
-            <div className="form-field">
-              <label>Last Name</label>
-              {renderEditableField("last_name", "Last Name")}
-            </div>
-
-            <div className="form-field">
-              <label>Email</label>
-              <div className="field-container">
-                <div className="field-content">
-                  <FiMail className="field-icon" />
-                  <span>{userData.email}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="form-field">
-              <label>Phone Number</label>
-              {renderEditableField(
-                "phone_number",
-                "Phone Number",
-                "tel",
-                FiPhone
-              )}
-            </div>
-          </div>
-        </section>
-
-        {/* Address Information Section */}
-        <section className="profile-section">
-          <div className="section-header">
-            <h2>Address Information</h2>
-          </div>
-          <div className="form-grid">
-            <div className="form-field full-width">
-              <label>Address</label>
-              {renderEditableField("address", "Address", "text", FiHome)}
-            </div>
-
-            <div className="form-field">
-              <label>City</label>
-              {renderEditableField("city", "City", "text", FiMapPin)}
-            </div>
-
-            <div className="form-field">
-              <label>State</label>
-              {renderEditableField("state", "State")}
-            </div>
-
-            <div className="form-field">
-              <label>Country</label>
-              {renderEditableField("country", "Country")}
-            </div>
-
-            <div className="form-field">
-              <label>Pincode</label>
-              {renderEditableField("pincode", "Pincode")}
-            </div>
-          </div>
-        </section>
-
-        {/* Resume Section */}
-        <section className="profile-section">
-          <div className="section-header">
-            <h2>Resume</h2>
-          </div>
-          <div className="resume-container">
-            {userData.resume_link ? (
-              <div className="resume-card">
-                <FiFile className="resume-icon" />
-                <div className="resume-details">
-                  <div className="resume-name">
-                    {typeof userData.resume_link === "string"
-                      ? userData.resume_link.split("/").pop()
-                      : userData.resume_link.name || "Resume"}
+        </div>
+      )}
+      <div className="profile-layout-container">
+        {/* Sidebar Navigation */}
+        <div className="profile-sidebar">
+          <div className="sidebar-content">
+            <div className="profile-summary">
+              <div className="avatar-container">
+                {userData.profile_picture ? (
+                  <img
+                    src={
+                      typeof userData.profile_picture === "string"
+                        ? userData.profile_picture
+                        : URL.createObjectURL(userData.profile_picture)
+                    }
+                    alt="Profile"
+                    className="profile-avatar"
+                  />
+                ) : (
+                  <div className="avatar-placeholder">
+                    <FiUser className="placeholder-icon" />
                   </div>
-                  <div className="resume-actions">
-                    <a
-                      href={
-                        typeof userData.resume_link === "string"
-                          ? userData.resume_link
-                          : URL.createObjectURL(userData.resume_link)
-                      }
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="resume-btn"
-                    >
-                      <FiEye /> View
-                    </a>
-                    <a
-                      href={
-                        typeof userData.resume_link === "string"
-                          ? userData.resume_link
-                          : URL.createObjectURL(userData.resume_link)
-                      }
-                      download
-                      className="resume-btn"
-                    >
-                      <FiDownload /> Download
-                    </a>
+                )}
+                <label className="avatar-upload-label">
+                  <FiCamera className="camera-icon" />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleFileChange(e, "profile_picture")}
+                    className="avatar-upload-input"
+                  />
+                </label>
+              </div>
+              <h2 className="profile-name">
+                {userData.first_name} {userData.last_name}
+              </h2>
+              <p className="profile-email">{userData.email}</p>
+            </div>
+
+            <nav className="sidebar-navigation">
+              <button
+                onClick={() => setActiveSection("personal")}
+                className={`nav-button ${
+                  activeSection === "personal" ? "active" : ""
+                }`}
+              >
+                <span>Personal Information</span>
+                <FiChevronRight className="nav-icon" />
+              </button>
+
+              <button
+                onClick={() => setActiveSection("address")}
+                className={`nav-button ${
+                  activeSection === "address" ? "active" : ""
+                }`}
+              >
+                <span>Address Information</span>
+                <FiChevronRight className="nav-icon" />
+              </button>
+
+              <button
+                onClick={() => setActiveSection("resume")}
+                className={`nav-button ${
+                  activeSection === "resume" ? "active" : ""
+                }`}
+              >
+                <span>Resume</span>
+                <FiChevronRight className="nav-icon" />
+              </button>
+
+              <button
+                onClick={() => setActiveSection("danger")}
+                className={`nav-button danger ${
+                  activeSection === "danger" ? "active" : ""
+                }`}
+              >
+                <span>Danger Zone</span>
+                <FiChevronRight className="nav-icon" />
+              </button>
+            </nav>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="profile-main-content">
+          <div className="profile-section-container">
+            {/* Personal Information Section */}
+            {activeSection === "personal" && (
+              <div className="section-content">
+                <div className="section-header">
+                  <h2 className="section-title">Personal Information</h2>
+                  <p className="section-description">
+                    Update your personal details and contact information.
+                  </p>
+                </div>
+
+                <div className="form-fields">
+                  <div className="form-field">
+                    <label className="field-label">First Name</label>
+                    {renderEditableField(
+                      "first_name",
+                      "First Name",
+                      "text",
+                      FiUser
+                    )}
+                  </div>
+
+                  <div className="form-field">
+                    <label className="field-label">Last Name</label>
+                    {renderEditableField("last_name", "Last Name")}
+                  </div>
+
+                  <div className="form-field">
+                    <label className="field-label">Email</label>
+                    <div className="email-display">
+                      <div className="field-content">
+                        <FiMail className="field-icon" />
+                        <span className="field-value">{userData.email}</span>
+                      </div>
+                      <span className="email-tag">Primary</span>
+                    </div>
+                  </div>
+
+                  <div className="form-field">
+                    <label className="field-label">Phone Number</label>
+                    {renderEditableField(
+                      "phone_number",
+                      "Phone Number",
+                      "tel",
+                      FiPhone
+                    )}
                   </div>
                 </div>
-              </div>
-            ) : (
-              <div className="no-resume">
-                <FiFile className="no-resume-icon" />
-                <span>No resume uploaded</span>
               </div>
             )}
-            <label className="resume-upload-btn">
-              {userData.resume_link ? "Update Resume" : "Upload Resume"}
-              <input
-                type="file"
-                name="resume"
-                accept=".pdf,.doc,.docx"
-                onChange={handleFileChange}
-              />
-            </label>
-          </div>
-        </section>
 
-        {/* Danger Zone Section */}
-        <section className="profile-section danger-zone">
-          <div className="section-header">
-            <h2>Danger Zone</h2>
-          </div>
-          <div className="danger-content">
-            <div className="danger-warning">
-              <FiTrash2 className="danger-icon" />
-              <div>
-                <h3>Delete Account</h3>
-                <p>Permanently delete your account and all associated data.</p>
+            {/* Address Information Section */}
+            {activeSection === "address" && (
+              <div className="section-content">
+                <div className="section-header">
+                  <h2 className="section-title">Address Information</h2>
+                  <p className="section-description">
+                    Update your current address details.
+                  </p>
+                </div>
+
+                <div className="form-fields">
+                  <div className="form-field full-width">
+                    <label className="field-label">Address</label>
+                    {renderEditableField("address", "Address", "text", FiHome)}
+                  </div>
+
+                  <div className="form-grid">
+                    <div className="form-field">
+                      <label className="field-label">City</label>
+                      {renderEditableField("city", "City", "text", FiMapPin)}
+                    </div>
+
+                    <div className="form-field">
+                      <label className="field-label">State</label>
+                      {renderEditableField("state", "State")}
+                    </div>
+
+                    <div className="form-field">
+                      <label className="field-label">Country</label>
+                      {renderEditableField("country", "Country")}
+                    </div>
+
+                    <div className="form-field">
+                      <label className="field-label">Pincode</label>
+                      {renderEditableField("pincode", "Pincode")}
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <button
-              onClick={() => setShowDeleteModal(true)}
-              className="delete-btn"
-            >
-              Delete Account
-            </button>
-          </div>
-        </section>
-      </div>
+            )}
 
+            {/* Resume Section */}
+            {activeSection === "resume" && (
+              <div className="section-content">
+                <div className="section-header">
+                  <h2 className="section-title">Resume Management</h2>
+                  <p className="section-description">
+                    Upload or update your resume for job applications.
+                  </p>
+                </div>
+
+                <div className="resume-section">
+                  {userData.resume_link ? (
+                    <div className="resume-card">
+                      <div className="resume-icon-container">
+                        <FiFile className="resume-icon" />
+                      </div>
+                      <div className="resume-details">
+                        <h3 className="resume-title">
+                          {typeof userData.resume_link === "string"
+                            ? userData.resume_link.split("/").pop()
+                            : userData.resume_link.name || "Resume"}
+                        </h3>
+                        <p className="resume-date">
+                          Last updated: {new Date().toLocaleDateString()}
+                        </p>
+                        <div className="resume-actions">
+                          <a
+                            href={
+                              typeof userData.resume_link === "string"
+                                ? userData.resume_link
+                                : URL.createObjectURL(userData.resume_link)
+                            }
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="resume-button view"
+                          >
+                            <FiEye className="button-icon" />
+                            View
+                          </a>
+                          <a
+                            href={
+                              typeof userData.resume_link === "string"
+                                ? userData.resume_link
+                                : URL.createObjectURL(userData.resume_link)
+                            }
+                            download
+                            className="resume-button download"
+                          >
+                            <FiDownload className="button-icon" />
+                            Download
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="empty-resume">
+                      <FiFile className="empty-resume-icon" />
+                      <h3 className="empty-resume-title">No resume uploaded</h3>
+                      <p className="empty-resume-description">
+                        Upload your resume to apply for jobs.
+                      </p>
+                    </div>
+                  )}
+
+                  <div className="resume-upload-wrapper">
+                    <label className="resume-upload-label">
+                      <FiUpload className="upload-icon" />
+                      <span className="upload-text">
+                        {userData.resume_link
+                          ? "Update Resume"
+                          : "Upload Resume"}
+                      </span>
+                      <input
+                        type="file"
+                        accept=".pdf,.doc,.docx"
+                        onChange={(e) => handleFileChange(e, "resume_link")}
+                        className="resume-upload-input"
+                      />
+                    </label>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Danger Zone Section */}
+            {activeSection === "danger" && (
+              <div className="section-content">
+                <div className="section-header">
+                  <h2 className="section-title">Danger Zone</h2>
+                  <p className="section-description">
+                    Actions in this section are irreversible.
+                  </p>
+                </div>
+
+                <div className="danger-zone-card">
+                  <div className="danger-content">
+                    <FiTrash2 className="danger-icon" />
+                    <div className="danger-text">
+                      <h3 className="danger-title">Delete Account</h3>
+                      <p className="danger-description">
+                        Once you delete your account, there is no going back.
+                        Please be certain.
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setShowDeleteModal(true)}
+                    className="danger-button"
+                  >
+                    Delete Account
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
       {/* Delete Account Modal */}
       {showDeleteModal && (
         <div className="modal-overlay">
           <div className="delete-modal">
-            <div className="modal-header">
-              <h3>Confirm Account Deletion</h3>
+            <div className="modal-icon-container">
+              <FiTrash2 className="modal-icon" />
             </div>
-            <div className="modal-body">
-              <p className="warning-text">
-                This action cannot be undone. All your data will be permanently
-                deleted.
+            <div className="modal-content">
+              <h3 className="modal-title">Delete Account</h3>
+              <p className="modal-description">
+                This will permanently delete your account and all associated
+                data. Please enter your password to confirm.
               </p>
-              <p>Please enter your password to confirm:</p>
-              <input
-                type="password"
-                value={deletePassword}
-                onChange={(e) => setDeletePassword(e.target.value)}
-                placeholder="Enter your password"
-                className="password-input"
-              />
-              {deleteError && <div className="error-text">{deleteError}</div>}
             </div>
-            <div className="modal-footer">
-              <button
-                onClick={() => {
-                  setShowDeleteModal(false);
-                  setDeletePassword("");
-                  setDeleteError("");
-                }}
-                className="secondary-btn"
-              >
-                Cancel
-              </button>
-              <button onClick={handleDeleteAccount} className="danger-btn">
-                Delete Account
-              </button>
+            <div className="modal-form">
+              <div className="form-group">
+                <label htmlFor="password" className="form-label">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  value={deletePassword}
+                  onChange={(e) => setDeletePassword(e.target.value)}
+                  className="form-input"
+                  placeholder="Enter your password"
+                />
+                {deleteError && <p className="form-error">{deleteError}</p>}
+              </div>
+              <div className="modal-buttons">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowDeleteModal(false);
+                    setDeletePassword("");
+                    setDeleteError("");
+                  }}
+                  className="modal-button secondary"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDeleteAccount}
+                  className="modal-button danger"
+                >
+                  Delete Account
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -1,13 +1,11 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import "../styles/Navbar.css";
 
 const ProHireNavbar = () => {
   const [menus, setMenus] = useState([]);
   const [logo, setLogo] = useState("");
-  const [navOpen, setNavOpen] = useState(false); // Controls collapse
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,71 +18,103 @@ const ProHireNavbar = () => {
       .catch((err) => console.error("Error fetching header data:", err));
   }, []);
 
-  // Close collapse on desktop resize
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 992) setNavOpen(false);
+    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
     };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [mobileMenuOpen]);
 
   return (
-    <Navbar expand="lg" className="prohire-navbar shadow-sm" expanded={navOpen}>
-      <Container fluid>
-        <Navbar.Brand href="/" className="prohire-logo">
-          {logo ? (
-            <img
-              src={logo}
-              alt="ProHire Logo"
-              style={{ height: "40px", objectFit: "contain" }}
-            />
-          ) : (
-            "ProHire"
-          )}
-        </Navbar.Brand>
+    <nav className="prohire-navbar-new">
+      <div className="navbar-container">
+        {/* Left-aligned group (logo + nav items) */}
+        <div className="nav-left-group">
+          <a href="/" className="logo">
+            {logo ? (
+              <img src={logo} alt="ProHire Logo" className="logo-img" />
+            ) : (
+              <span>ProHire</span>
+            )}
+          </a>
 
-        {/* Custom Hamburger Toggle */}
-        <button
-          className={`hamburger-menu d-lg-none ${navOpen ? "open" : ""}`}
-          aria-controls="basic-navbar-nav"
-          aria-expanded={navOpen}
-          onClick={() => setNavOpen((prev) => !prev)}
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-
-        {/* Collapsible Menu */}
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
+          <ul className="desktop-menu">
             {menus.map((menu) => (
-              <Nav.Link key={menu.id} href={menu.url} className="px-3">
-                {menu.title}
-              </Nav.Link>
+              <li key={menu.id}>
+                <a href={menu.url}>
+                  <span className="nav-link-text">{menu.title}</span>
+                  <span className="underline"></span>
+                </a>
+              </li>
             ))}
-          </Nav>
+          </ul>
+        </div>
 
-          <div className="d-flex">
-            <Button
-              variant="outline-secondary"
-              className="rounded-pill mx-2"
+        {/* Right-aligned group (auth buttons + hamburger) */}
+        <div className="nav-right-group">
+          <div className="auth-buttons">
+            <button
+              className="nav-btn login"
               onClick={() => navigate("/login")}
             >
               Login
-            </Button>
-            <Button
-              variant="primary"
-              className="signup-btn rounded-pill mx-2"
+            </button>
+            <button
+              className="nav-btn signup"
               onClick={() => navigate("/registrationform")}
             >
               Sign Up
-            </Button>
+            </button>
           </div>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+
+          <button
+            className={`hamburger ${mobileMenuOpen ? "open" : ""}`}
+            aria-label="Toggle menu"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile menu overlay */}
+      <div className={`mobile-menu-overlay ${mobileMenuOpen ? "show" : ""}`}>
+        <ul>
+          {menus.map((menu, idx) => (
+            <React.Fragment key={menu.id}>
+              <li onClick={() => setMobileMenuOpen(false)}>
+                <a href={menu.url}>{menu.title}</a>
+              </li>
+              {idx < menus.length - 1 && (
+                <div className="mobile-menu-divider" />
+              )}
+            </React.Fragment>
+          ))}
+        </ul>
+        <div className="mobile-actions">
+          <button
+            className="nav-btn login"
+            onClick={() => {
+              setMobileMenuOpen(false);
+              navigate("/login");
+            }}
+          >
+            Login
+          </button>
+          <button
+            className="nav-btn signup"
+            onClick={() => {
+              setMobileMenuOpen(false);
+              navigate("/registrationform");
+            }}
+          >
+            Sign Up
+          </button>
+        </div>
+      </div>
+    </nav>
   );
 };
 

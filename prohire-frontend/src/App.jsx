@@ -18,6 +18,7 @@ import Settings from "./pages/Settings";
 import Forget from "./pages/ForgotPassword.jsx";
 import DashboardContent from "./pages/DashboardContent.jsx";
 import SavedJobsLayout from "./pages/SavedLayout.jsx";
+import SavedPage from "./pages/SavedPage.jsx";
 
 function App() {
   return (
@@ -32,7 +33,7 @@ function App() {
         <Route path="/otp" element={<OTPPage />} />
         <Route path="/send-otp" element={<SendOTPPage />} />
         <Route path="/forget" element={<Forget />} />
-        <Route path="/saved_jobs" element={<SavedJobsLayout />} />
+        {/* <Route path="/saved_jobs" element={<SavedJobsLayout />} /> */}
 
         <Route
           path="/ProfileEditForm"
@@ -70,6 +71,16 @@ function App() {
               <JobLayout>
                 <JobPage />
               </JobLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/jobs_save"
+          element={
+            <ProtectedRoute>
+              <SavedJobsLayout>
+                <SavedPage />
+              </SavedJobsLayout>
             </ProtectedRoute>
           }
         />

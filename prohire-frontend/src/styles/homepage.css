@@ -1,6 +1,21 @@
 /* Google Font Import */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #fff;
+}
+::-webkit-scrollbar-thumb {
+  background: #2c1475;
+  border-left: 1px solid rgba(74, 58, 255, 0.5);
+}
+* {
+  scrollbar-color: #2c1475 #fff;
+}
+
 /* Navbar Styles */
 .prohire-navbar {
   background-color: white !important;

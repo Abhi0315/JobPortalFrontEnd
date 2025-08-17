@@ -5,7 +5,10 @@ import "./App.css";
 import AboutUs from "./components/AboutUs.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Testimonials from "./components/Testimonials.jsx";
+import ProfilePage from "./pages/complete-profile.jsx";
 import DashboardSidebarHeader from "./pages/dashboard";
+import DashboardContent from "./pages/DashboardContent.jsx";
+import Forget from "./pages/ForgotPassword.jsx";
 import HomePage from "./pages/homepage";
 import JobLayout from "./pages/job";
 import JobPage from "./pages/JobPage";
@@ -13,12 +16,10 @@ import Login from "./pages/login";
 import OTPPage from "./pages/OTPPage";
 import ProfileEditForm from "./pages/ProfileEditForm.jsx";
 import RegistrationForm from "./pages/registrationform";
-import SendOTPPage from "./pages/SendOTPPage";
-import Settings from "./pages/Settings";
-import Forget from "./pages/ForgotPassword.jsx";
-import DashboardContent from "./pages/DashboardContent.jsx";
 import SavedJobsLayout from "./pages/SavedLayout.jsx";
 import SavedPage from "./pages/SavedPage.jsx";
+import SendOTPPage from "./pages/SendOTPPage";
+import Settings from "./pages/Settings";
 
 function App() {
   return (
@@ -92,6 +93,15 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+          <Route
+          path="/complete-profile"
+          element={
+            <ProfilePage/>
+          }
+        />
+
+
       </Routes>
     </Router>
   );

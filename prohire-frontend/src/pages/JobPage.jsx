@@ -234,7 +234,7 @@ const JobsPage = () => {
 
   return (
     <div className="jobs-page-container">
-      <h1 className="jobs-page-title">
+      {/* <h1 className="jobs-page-title">
   Find Your Dream Job
   <span style={{
     display: 'block',
@@ -247,7 +247,7 @@ const JobsPage = () => {
   }}>
     Discover opportunities that match your skills
   </span>
-</h1>
+</h1> */}
       
       {/* Search and Filter Bar */}
       <div className="search-filter-container">

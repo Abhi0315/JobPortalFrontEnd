@@ -63,31 +63,23 @@ const JobCard = ({ job }) => {
     if (!token) return;
 
     try {
-      // Toggle save state immediately for better UX
       setIsSaved(!isSaved);
-
       await axios.post(
         "https://prohires.strangled.net/job/save_jobs/",
         { job_id },
         { headers: { Authorization: `Token ${token}` } }
       );
-
-      // The API call will confirm the state change
     } catch (error) {
       console.error("Error saving job:", error);
-      // Revert if API call fails
       setIsSaved(!isSaved);
     }
   };
 
-  // Construct the full logo URL
   const getLogoUrl = () => {
     if (!employer?.employer_logo) return null;
-    // Check if the logo path is already a full URL
     if (employer.employer_logo.startsWith("http")) {
       return employer.employer_logo;
     }
-    // Prepend the base URL if it's a relative path
     return `https://prohires.strangled.net${employer.employer_logo}`;
   };
 
@@ -109,7 +101,7 @@ const JobCard = ({ job }) => {
               {employer.name?.charAt(0).toUpperCase()}
             </div>
           )}
-          <div>
+          <div className="job-title-container">
             <h2>{title}</h2>
             <div className="employer-name">{employer.name}</div>
           </div>
@@ -121,15 +113,8 @@ const JobCard = ({ job }) => {
             onClick={handleSaveJob}
             aria-label={isSaved ? "Unsave job" : "Save job"}
           >
-            {isSaved ? (
-              <>
-                <FaBookmark className="save-icon" /> Saved
-              </>
-            ) : (
-              <>
-                <FaRegBookmark className="save-icon" /> Save
-              </>
-            )}
+            {isSaved ? <FaBookmark /> : <FaRegBookmark />}
+            <span className="save-btn-text">{isSaved ? "Saved" : "Save"}</span>
           </button>
           {postedDate && (
             <div className="posted-date">

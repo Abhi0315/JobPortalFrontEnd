@@ -187,31 +187,34 @@ const Sidebar = ({
 
         <nav className="sidebar-nav">
           <ul>
-            {menuItems.map((item) => (
-              <li key={item.id}>
-                <button
-                  className={`nav-item ${activePath.startsWith(item.url) ? "active" : ""}`}
-                  onClick={() => handleNavigation(item.url)}
-                  aria-label={item.title}
-                >
-                  <div className="nav-icon">
-                    <img
-                      src={item.icon}
-                      alt={item.title}
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = "https://prohires.strangled.net/media/sidebar_icons/default.png";
-                      }}
-                    />
-                  </div>
-                  {isOpen ? (
-                    <span className="nav-text">{item.title}</span>
-                  ) : (
-                    <span className="tooltip">{item.title}</span>
-                  )}
-                </button>
-              </li>
-            ))}
+{menuItems.map((item) => (
+  <li key={item.id}>
+    <button
+      className={`nav-item ${
+        activePath === item.url || 
+        (item.url !== "/" && activePath.startsWith(`${item.url}/`)) ? "active" : ""
+      }`}
+      onClick={() => handleNavigation(item.url)}
+      aria-label={item.title}
+    >
+      <div className="nav-icon">
+        <img
+          src={item.icon}
+          alt={item.title}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "https://prohires.strangled.net/media/sidebar_icons/default.png";
+          }}
+        />
+      </div>
+      {isOpen ? (
+        <span className="nav-text">{item.title}</span>
+      ) : (
+        <span className="tooltip">{item.title}</span>
+      )}
+    </button>
+  </li>
+))}
           </ul>
         </nav>
 

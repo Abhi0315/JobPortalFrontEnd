@@ -26,6 +26,7 @@ const JobCard = ({ job }) => {
   const [expanded, setExpanded] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [logoError, setLogoError] = useState(false);
+  const [isApplying, setIsApplying] = useState(false);
 
   const toggleExpand = () => setExpanded(!expanded);
 
@@ -73,6 +74,53 @@ const JobCard = ({ job }) => {
       console.error("Error saving job:", error);
       setIsSaved(!isSaved);
     }
+  };
+
+  const trackJobApplication = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.warn("Cannot track job view - no auth token");
+      return false;
+    }
+
+    try {
+      console.log(`Tracking view for job: ${job_id}`);
+      const response = await axios.post(
+        "https://prohires.strangled.net/job/view_job/",
+        { job_id },
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "application/json",
+          },
+          timeout: 3000,
+        }
+      );
+      console.log("Job view tracked successfully", response.data);
+      return true;
+    } catch (error) {
+      console.error("Failed to track job view:", {
+        error: error.message,
+        status: error.response?.status,
+        data: error.response?.data,
+      });
+      return false;
+    }
+  };
+
+  const handleApply = async (e) => {
+    e.stopPropagation();
+    setIsApplying(true);
+
+    // 1. First track the job view via your API
+    await trackJobApplication();
+
+    // 2. Then proceed with application redirect (external apply link)
+    if (applyLink) {
+      window.open(applyLink, "_blank");
+    }
+
+    setIsApplying(false);
   };
 
   const getLogoUrl = () => {
@@ -179,17 +227,13 @@ const JobCard = ({ job }) => {
       </div>
 
       <div className="job-card-footer">
-        {applyLink && (
-          <a
-            href={applyLink}
-            className="apply-button"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-          >
-            Apply Now
-          </a>
-        )}
+        <button
+          className="apply-button"
+          onClick={handleApply}
+          disabled={isApplying}
+        >
+          {isApplying ? "Applying..." : "Apply Now"}
+        </button>
         {employer.website && (
           <a
             href={employer.website}

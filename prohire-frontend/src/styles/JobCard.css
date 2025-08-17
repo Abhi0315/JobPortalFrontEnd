@@ -312,3 +312,29 @@
     font-size: 0.85rem;
   }
 }
+
+/* Add these to your existing CSS */
+.apply-success-message {
+  color: #15803d;
+  background-color: #f0fdf4;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-size: 0.9rem;
+  width: 100%;
+  text-align: center;
+}
+
+.apply-error-message {
+  color: #b91c1c;
+  background-color: #fee2e2;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-size: 0.9rem;
+  width: 100%;
+  text-align: center;
+}
+
+.apply-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

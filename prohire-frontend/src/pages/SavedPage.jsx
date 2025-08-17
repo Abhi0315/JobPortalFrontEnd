@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
 import "../styles/SavedPage.css";
 
 function SavedPage() {
@@ -137,7 +137,7 @@ function SavedPage() {
 
   return (
     <div className="saved-container">
-      <h1 className="saved-title">Saved Jobs</h1>
+      {/* <h1 className="saved-title">Saved Jobs</h1> */}
 
       {savedJobs.length === 0 ? (
         <p className="no-jobs">No saved jobs found.</p>

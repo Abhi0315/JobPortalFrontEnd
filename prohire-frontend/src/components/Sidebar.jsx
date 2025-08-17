@@ -1,7 +1,13 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { fetchSidebarData } from "../api/sidebar";
-import { MdLogout, MdChevronRight, MdMenu, MdClose, MdChevronLeft } from "react-icons/md";
+import {
+  MdLogout,
+  MdChevronRight,
+  MdMenu,
+  MdClose,
+  MdChevronLeft,
+} from "react-icons/md";
 import "../styles/sidebar.css";
 
 const Sidebar = ({
@@ -20,15 +26,17 @@ const Sidebar = ({
   const navigate = useNavigate();
   const location = useLocation();
   const overlayRef = useRef(null);
-  const animationTimeoutRef = useRef(null);
+  const touchStartX = useRef(0);
+  const touchCurrentX = useRef(0);
+  const isDragging = useRef(false);
 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 1024);
     };
     handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
@@ -43,7 +51,7 @@ const Sidebar = ({
             : `https://prohires.strangled.net${data.logo}`
         );
 
-        setCompanyName(data.company_name || "ProHires");
+        setCompanyName(data.company_name || "ProHire");
 
         const formattedMenus = (data.menus || []).map((item) => ({
           ...item,
@@ -82,10 +90,71 @@ const Sidebar = ({
     loadSidebarData();
   }, []);
 
-  // Set active path without animation on initial load
   useEffect(() => {
     setActivePath(location.pathname);
   }, [location.pathname]);
+
+  // Add touch event handlers
+  useEffect(() => {
+    const sidebarElement = sidebarRef.current;
+
+    if (!sidebarElement) return;
+
+    const handleTouchStart = (e) => {
+      if (!isMobile || !isOpen) return;
+
+      touchStartX.current = e.touches[0].clientX;
+      touchCurrentX.current = touchStartX.current;
+      isDragging.current = true;
+      sidebarElement.classList.add("swipe-transition");
+    };
+
+    const handleTouchMove = (e) => {
+      if (!isDragging.current || !isMobile || !isOpen) return;
+
+      touchCurrentX.current = e.touches[0].clientX;
+      const diff = touchStartX.current - touchCurrentX.current;
+
+      // Only allow right-to-left swipe (closing)
+      if (diff > 0) {
+        e.preventDefault();
+        const translateX = Math.min(0, -diff);
+        sidebarElement.style.transform = `translateX(${translateX}px)`;
+      }
+    };
+
+    const handleTouchEnd = () => {
+      if (!isDragging.current || !isMobile || !isOpen) return;
+
+      isDragging.current = false;
+      sidebarElement.classList.remove("swipe-transition");
+
+      const diff = touchStartX.current - touchCurrentX.current;
+      const threshold = sidebarElement.offsetWidth * 0.3;
+
+      if (diff > threshold) {
+        toggleSidebar();
+        document.body.classList.remove("no-scroll");
+      }
+
+      // Reset transform
+      sidebarElement.style.transform = "";
+    };
+
+    sidebarElement.addEventListener("touchstart", handleTouchStart, {
+      passive: true,
+    });
+    sidebarElement.addEventListener("touchmove", handleTouchMove, {
+      passive: false,
+    });
+    sidebarElement.addEventListener("touchend", handleTouchEnd);
+
+    return () => {
+      sidebarElement.removeEventListener("touchstart", handleTouchStart);
+      sidebarElement.removeEventListener("touchmove", handleTouchMove);
+      sidebarElement.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [isMobile, isOpen, sidebarRef, toggleSidebar]);
 
   const handleNavigation = (url) => {
     if (location.pathname !== url) {
@@ -94,7 +163,7 @@ const Sidebar = ({
     }
     if (isMobile) {
       toggleSidebar();
-      document.body.classList.remove('no-scroll');
+      document.body.classList.remove("no-scroll");
     }
   };
 
@@ -121,7 +190,7 @@ const Sidebar = ({
 
   const handleOverlayClick = () => {
     toggleSidebar();
-    document.body.classList.remove('no-scroll');
+    document.body.classList.remove("no-scroll");
   };
 
   if (loading) {
@@ -139,18 +208,22 @@ const Sidebar = ({
   return (
     <>
       {isMobile && isOpen && (
-        <div 
+        <div
           ref={overlayRef}
           className="sidebar-overlay"
           onClick={handleOverlayClick}
         />
       )}
-      
+
       <aside
         ref={sidebarRef}
         className={`sidebar ${isOpen ? "open" : "collapsed"}`}
-        style={{ width: isOpen ? `${width}px` : "84px" }}
+        style={{
+          width: isOpen ? `${width}px` : "84px",
+          transform: isMobile && !isOpen ? "translateX(-100%)" : "",
+        }}
       >
+        {/* Rest of your sidebar JSX remains the same */}
         <div className="sidebar-header">
           {isOpen ? (
             <>
@@ -161,7 +234,8 @@ const Sidebar = ({
                   className="sidebar-logo"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = "https://prohires.strangled.net/media/company/default_logo.png";
+                    e.target.src =
+                      "https://prohires.strangled.net/media/company/default_logo.png";
                   }}
                 />
                 <h3 className="app-name">{companyName}</h3>
@@ -187,34 +261,37 @@ const Sidebar = ({
 
         <nav className="sidebar-nav">
           <ul>
-{menuItems.map((item) => (
-  <li key={item.id}>
-    <button
-      className={`nav-item ${
-        activePath === item.url || 
-        (item.url !== "/" && activePath.startsWith(`${item.url}/`)) ? "active" : ""
-      }`}
-      onClick={() => handleNavigation(item.url)}
-      aria-label={item.title}
-    >
-      <div className="nav-icon">
-        <img
-          src={item.icon}
-          alt={item.title}
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = "https://prohires.strangled.net/media/sidebar_icons/default.png";
-          }}
-        />
-      </div>
-      {isOpen ? (
-        <span className="nav-text">{item.title}</span>
-      ) : (
-        <span className="tooltip">{item.title}</span>
-      )}
-    </button>
-  </li>
-))}
+            {menuItems.map((item) => (
+              <li key={item.id}>
+                <button
+                  className={`nav-item ${
+                    activePath === item.url ||
+                    (item.url !== "/" && activePath.startsWith(`${item.url}/`))
+                      ? "active"
+                      : ""
+                  }`}
+                  onClick={() => handleNavigation(item.url)}
+                  aria-label={item.title}
+                >
+                  <div className="nav-icon">
+                    <img
+                      src={item.icon}
+                      alt={item.title}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src =
+                          "https://prohires.strangled.net/media/sidebar_icons/default.png";
+                      }}
+                    />
+                  </div>
+                  {isOpen ? (
+                    <span className="nav-text">{item.title}</span>
+                  ) : (
+                    <span className="tooltip">{item.title}</span>
+                  )}
+                </button>
+              </li>
+            ))}
           </ul>
         </nav>
 

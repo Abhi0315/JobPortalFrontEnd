@@ -105,10 +105,34 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
         });
 
         setProfileMenuItems([
-          { id: 1, label: "Profile", icon: "FiUser", path: "/ProfileEditForm", type: "link", visible: true, order: 1 },
-          { id: 2, label: "Settings", icon: "FiSettings", path: "/settings", type: "link", visible: true, order: 2 },
+          {
+            id: 1,
+            label: "Profile",
+            icon: "FiUser",
+            path: "/ProfileEditForm",
+            type: "link",
+            visible: true,
+            order: 1,
+          },
+          {
+            id: 2,
+            label: "Settings",
+            icon: "FiSettings",
+            path: "/settings",
+            type: "link",
+            visible: true,
+            order: 2,
+          },
           { id: 3, type: "divider", visible: true, order: 3 },
-          { id: 4, label: "Logout", icon: "FiLogOut", action: "logout", type: "action", visible: true, order: 4 },
+          {
+            id: 4,
+            label: "Logout",
+            icon: "FiLogOut",
+            action: "logout",
+            type: "action",
+            visible: true,
+            order: 4,
+          },
         ]);
 
         if (error.response?.status === 401) {
@@ -157,7 +181,10 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
     return (
       <header className="app-header">
         <div className="header-left">
-          <button className="sidebar-toggle mobile-only" onClick={toggleSidebar}>
+          <button
+            className="sidebar-toggle mobile-only"
+            onClick={toggleSidebar}
+          >
             <FiMenu size={20} />
           </button>
           <h1 className="page-title">Loading...</h1>
@@ -212,7 +239,9 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
                 }}
               />
             ) : null}
-            <span style={{ display: userData.profilePicture ? "none" : "block" }}>
+            <span
+              style={{ display: userData.profilePicture ? "none" : "block" }}
+            >
               {userData.initials}
             </span>
           </div>
@@ -227,7 +256,12 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
                 .sort((a, b) => (a.order || 0) - (b.order || 0))
                 .map((item) => {
                   if (item.type === "divider") {
-                    return <div key={`divider-${item.id}`} className="dropdown-divider"></div>;
+                    return (
+                      <div
+                        key={`divider-${item.id}`}
+                        className="dropdown-divider"
+                      ></div>
+                    );
                   }
 
                   const IconComponent = getIconComponent(item.icon);

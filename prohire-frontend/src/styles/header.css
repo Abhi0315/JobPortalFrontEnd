@@ -39,7 +39,6 @@
   transition: var(--header-transition);
 }
 
-
 .sidebar-toggle:hover {
   background: var(--header-hover);
   transform: rotate(90deg);
@@ -230,6 +229,13 @@
   .app-header {
     padding: 0 1rem;
   }
+  .page-title {
+    font-size: 50px;
+    font-weight: 200;
+    color: var(--header-text);
+    margin: 0;
+    white-space: nowrap;
+  }
 
   .header-search {
     position: absolute;
@@ -259,8 +265,14 @@
   .page-title {
     display: none;
   }
+  .page-title {
+    font-size: 50px;
+    font-weight: 200;
+    color: var(--header-text);
+    margin: 0;
+    white-space: nowrap;
+  }
 }
-
 
 .mobile-only {
   display: none;

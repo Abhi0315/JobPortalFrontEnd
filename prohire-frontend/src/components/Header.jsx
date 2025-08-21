@@ -13,6 +13,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import "../styles/header.css";
 import axios from "axios";
+// import NotificationPopup from "./NotificationPopup"; // Import the new component
+import NotificationPopup from "../components/NotificationPopup"; // Adjust the import path as necessary
 
 const routeTitles = {
   "/dashboard": "Dashboard",
@@ -40,6 +42,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false); // State for notification popup
   const [userData, setUserData] = useState({
     name: "",
     fullName: "",
@@ -194,103 +197,111 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
   }
 
   return (
-    <header className="app-header">
-      <div className="header-left">
-        <button
-          className="sidebar-toggle mobile-only"
-          onClick={toggleSidebar}
-          aria-label="Toggle sidebar"
-        >
-          <FiMenu size={20} />
-        </button>
-        <h1 className="page-title">{currentTitle}</h1>
-      </div>
+    <>
+      <header className="app-header">
+        <div className="header-left">
+          <button
+            className="sidebar-toggle mobile-only"
+            onClick={toggleSidebar}
+            aria-label="Toggle sidebar"
+          >
+            <FiMenu size={20} />
+          </button>
+          <h1 className="page-title">{currentTitle}</h1>
+        </div>
 
-      <div className="header-right">
-        <button
-          className="icon-btn"
-          aria-label="Notifications"
-          onClick={() => navigate("/notifications")}
-        >
-          <FiBell size={20} />
-        </button>
+        <div className="header-right">
+          <button
+            className="icon-btn"
+            aria-label="Notifications"
+            onClick={() => setShowNotifications(true)}
+          >
+            <FiBell size={20} />
+          </button>
 
-        <button
-          className="icon-btn"
-          aria-label="Settings"
-          onClick={() => navigate("/settings")}
-        >
-          <FiSettings size={20} />
-        </button>
+          <button
+            className="icon-btn"
+            aria-label="Settings"
+            onClick={() => navigate("/settings")}
+          >
+            <FiSettings size={20} />
+          </button>
 
-        <div
-          className="user-profile"
-          ref={profileRef}
-          onClick={() => setIsProfileOpen(!isProfileOpen)}
-        >
-          <div className="user-avatar">
-            {userData.profilePicture ? (
-              <img
-                src={userData.profilePicture}
-                alt={userData.fullName}
-                onError={(e) => {
-                  e.target.style.display = "none";
-                  e.target.nextSibling.style.display = "block";
-                }}
-              />
-            ) : null}
-            <span
-              style={{ display: userData.profilePicture ? "none" : "block" }}
-            >
-              {userData.initials}
-            </span>
-          </div>
-          <div className="user-info">
-            <span className="user-name">{userData.name}</span>
-          </div>
+          <div
+            className="user-profile"
+            ref={profileRef}
+            onClick={() => setIsProfileOpen(!isProfileOpen)}
+          >
+            <div className="user-avatar">
+              {userData.profilePicture ? (
+                <img
+                  src={userData.profilePicture}
+                  alt={userData.fullName}
+                  onError={(e) => {
+                    e.target.style.display = "none";
+                    e.target.nextSibling.style.display = "block";
+                  }}
+                />
+              ) : null}
+              <span
+                style={{ display: userData.profilePicture ? "none" : "block" }}
+              >
+                {userData.initials}
+              </span>
+            </div>
+            <div className="user-info">
+              <span className="user-name">{userData.name}</span>
+            </div>
 
-          {isProfileOpen && (
-            <div className="profile-dropdown">
-              {profileMenuItems
-                .filter((item) => item.visible !== false)
-                .sort((a, b) => (a.order || 0) - (b.order || 0))
-                .map((item) => {
-                  if (item.type === "divider") {
+            {isProfileOpen && (
+              <div className="profile-dropdown">
+                {profileMenuItems
+                  .filter((item) => item.visible !== false)
+                  .sort((a, b) => (a.order || 0) - (b.order || 0))
+                  .map((item) => {
+                    if (item.type === "divider") {
+                      return (
+                        <div
+                          key={`divider-${item.id}`}
+                          className="dropdown-divider"
+                        ></div>
+                      );
+                    }
+
+                    const IconComponent = getIconComponent(item.icon);
+
                     return (
                       <div
-                        key={`divider-${item.id}`}
-                        className="dropdown-divider"
-                      ></div>
+                        key={`item-${item.id}`}
+                        className="dropdown-item"
+                        onClick={() => handleMenuItemClick(item)}
+                      >
+                        {IconComponent ? (
+                          <IconComponent size={16} />
+                        ) : item.icon ? (
+                          <img
+                            src={item.icon}
+                            alt=""
+                            className="menu-item-icon"
+                            style={{ width: "16px", height: "16px" }}
+                          />
+                        ) : null}
+                        <span>{item.label}</span>
+                      </div>
                     );
-                  }
-
-                  const IconComponent = getIconComponent(item.icon);
-
-                  return (
-                    <div
-                      key={`item-${item.id}`}
-                      className="dropdown-item"
-                      onClick={() => handleMenuItemClick(item)}
-                    >
-                      {IconComponent ? (
-                        <IconComponent size={16} />
-                      ) : item.icon ? (
-                        <img
-                          src={item.icon}
-                          alt=""
-                          className="menu-item-icon"
-                          style={{ width: "16px", height: "16px" }}
-                        />
-                      ) : null}
-                      <span>{item.label}</span>
-                    </div>
-                  );
-                })}
-            </div>
-          )}
+                  })}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      {/* Notification Popup */}
+      <NotificationPopup
+        isOpen={showNotifications}
+        onClose={() => setShowNotifications(false)}
+      />
+    </>
   );
 };
 

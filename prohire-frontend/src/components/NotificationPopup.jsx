@@ -1,7 +1,3 @@
-// import { useState, useEffect } from "react";
-// import axios from "axios";
-// import "../styles/notificationPopup.css"; // Ensure you have the styles for the notification popup
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "../styles/notificationPopup.css";

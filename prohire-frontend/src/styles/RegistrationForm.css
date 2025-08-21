@@ -25,7 +25,7 @@ html {
   flex-direction: column;
 }
 
-/* Left Section Styling */
+/* Left Section Styling - Hidden on Mobile */
 .left-section {
   background-color: var(--persian-indigo);
   color: white;
@@ -187,6 +187,7 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex: 1;
 }
 
 /* Form Container */
@@ -307,6 +308,7 @@ html {
 
   .left-section {
     padding: 2rem;
+    display: flex !important; /* Ensure it's visible on desktop */
   }
 
   .left-section h1 {
@@ -326,31 +328,39 @@ html {
   }
 }
 
+/* Mobile view - Hide left section content */
 @media (max-width: 767px) {
-  .left-content {
-    text-align: center;
-    align-items: center;
+  .left-section {
+    display: none !important; /* Completely hide on mobile */
   }
 
-  .logo-container {
-    justify-content: center;
+  .right-section {
+    padding: 1.5rem;
+    min-height: 100vh;
+    background-color: var(--periwinkle-gray);
   }
 
-  .feature-card {
-    text-align: left;
+  .form-container {
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Additional mobile optimizations */
+@media (max-width: 480px) {
+  .right-section {
+    padding: 1rem;
   }
 
-  .testimonial-author {
-    justify-content: center;
+  .form-container {
+    padding: 1.25rem;
   }
 
-  .testimonial-text {
-    text-align: center;
-    padding-left: 0;
+  .form-control {
+    padding: 0.7rem;
   }
 
-  .testimonial-text::before {
-    left: 50%;
-    transform: translateX(-50%);
+  .btn {
+    padding: 0.7rem;
   }
 }

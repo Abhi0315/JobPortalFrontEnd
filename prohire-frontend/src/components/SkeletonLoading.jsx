@@ -1,82 +1,71 @@
-import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
-
+import { motion } from "framer-motion";
 import "../styles/SkeletonLoading.css";
 
-const SkeletonLoading = () => {
+const Loading = ({ type = "page", message = "Loading..." }) => {
+  if (type === "button") {
+    return (
+      <div className="loading-button">
+        <div className="loading-spinner"></div>
+        <span>{message}</span>
+      </div>
+    );
+  }
+
   return (
-    <div className="skeleton-loading">
-      <section className="hero-section-skeleton">
-        <Container>
-          <Row className="align-items-center">
-            <Col lg={6} className="hero-skeleton-content-col">
-              <div className="skeleton-title"></div>
-              <div className="skeleton-subtitle"></div>
-              <div className="skeleton-text"></div>
-              <div className="skeleton-text" style={{ width: "80%" }}></div>
-              <div className="skeleton-feature-list">
-                {[1, 2, 3].map((item) => (
-                  <div key={item} className="skeleton-feature-item"></div>
-                ))}
-              </div>
-              <div className="skeleton-button-group">
-                <div className="skeleton-button"></div>
-                <div className="skeleton-button"></div>
-              </div>
-              <div className="skeleton-trust">
-                <div className="skeleton-trust-text"></div>
-                <div className="skeleton-trust-logos">
-                  {[1, 2, 3, 4, 5].map((item) => (
-                    <div key={item} className="skeleton-trust-logo"></div>
-                  ))}
-                </div>
-              </div>
-            </Col>
-            <Col lg={6} className="hero-skeleton-image-col">
-              <div className="skeleton-image"></div>
-            </Col>
-          </Row>
-        </Container>
-      </section>
+    <div className="loading-container">
+      {/* Animated Logo/Brand */}
+      <motion.div
+        className="loading-logo"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="logo-shape">
+          <span>P</span>
+        </div>
+        <h2>ProHire</h2>
+      </motion.div>
 
-      {/* Features Section Skeleton */}
-      <section className="features-section-skeleton py-5">
-        <Container>
-          <div className="skeleton-features-title"></div>
-          <div className="skeleton-features-description"></div>
-          <div className="skeleton-features-scroll">
-            {[1, 2, 3, 4, 5].map((item) => (
-              <div key={item} className="skeleton-feature-card"></div>
-            ))}
-          </div>
-        </Container>
-      </section>
+      {/* Animated Spinner */}
+      <motion.div
+        className="spinner-container"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3, duration: 0.5 }}
+      >
+        <div className="spinner">
+          <div className="spinner-inner"></div>
+        </div>
+      </motion.div>
 
-      {/* Contact Section Skeleton */}
-      <section className="contact-section-skeleton py-5">
-        <Container>
-          <Row>
-            <Col lg={6}>
-              <div className="skeleton-contact-title"></div>
-              <div className="skeleton-contact-description"></div>
-              <div className="skeleton-form">
-                <div className="skeleton-form-field"></div>
-                <div className="skeleton-form-field"></div>
-                <div
-                  className="skeleton-form-field"
-                  style={{ height: "120px" }}
-                ></div>
-                <div className="skeleton-form-button"></div>
-              </div>
-            </Col>
-            <Col lg={6}>
-              <div className="skeleton-contact-image"></div>
-            </Col>
-          </Row>
-        </Container>
-      </section>
+      {/* Loading Text */}
+      <motion.div
+        className="loading-text"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6, duration: 0.5 }}
+      >
+        <p>{message}</p>
+      </motion.div>
+
+      {/* Progress Bar */}
+      <motion.div
+        className="progress-container"
+        initial={{ width: 0 }}
+        animate={{ width: "60%" }}
+        transition={{ delay: 0.8, duration: 1.5, ease: "easeInOut" }}
+      >
+        <div className="progress-bar"></div>
+      </motion.div>
     </div>
   );
 };
 
-export default SkeletonLoading;
+export const PageLoader = () => (
+  <Loading type="page" message="Loading ProHire..." />
+);
+export const ButtonLoader = ({ message = "Sending..." }) => (
+  <Loading type="button" message={message} />
+);
+
+export default Loading;

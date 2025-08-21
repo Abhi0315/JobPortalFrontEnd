@@ -340,7 +340,7 @@
   cursor: not-allowed;
 }
 
-.share-button {
+/* .share-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -358,4 +358,4 @@
 .share-button:hover {
   background-color: #f5f5f5;
   color: #333;
-}
+} */

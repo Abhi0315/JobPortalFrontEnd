@@ -6,11 +6,12 @@
 .share-button {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   background-color: transparent;
   border: 1px solid #ddd;
   border-radius: 6px;
-  padding: 8px 16px;
+  padding: 8px 12px;
   font-size: 14px;
   font-weight: 500;
   color: #4a5568;
@@ -18,6 +19,7 @@
   transition: all 0.2s ease;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   width: 100%;
+  box-sizing: border-box;
 }
 
 .share-button:hover {
@@ -55,46 +57,39 @@
 /* ================= Popup ================== */
 .share-popup {
   position: absolute;
-  bottom: 8px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 100%;
+  right: 0;
   background-color: white;
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  width: 90vw;
-  max-width: 300px;
+  width: 340px;
   z-index: 1000;
-  margin: 0;
+  margin-bottom: 12px;
   animation: popupFadeIn 0.2s ease;
   overflow: hidden;
   border: 1px solid #e2e8f0;
 }
 
-/* Very small phones */
-@media (max-width: 340px) {
+/* Mobile responsiveness */
+@media (max-width: 768px) {
   .share-popup {
-    width: 95vw;
-  }
-  .share-options {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Desktop and larger */
-@media (min-width: 769px) {
-  .share-popup {
-    bottom: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
     right: 0;
-    left: auto;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 0;
+    border-radius: 12px 12px 0 0;
     transform: none;
-    width: 340px;
-    max-width: none;
-    margin-bottom: 12px;
+    animation: slideUp 0.3s ease;
   }
-  .share-options {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    padding: 20px;
+
+  /* Prevent body scroll when popup is open on mobile */
+  body.share-popup-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
   }
 }
 
@@ -106,6 +101,17 @@
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -150,9 +156,26 @@
 /* ================= Options ================== */
 .share-options {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* ✅ default 3 cols for mobile */
+  grid-template-columns: repeat(4, 1fr);
   gap: 12px;
   padding: 20px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .share-options {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .share-options {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 15px;
+  }
 }
 
 .share-option {
@@ -164,10 +187,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   background: none;
   border: none;
-  padding: 12px 8px;
+  padding: 10px 6px;
   border-radius: 8px;
   cursor: pointer;
   width: 100%;
@@ -193,10 +216,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   transition: all 0.2s ease;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .share-icon-wrapper {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  .share-platform {
+    padding: 8px 4px;
+    gap: 4px;
+  }
 }
 
 .share-platform:hover .share-icon-wrapper {
@@ -206,9 +243,16 @@
 }
 
 .share-platform span {
-  font-size: 12px;
+  font-size: 11px;
   text-align: center;
   font-weight: 500;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .share-platform span {
+    font-size: 10px;
+  }
 }
 
 /* ================= Copied message ================== */
@@ -216,14 +260,11 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 20px;
+  padding: 10px 15px;
   background-color: #f0fff4;
   color: #2f855a;
   border-top: 1px solid #c6f6d5;
   animation: slideIn 0.3s ease;
-}
-
-.copied-message .check-icon {
   font-size: 14px;
 }
 
@@ -236,6 +277,10 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.copied-message .check-icon {
+  font-size: 14px;
 }
 
 /* ================= Animations ================== */
@@ -254,9 +299,4 @@
 .share-button:focus {
   outline: none;
   animation: pulse 1.5s infinite;
-}
-
-/* Prevent body scrolling when popup is open */
-body.share-popup-open {
-  overflow: hidden;
 }

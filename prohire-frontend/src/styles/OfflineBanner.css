@@ -40,7 +40,8 @@ body.offline-mode::before {
 }
 
 .offline-banner.online {
-  background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+  background: #cfd6ea;
+  color: #2c3e50;
 }
 
 .offline-content {
@@ -70,7 +71,7 @@ body.offline-mode::before {
 
 .online-icon {
   color: #4cd964;
-  background: rgba(76, 217, 100, 0.2);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .banner-text {
@@ -109,9 +110,18 @@ body.offline-mode::before {
   backdrop-filter: blur(10px);
 }
 
+.offline-banner.online .close-btn {
+  background: rgba(0, 0, 0, 0.1);
+  color: #2c3e50;
+}
+
 .close-btn:hover {
   background: rgba(255, 255, 255, 0.3);
   transform: scale(1.1);
+}
+
+.offline-banner.online .close-btn:hover {
+  background: rgba(0, 0, 0, 0.15);
 }
 
 .progress-bar {
@@ -123,6 +133,10 @@ body.offline-mode::before {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 0 0 16px 16px;
   overflow: hidden;
+}
+
+.offline-banner.online .progress-bar {
+  background: rgba(0, 0, 0, 0.1);
 }
 
 .progress-fill {
@@ -217,5 +231,10 @@ body.offline-mode::before {
 
   .close-btn {
     background: rgba(255, 255, 255, 0.15);
+  }
+
+  .offline-banner.online {
+    background: #cfd6ea;
+    color: #2c3e50;
   }
 }

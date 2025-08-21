@@ -2,7 +2,7 @@
   padding: 30px 20px;
   max-width: 1200px;
   margin: 0 auto;
-  min-height: 50px;
+  min-height: 80vh;
   /* height: 900px; */
   display: flex;
 }
@@ -70,8 +70,6 @@
 
 .job-card {
   background: white;
-  width: 140%;
-  /* height: 80%; */
   border-radius: 12px;
   padding: 25px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);

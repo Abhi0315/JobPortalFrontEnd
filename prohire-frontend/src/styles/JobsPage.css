@@ -5,6 +5,7 @@
   text-align: center;
   background: linear-gradient(90deg, #2c1475, #4a3a8a);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   position: relative;
   padding: 0.5rem 0;

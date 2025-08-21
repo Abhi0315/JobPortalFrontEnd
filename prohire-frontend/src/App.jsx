@@ -20,9 +20,12 @@ import SavedJobsLayout from "./pages/SavedLayout.jsx";
 import SavedPage from "./pages/SavedPage.jsx";
 import SendOTPPage from "./pages/SendOTPPage";
 import Settings from "./pages/Settings";
+import OfflineBanner from "./components/OfflineBanner.jsx";
+
 function App() {
   return (
     <Router>
+      <OfflineBanner />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/homepage" element={<HomePage />} />
@@ -33,6 +36,7 @@ function App() {
         <Route path="/otp" element={<OTPPage />} />
         <Route path="/send-otp" element={<SendOTPPage />} />
         <Route path="/forget" element={<Forget />} />
+
         {/* <Route path="/saved_jobs" element={<SavedJobsLayout />} /> */}
 
         <Route

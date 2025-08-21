@@ -252,9 +252,10 @@
 
 // export default JobCard;
 import React, { useState, useEffect } from "react";
-import { FaRegBookmark, FaBookmark } from "react-icons/fa";
+import { FaRegBookmark, FaBookmark, FaShare } from "react-icons/fa";
 import "../styles/JobCard.css";
 import axios from "axios";
+import ShareComponent from './ShareComponent';
 
 const JobCard = ({ job }) => {
   const {
@@ -588,8 +589,14 @@ const JobCard = ({ job }) => {
             Visit Company
           </a>
         )}
-      </div>
-    </div>
+
+    <ShareComponent 
+      url={applyLink} 
+      title={title}
+      description={`Check out this ${title} position at ${employer.name}`}
+    />
+  </div>
+</div>
   );
 };
 

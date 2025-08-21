@@ -1,0 +1,262 @@
+.share-container {
+  position: relative;
+  display: inline-block;
+}
+
+.share-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: transparent;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  width: 100%;
+}
+
+.share-button:hover {
+  background-color: #f8f9fa;
+  border-color: #cbd5e0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.share-button.active {
+  background-color: #e9ecef;
+  border-color: #adb5bd;
+}
+
+.share-button .share-icon {
+  font-size: 14px;
+  transition: transform 0.2s ease;
+}
+
+.share-button:hover .share-icon {
+  transform: scale(1.1);
+}
+
+/* Dark theme */
+.share-container.dark .share-button {
+  background-color: #2d3748;
+  border-color: #4a5568;
+  color: #e2e8f0;
+}
+
+.share-container.dark .share-button:hover {
+  background-color: #4a5568;
+}
+
+/* ================= Popup ================== */
+.share-popup {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  width: 90vw;
+  max-width: 300px;
+  z-index: 1000;
+  margin: 0;
+  animation: popupFadeIn 0.2s ease;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+/* Very small phones */
+@media (max-width: 340px) {
+  .share-popup {
+    width: 95vw;
+  }
+  .share-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop and larger */
+@media (min-width: 769px) {
+  .share-popup {
+    bottom: 100%;
+    right: 0;
+    left: auto;
+    transform: none;
+    width: 340px;
+    max-width: none;
+    margin-bottom: 12px;
+  }
+  .share-options {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    padding: 20px;
+  }
+}
+
+@keyframes popupFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ================= Header ================== */
+.share-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #f1f3f4;
+  background-color: #f8f9fa;
+}
+
+.share-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #718096;
+  padding: 4px;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.close-button:hover {
+  background-color: #e2e8f0;
+  color: #4a5568;
+}
+
+/* ================= Options ================== */
+.share-options {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* ✅ default 3 cols for mobile */
+  gap: 12px;
+  padding: 20px;
+}
+
+.share-option {
+  display: flex;
+  justify-content: center;
+}
+
+.share-platform {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  padding: 12px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.share-platform:hover {
+  background-color: #f7fafc;
+  transform: translateY(-2px);
+}
+
+.share-platform.hovered {
+  color: var(--hover-color);
+}
+
+.share-platform.copied {
+  color: #38a169;
+}
+
+.share-icon-wrapper {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.share-platform:hover .share-icon-wrapper {
+  background-color: var(--hover-color) !important;
+  color: white;
+  transform: scale(1.1);
+}
+
+.share-platform span {
+  font-size: 12px;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* ================= Copied message ================== */
+.copied-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background-color: #f0fff4;
+  color: #2f855a;
+  border-top: 1px solid #c6f6d5;
+  animation: slideIn 0.3s ease;
+}
+
+.copied-message .check-icon {
+  font-size: 14px;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================= Animations ================== */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(66, 153, 225, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(66, 153, 225, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(66, 153, 225, 0);
+  }
+}
+
+.share-button:focus {
+  outline: none;
+  animation: pulse 1.5s infinite;
+}
+
+/* Prevent body scrolling when popup is open */
+body.share-popup-open {
+  overflow: hidden;
+}

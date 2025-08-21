@@ -1,195 +1,214 @@
-/* Skeleton Loading Styles */
-.skeleton-loading {
-  padding: 20px;
-}
-
-.skeleton-image,
-.skeleton-title,
-.skeleton-subtitle,
-.skeleton-text,
-.skeleton-feature-item,
-.skeleton-button,
-.skeleton-trust-text,
-.skeleton-trust-logo,
-.skeleton-features-title,
-.skeleton-features-description,
-.skeleton-feature-card,
-.skeleton-contact-title,
-.skeleton-contact-description,
-.skeleton-form-field,
-.skeleton-form-button,
-.skeleton-contact-image {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: 4px;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-}
-
-/* Hero Section Skeleton */
-.hero-section-skeleton {
-  padding: 80px 0;
-}
-
-.skeleton-image {
-  height: 400px;
-  margin-bottom: 20px;
-}
-
-.skeleton-title {
-  height: 50px;
-  width: 60%;
-  margin-bottom: 15px;
-}
-
-.skeleton-subtitle {
-  height: 30px;
-  width: 80%;
-  margin-bottom: 20px;
-}
-
-.skeleton-text {
-  height: 20px;
-  width: 100%;
-  margin-bottom: 10px;
-}
-
-.skeleton-feature-list {
-  margin: 25px 0;
-}
-
-.skeleton-feature-item {
-  height: 20px;
-  width: 100%;
-  margin-bottom: 12px;
-  padding-left: 30px;
-}
-
-.skeleton-button-group {
+.loading-container {
   display: flex;
-  gap: 15px;
-  margin-bottom: 30px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+  border-radius: 16px;
+  margin: 1rem;
 }
 
-.skeleton-button {
-  height: 50px;
-  width: 150px;
+.loading-logo {
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
-.skeleton-trust-text {
-  height: 15px;
-  width: 100px;
-  margin-bottom: 15px;
-}
-
-.skeleton-trust-logos {
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-}
-
-.skeleton-trust-logo {
-  height: 30px;
+.logo-shape {
   width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #2c1475 0%, #7757d6 100%);
   border-radius: 20px;
-}
-
-/* Features Section Skeleton */
-.skeleton-features-title {
-  height: 40px;
-  width: 40%;
-  margin-bottom: 15px;
-}
-
-.skeleton-features-description {
-  height: 20px;
-  width: 70%;
-  margin-bottom: 30px;
-}
-
-.skeleton-features-scroll {
   display: flex;
-  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  box-shadow: 0 10px 30px rgba(44, 20, 117, 0.2);
+}
+
+.logo-shape span {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: white;
+}
+
+.loading-logo h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2c1475;
+  margin: 0;
+}
+
+.spinner-container {
+  margin: 1.5rem 0;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2c1475 0%, #7757d6 100%);
+  padding: 3px;
+  position: relative;
+}
+
+.spinner-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: white;
+  animation: spin 1.5s linear infinite;
+  position: relative;
   overflow: hidden;
 }
 
-.skeleton-feature-card {
-  min-width: 280px;
-  height: 300px;
-  border-radius: 16px;
-}
-
-/* Contact Section Skeleton */
-.skeleton-contact-title {
-  height: 40px;
+.spinner-inner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 50%;
-  margin-bottom: 15px;
+  height: 100%;
+  background: linear-gradient(135deg, #2c1475 0%, #7757d6 100%);
+  animation: fill 1.5s ease-in-out infinite;
 }
 
-.skeleton-contact-description {
-  height: 20px;
-  width: 80%;
-  margin-bottom: 30px;
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-.skeleton-form-field {
-  height: 45px;
+@keyframes fill {
+  0%,
+  100% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+}
+
+.loading-text {
+  text-align: center;
+  margin: 1rem 0 2rem;
+}
+
+.loading-text p {
+  font-size: 1.1rem;
+  color: #2c1475;
+  font-weight: 500;
+  margin: 0;
+}
+
+.progress-container {
+  width: 60%;
+  height: 6px;
+  background: #e9ecef;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.progress-bar {
   width: 100%;
-  margin-bottom: 20px;
+  height: 100%;
+  background: linear-gradient(90deg, #2c1475 0%, #7757d6 50%, #2c1475 100%);
+  border-radius: 3px;
+  animation: progressSlide 2s ease-in-out infinite;
 }
 
-.skeleton-form-button {
-  height: 45px;
-  width: 150px;
+@keyframes progressSlide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
-.skeleton-contact-image {
-  height: 400px;
-  width: 100%;
+/* Button Loader Styles */
+.loading-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #2c1475;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: not-allowed;
+  opacity: 0.8;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 992px) {
-  .hero-section-skeleton {
-    padding: 60px 0;
+.loading-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: buttonSpin 0.8s linear infinite;
+}
+
+@keyframes buttonSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .loading-container {
+    min-height: 50vh;
+    padding: 1.5rem;
   }
 
-  .skeleton-image {
-    height: 300px;
+  .logo-shape {
+    width: 60px;
+    height: 60px;
   }
 
-  .skeleton-title {
+  .logo-shape span {
+    font-size: 2rem;
+  }
+
+  .loading-logo h2 {
+    font-size: 1.25rem;
+  }
+
+  .spinner {
+    width: 50px;
+    height: 50px;
+  }
+
+  .loading-text p {
+    font-size: 1rem;
+  }
+
+  .progress-container {
     width: 80%;
   }
-
-  .skeleton-button-group {
-    flex-direction: column;
-  }
-
-  .skeleton-button {
-    width: 100%;
-  }
 }
 
-@media (max-width: 768px) {
-  .skeleton-features-scroll {
-    flex-direction: column;
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .loading-container {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   }
 
-  .skeleton-feature-card {
-    width: 100%;
+  .loading-text p {
+    color: #e2e2e2;
   }
 
-  .skeleton-contact-image {
-    margin-top: 30px;
-    height: 300px;
+  .progress-container {
+    background: #2d3748;
   }
 }

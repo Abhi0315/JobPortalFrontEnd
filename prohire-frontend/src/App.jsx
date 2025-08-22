@@ -22,6 +22,9 @@ import SendOTPPage from "./pages/SendOTPPage";
 import Settings from "./pages/Settings";
 import OfflineBanner from "./components/OfflineBanner.jsx";
 
+//Employer router
+// import EmployerRegistration from "./EmployerPortal/EmployerRegistration.jsx";
+
 function App() {
   return (
     <Router>
@@ -36,6 +39,12 @@ function App() {
         <Route path="/otp" element={<OTPPage />} />
         <Route path="/send-otp" element={<SendOTPPage />} />
         <Route path="/forget" element={<Forget />} />
+
+        {/* Employer Route */}
+        {/* <Route
+          path="/employer-registration"
+          element={<EmployerRegistration />}
+        /> */}
 
         {/* <Route path="/saved_jobs" element={<SavedJobsLayout />} /> */}
 

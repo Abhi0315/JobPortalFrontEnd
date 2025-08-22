@@ -21,6 +21,7 @@ import SavedPage from "./pages/SavedPage.jsx";
 import SendOTPPage from "./pages/SendOTPPage";
 import Settings from "./pages/Settings";
 import OfflineBanner from "./components/OfflineBanner.jsx";
+import EmployerDashboard from "./empcomponents/EmployerDashboard.jsx";
 
 //Employer router
 // import EmployerRegistration from "./EmployerPortal/EmployerRegistration.jsx";
@@ -29,7 +30,9 @@ function App() {
   return (
     <Router>
       <OfflineBanner />
+
       <Routes>
+        <Route path="/employerDashboard" element={<EmployerDashboard />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/homepage" element={<HomePage />} />
         <Route path="/registrationform" element={<RegistrationForm />} />
@@ -107,6 +110,14 @@ function App() {
         />
 
         {/* <Route path="/complete-profile" element={<ProfilePage />} /> */}
+        <Route
+          path="/employer-dashboard"
+          element={
+            <ProtectedRoute>
+              <EmployerDashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );

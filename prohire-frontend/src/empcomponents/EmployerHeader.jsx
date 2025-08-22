@@ -2,7 +2,7 @@
 import "../EmployerPortalStyles/EmployerHeader.css";
 import React from "react";
 import * as FaIcons from "react-icons/fa";
-// import './';
+import "../EmployerPortalStyles/EmployerHeader.css";
 
 const EmployerHeader = ({ headerData }) => {
   if (!headerData) return null;
@@ -10,7 +10,6 @@ const EmployerHeader = ({ headerData }) => {
   const renderIcon = (iconName) => {
     const IconComponent = FaIcons[iconName];
     if (!IconComponent) {
-      console.warn(`Icon ${iconName} not found in react-icons/fa`);
       return <FaIcons.FaBuilding className="employer-header-icon" />;
     }
     return <IconComponent className="employer-header-icon" />;
@@ -22,7 +21,6 @@ const EmployerHeader = ({ headerData }) => {
       window.location.href = action;
     } else {
       console.log(`Employer action: ${label} - ${action}`);
-      // Handle custom actions like logout, etc.
       if (label === "Logout") {
         localStorage.removeItem("employer_access_token");
         sessionStorage.removeItem("employer_access_token");
@@ -31,21 +29,31 @@ const EmployerHeader = ({ headerData }) => {
     }
   };
 
+  // Safe logo handling - prevent continuous errors
+  const handleLogoError = (e) => {
+    e.target.style.display = "none";
+    // Don't try to set a fallback URL that will also fail
+  };
+
   return (
     <header className="employer-header">
       <div className="employer-header-left">
-        <img
-          src={headerData.logo}
-          alt="Employer Logo"
-          className="employer-header-logo"
-          onError={(e) => {
-            e.target.src =
-              "https://via.placeholder.com/40x40/2c3e50/ffffff?text=E";
-          }}
-        />
+        <div className="employer-logo-container">
+          <img
+            src={headerData.logo || "/employer-logo.png"}
+            alt="Employer Logo"
+            className="employer-header-logo"
+            onError={handleLogoError}
+          />
+          {/* Fallback icon if image fails */}
+          {headerData.logo && (
+            <div className="employer-logo-fallback" style={{ display: "none" }}>
+              <FaIcons.FaBuilding />
+            </div>
+          )}
+        </div>
         <div className="employer-header-info">
           <h1 className="employer-header-title">{headerData.title}</h1>
-          {/* <span className="employer-header-subtitle">Employer Portal</span> */}
         </div>
       </div>
 

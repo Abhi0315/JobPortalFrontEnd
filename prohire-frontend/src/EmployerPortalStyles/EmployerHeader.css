@@ -12,7 +12,6 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  backdrop-filter: blur(10px);
 }
 
 .employer-header-left {
@@ -21,13 +20,40 @@
   gap: 15px;
 }
 
+.employer-logo-container {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .employer-header-logo {
   width: 45px;
   height: 45px;
   border-radius: 10px;
   object-fit: cover;
   border: 2px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.employer-header-logo:hover {
+  transform: scale(1.05);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.employer-logo-fallback {
+  display: none;
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
 }
 
 .employer-header-info {
@@ -41,12 +67,10 @@
   font-weight: 700;
   color: #ecf0f1;
   line-height: 1.2;
-}
-
-.employer-header-subtitle {
-  font-size: 0.8rem;
-  opacity: 0.8;
-  color: #bdc3c7;
+  background: linear-gradient(45deg, #ecf0f1, #bdc3c7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .employer-header-right {
@@ -57,7 +81,7 @@
 
 .employer-header-actions {
   display: flex;
-  gap: 10px;
+  gap: 12px;
 }
 
 .employer-header-button {
@@ -72,7 +96,6 @@
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.9rem;
-  backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -89,6 +112,11 @@
 .employer-header-button-icon {
   font-size: 1.1rem;
   display: flex;
+  transition: transform 0.3s ease;
+}
+
+.employer-header-button:hover .employer-header-button-icon {
+  transform: scale(1.1);
 }
 
 .employer-header-icon {
@@ -113,6 +141,13 @@
   background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.employer-profile-badge:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
 }
 
 .employer-profile-icon {
@@ -150,17 +185,24 @@
     height: 60px;
   }
 
-  .employer-header-logo {
+  .employer-logo-container {
     width: 40px;
     height: 40px;
   }
 
-  .employer-header-title {
+  .employer-header-logo {
+    width: 38px;
+    height: 38px;
+  }
+
+  .employer-logo-fallback {
+    width: 38px;
+    height: 38px;
     font-size: 1.2rem;
   }
 
-  .employer-header-subtitle {
-    display: none;
+  .employer-header-title {
+    font-size: 1.2rem;
   }
 
   .employer-profile-name {
@@ -181,9 +223,20 @@
     gap: 10px;
   }
 
-  .employer-header-logo {
+  .employer-logo-container {
     width: 35px;
     height: 35px;
+  }
+
+  .employer-header-logo {
+    width: 32px;
+    height: 32px;
+  }
+
+  .employer-logo-fallback {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
   }
 
   .employer-header-title {
@@ -191,21 +244,12 @@
   }
 
   .employer-header-actions {
-    gap: 5px;
+    gap: 8px;
   }
 
   .employer-header-button {
     padding: 6px 10px;
   }
-}
-
-/* Logo fallback improvements */
-.employer-header-logo {
-  transition: opacity 0.3s ease;
-}
-
-.employer-header-logo:hover {
-  opacity: 0.9;
 }
 
 /* Focus styles for accessibility */
@@ -214,166 +258,59 @@
   outline-offset: 2px;
 }
 
-/* Loading state for logo */
-.employer-header-logo.loading {
-  opacity: 0.7;
+.employer-profile-badge:focus {
+  outline: 2px solid #1abc9c;
+  outline-offset: 2px;
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .employer-header {
-    background: linear-gradient(135deg, #1a1f2e 0%, #2a3246 100%);
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .employer-header-logo,
+  .employer-header-button,
+  .employer-header-button-icon,
+  .employer-profile-badge {
+    transition: none;
   }
 
-  .employer-header-button {
-    background: rgba(255, 255, 255, 0.08);
+  .employer-header-logo:hover,
+  .employer-header-button:hover,
+  .employer-profile-badge:hover {
+    transform: none;
   }
-
-  .employer-header-button:hover {
-    background: rgba(255, 255, 255, 0.15);
-  }
-}
-
-/* Animation for header buttons */
-@keyframes buttonPulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.employer-header-button:active {
-  animation: buttonPulse 0.2s ease;
-}
-
-/* Profile badge hover effect */
-.employer-profile-badge {
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.employer-profile-badge:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-1px);
-}
-
-/* Header title gradient effect */
-.employer-header-title {
-  background: linear-gradient(45deg, #ecf0f1, #bdc3c7);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Button icon animation */
-.employer-header-button-icon {
-  transition: transform 0.3s ease;
-}
-
-.employer-header-button:hover .employer-header-button-icon {
-  transform: scale(1.1);
-}
-
-/* Mobile menu button (if needed in future) */
-.employer-mobile-menu-button {
+} /* Add to your existing EmployerHeader.css */
+.employer-hamburger-menu {
   display: none;
   background: none;
   border: none;
   color: white;
   font-size: 1.5rem;
   cursor: pointer;
-  padding: 5px;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+  margin-right: 15px;
+}
+
+.employer-hamburger-menu:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 @media (max-width: 768px) {
-  .employer-mobile-menu-button {
-    display: block;
-  }
-}
-
-/* Notification badge style (if needed) */
-.employer-notification-badge {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  background: #e74c3c;
-  color: white;
-  border-radius: 50%;
-  width: 18px;
-  height: 18px;
-  font-size: 0.7rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-}
-
-/* Dropdown menu styles (if needed in future) */
-.employer-dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.employer-dropdown-content {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: 100%;
-  background: white;
-  min-width: 160px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  z-index: 1001;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.employer-dropdown:hover .employer-dropdown-content {
-  display: block;
-}
-
-.employer-dropdown-item {
-  padding: 12px 16px;
-  color: #2c3e50;
-  text-decoration: none;
-  display: block;
-  transition: background 0.3s ease;
-}
-
-.employer-dropdown-item:hover {
-  background: #f8f9fa;
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-  .employer-header {
-    background: #000;
-    border-bottom: 2px solid #fff;
+  .employer-hamburger-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .employer-header-button {
-    background: #000;
-    border: 2px solid #fff;
+  .employer-header-title {
+    font-size: 1.2rem;
   }
 
-  .employer-header-button:hover {
-    background: #333;
-  }
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  .employer-header-button,
-  .employer-profile-badge,
-  .employer-header-button-icon {
-    transition: none;
+  .employer-header-button-label {
+    display: none;
   }
 
-  .employer-header-button:hover {
-    transform: none;
+  .employer-profile-name {
+    display: none;
   }
 }

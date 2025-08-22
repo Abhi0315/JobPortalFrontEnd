@@ -1,5 +1,3 @@
-// import "../EmployerPortalStyles/EmployerHeader.css";
-import "../EmployerPortalStyles/EmployerHeader.css";
 import React from "react";
 import * as FaIcons from "react-icons/fa";
 import "../EmployerPortalStyles/EmployerHeader.css";
@@ -17,10 +15,8 @@ const EmployerHeader = ({ headerData }) => {
 
   const handleButtonClick = (action, label) => {
     if (action.startsWith("http") || action.startsWith("/")) {
-      console.log(`Navigating to: ${action}`);
       window.location.href = action;
     } else {
-      console.log(`Employer action: ${label} - ${action}`);
       if (label === "Logout") {
         localStorage.removeItem("employer_access_token");
         sessionStorage.removeItem("employer_access_token");
@@ -29,10 +25,13 @@ const EmployerHeader = ({ headerData }) => {
     }
   };
 
-  // Safe logo handling - prevent continuous errors
+  // Handle logo from API - use local fallback if API logo fails
   const handleLogoError = (e) => {
     e.target.style.display = "none";
-    // Don't try to set a fallback URL that will also fail
+    const fallback = e.target.nextSibling;
+    if (fallback && fallback.classList.contains("employer-logo-fallback")) {
+      fallback.style.display = "flex";
+    }
   };
 
   return (
@@ -40,17 +39,14 @@ const EmployerHeader = ({ headerData }) => {
       <div className="employer-header-left">
         <div className="employer-logo-container">
           <img
-            src={headerData.logo || "/employer-logo.png"}
+            src={headerData.logo}
             alt="Employer Logo"
             className="employer-header-logo"
             onError={handleLogoError}
           />
-          {/* Fallback icon if image fails */}
-          {headerData.logo && (
-            <div className="employer-logo-fallback" style={{ display: "none" }}>
-              <FaIcons.FaBuilding />
-            </div>
-          )}
+          <div className="employer-logo-fallback">
+            <FaIcons.FaBuilding />
+          </div>
         </div>
         <div className="employer-header-info">
           <h1 className="employer-header-title">{headerData.title}</h1>
